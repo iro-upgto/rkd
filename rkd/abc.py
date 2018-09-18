@@ -9,3 +9,4 @@ x0,x1,x2,x3,x4,x5,x6 = symbols("x_0:7")
 y0,y1,y2,y3,y4,y5,y6 = symbols("y_0:7")
 z0,z1,z2,z3,z4,z5,z6 = symbols("z_0:7")
 
+del pi # Delete "pi" symbolic variable -> conflict with pi number
