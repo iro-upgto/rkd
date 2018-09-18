@@ -371,5 +371,5 @@ def test_rb2():
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    # ~ test_robot()
-    test_rb2()
+    test_robot()
+    # ~ test_rb2()
