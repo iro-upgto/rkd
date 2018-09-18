@@ -2,10 +2,10 @@ from setuptools import setup
 
 # Current status: pre-alpha
 
-setup(name='nusa',
+setup(name='rkd',
       version='0.1.0',
       description='Python library for kinematic analysis of robots',
-      author='IRO',
+      author='IRO-UPGTO',
       author_email='jdelossantos@upgto.edu.mx',
       license = "MIT",
       keywords=["Robotics","Kinematics"],
