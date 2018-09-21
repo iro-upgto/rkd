@@ -11,8 +11,11 @@ init_printing(use_latex=True)
 
 def deg2rad(theta):
     """ Convert degrees to radians """
-    return theta*pi/180
+    return theta*(pi/180)
     
+def rad2deg(theta):
+    """ Convert radians to degrees """
+    return ( theta*(180/pi) ).evalf()
 
 def rotz(theta, deg=False):
     """
@@ -371,5 +374,5 @@ def test_rb2():
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    test_robot()
-    # ~ test_rb2()
+    # ~ test_robot()
+    test_rb2()
