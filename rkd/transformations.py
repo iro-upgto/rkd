@@ -1,6 +1,8 @@
 # Transformations
+from sympy import *
+from numpy import *
+from util import *
 import numpy as np
-from numpy import arctan2,sqrt
 
 
 def rotz(theta, deg=False):
@@ -60,6 +62,34 @@ def roty(theta, deg=False):
                   [-st,0,ct]])
     return R
 
+def htmrot(axis, angle, deg=False):
+    if deg:
+        angle = deg2rad(angle)
+    ca = cos(angle)
+    sa = sin(angle)
+    if ((axis=='x')or(axis=='X')):
+        H=np.array([[1, 0, 0, 0],
+                    [0, ca, -sa, 0],
+                    [0, sa, ca, 0],
+                    [0, 0, 0, 1]])
+        return H
+    if ((axis=='y')or(axis=='Y')):
+        H=np.array([[]])
+
+def htmDH(a, al, d, t, deg=False ):
+    if deg:
+        al = deg2rad(al)
+        t = deg2rad(t)
+    cal = cos(al)
+    sal = sin(al)
+    ct = cos(t)
+    st = sin(t)
+    H = np.array([[ct, -st*cal, st*sal, a*ct],
+                [st, ct*cal, -ct*sal, a*st],
+                [0, sal, cal, d],
+                [0, 0, 0, 1]])
+    return H
+
 def rot2eul(R):
     """
     Calculate the Euler angles from a rotation matrix
@@ -69,15 +99,15 @@ def rot2eul(R):
     Important: The rotation matrix must be 3x3
     """
     
-    r11 = R[0,0]
-    r12 = R[0,1]
-    r13 = R[0,2]
-    r21 = R[1,0]
-    r22 = R[1,1]
-    r23 = R[1,2]
-    r31 = R[2,0]
-    r32 = R[2,1]
-    r33 = R[2,2]
+    r11 = R[0,0] #Posicion de la matriz [1,1]
+    r12 = R[0,1] #Posicion de la matriz [1,2]
+    r13 = R[0,2] #Posicion de la matriz [1,3]
+    r21 = R[1,0] #Posicion de la matriz [2,1]
+    r22 = R[1,1] #Posicion de la matriz [2,2]
+    r23 = R[1,2] #Posicion de la matriz [2,3]
+    r31 = R[2,0] #Posicion de la matriz [3,1]
+    r32 = R[2,1] #Posicion de la matriz [3,2]
+    r33 = R[2,2] #Posicion de la matriz [3,3]
 
     if ((r33!=1)or(r33!=-1)):
         theta = arctan2((sqrt(1-(r33**2))),r33)
