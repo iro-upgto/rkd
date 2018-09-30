@@ -63,7 +63,7 @@ def roty(theta, deg=False):
     return R
 
 def htmDH(a, al, d, t, deg=False ):
-    if deg:
+    if deg: # If theta is given in degrees -> convert to radians
         al = deg2rad(al)
         t = deg2rad(t)
     cal = cos(al)
@@ -74,36 +74,70 @@ def htmDH(a, al, d, t, deg=False ):
                 [st, ct*cal, -ct*sal, a*st],
                 [0, sal, cal, d],
                 [0, 0, 0, 1]])
+
     return H
 
 def rot2eul(R):
     """
-    Calculate the Euler angles from a rotation matrix
+    Calculates the Euler angles from a rotation matrix on the ZXZ axis
 
-    Angles given in radians by default
+    ** The angles must be given in radians by default **
 
     Important: The rotation matrix must be 3x3
     """
     
-    r11 = R[0,0] #Posicion de la matriz [1,1]
-    r12 = R[0,1] #Posicion de la matriz [1,2]
-    r13 = R[0,2] #Posicion de la matriz [1,3]
-    r21 = R[1,0] #Posicion de la matriz [2,1]
-    r22 = R[1,1] #Posicion de la matriz [2,2]
-    r23 = R[1,2] #Posicion de la matriz [2,3]
-    r31 = R[2,0] #Posicion de la matriz [3,1]
-    r32 = R[2,1] #Posicion de la matriz [3,2]
-    r33 = R[2,2] #Posicion de la matriz [3,3]
+    r11 = R[0,0] # Position in the matrix [1,1]
+    r12 = R[0,1] # Position in the matrix [1,2]
+    r13 = R[0,2] # Position in the matrix [1,3]
+    r21 = R[1,0] # Position in the matrix [2,1]
+    r22 = R[1,1] # Position in the matrix [2,2]
+    r23 = R[1,2] # Position in the matrix [2,3]
+    r31 = R[2,0] # Position in the matrix [3,1]
+    r32 = R[2,1] # Position in the matrix [3,2]
+    r33 = R[2,2] # Position in the matrix [3,3]
 
-    if ((r33!=1)or(r33!=-1)):
+    if ((r33!=1)or(r33!=-1)): # Conditions that the matrix must have
         theta = arctan2((sqrt(1-(r33**2))),r33)
         phi = arctan2(r13,-r23)
         psi = arctan2(r31,r32)
-    if ((r33==1)or(r33==1)):
+
+    if ((r33==1)or(r33==-1)):
         theta = 0
         phi = 0
         psi = arctan2(r21,r11)
+
     return theta,phi,psi
+
+def rot2RPY(R):
+    """
+    Calculates the Roll, Pitch, Yaw angles from a rotation matrix on the XYZ axis
+
+    ** The angles must be given in radians bu default **
+
+    Important: The rotation matrix must be 3x3
+    """
+
+    r11 = R[0,0] # Position in the matrix [1,1]
+    r12 = R[0,1] # Position in the matrix [1,2]
+    r13 = R[0,2] # Position in the matrix [1,3]
+    r21 = R[1,0] # Position in the matrix [2,1]
+    r22 = R[1,1] # Position in the matrix [2,2]
+    r23 = R[1,2] # Position in the matrix [2,3]
+    r31 = R[2,0] # Position in the matrix [3,1]
+    r32 = R[2,1] # Position in the matrix [3,2]
+    r33 = R[2,2] # Position in the matrix [3,3]
+
+    if ((r31!=1)or(r31!=-1)): # Conditions that the matrix must have
+        theta = arctan2(r31, (sqrt(1-(r31**2))))
+        phi = arctan2(r21, r11)
+        psi = arctan2(r32, r33)
+
+    if ((r31==1)or(r31==-1)):
+        theta = 0
+        phi = 0
+        psi = arctan2(-r12, r22)
+
+    return theta, phi, psi
 
 if __name__=="__main__":
 
