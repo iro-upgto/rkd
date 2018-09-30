@@ -62,20 +62,6 @@ def roty(theta, deg=False):
                   [-st,0,ct]])
     return R
 
-def htmrot(axis, angle, deg=False):
-    if deg:
-        angle = deg2rad(angle)
-    ca = cos(angle)
-    sa = sin(angle)
-    if ((axis=='x')or(axis=='X')):
-        H=np.array([[1, 0, 0, 0],
-                    [0, ca, -sa, 0],
-                    [0, sa, ca, 0],
-                    [0, 0, 0, 1]])
-        return H
-    if ((axis=='y')or(axis=='Y')):
-        H=np.array([[]])
-
 def htmDH(a, al, d, t, deg=False ):
     if deg:
         al = deg2rad(al)
