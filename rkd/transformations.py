@@ -1,8 +1,10 @@
 # Transformations
 from sympy import *
 from numpy import *
-from util import *
 import numpy as np
+from rkd.util import *
+from rkd.abc import *
+init_printing(use_latex=True)
 
 
 def rotz(theta, deg=False):
@@ -62,21 +64,6 @@ def roty(theta, deg=False):
                   [-st,0,ct]])
     return R
 
-def htmDH(a, al, d, t, deg=False ):
-    if deg: # If theta is given in degrees -> convert to radians
-        al = deg2rad(al)
-        t = deg2rad(t)
-    cal = cos(al)
-    sal = sin(al)
-    ct = cos(t)
-    st = sin(t)
-    H = np.array([[ct, -st*cal, st*sal, a*ct],
-                [st, ct*cal, -ct*sal, a*st],
-                [0, sal, cal, d],
-                [0, 0, 0, 1]])
-
-    return H
-
 def rot2eul(R):
     """
     Calculates the Euler angles from a rotation matrix on the ZXZ axis
@@ -112,7 +99,7 @@ def rot2RPY(R):
     """
     Calculates the Roll, Pitch, Yaw angles from a rotation matrix on the XYZ axis
 
-    ** The angles must be given in radians bu default **
+    ** The angles must be given in radians by default **
 
     Important: The rotation matrix must be 3x3
     """
@@ -138,6 +125,27 @@ def rot2RPY(R):
         psi = arctan2(-r12, r22)
 
     return theta, phi, psi
+
+def htmDH(a,al,d,t, deg=False ):
+    """
+    Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameter
+
+    ** The angles must be given in radians by default **
+    """
+
+    if deg: # If theta is given in degrees -> convert to radians
+        al = deg2rad(al)
+        t = deg2rad(t)
+    cal = cos(al)
+    sal = sin(al)
+    ct = cos(t)
+    st = sin(t)
+    H = np.array([[ct, -st*cal, st*sal, a*ct],
+                [st, ct*cal, -ct*sal, a*st],
+                [0, sal, cal, d],
+                [0, 0, 0, 1]])
+
+    return H
 
 if __name__=="__main__":
 
