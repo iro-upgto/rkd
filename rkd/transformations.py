@@ -2,8 +2,8 @@
 from sympy import *
 from numpy import *
 import numpy as np
-from rkd.util import *
-from rkd.abc import *
+from util import *
+from abc import *
 init_printing(use_latex=True)
 
 
@@ -64,9 +64,9 @@ def roty(theta, deg=False):
                   [-st,0,ct]])
     return R
 
-def rot2eul(R):
+def rot2eul(R, axis, deg = False):
     """
-    Calculates the Euler angles from a rotation matrix on the ZXZ axis
+    Calculates the Euler angles from a rotation matrix with differents combinations of axis
 
     ** The angles must be given in radians by default **
 
@@ -83,17 +83,32 @@ def rot2eul(R):
     r32 = R[2,1] # Position in the matrix [3,2]
     r33 = R[2,2] # Position in the matrix [3,3]
 
-    if ((r33!=1)or(r33!=-1)): # Conditions that the matrix must have
-        theta = arctan2((sqrt(1-(r33**2))),r33)
-        phi = arctan2(r13,-r23)
-        psi = arctan2(r31,r32)
 
-    if ((r33==1)or(r33==-1)):
-        theta = 0
-        phi = 0
-        psi = arctan2(r21,r11)
+    if ((axis=="ZXZ")or(axis=="zxz")): # Condition for the ZXZ axis
+        if ((r33!=1)or(r33!=-1)): # Conditions that the matrix must have
+            theta = arctan2((sqrt(1-(r33**2))),r33)
+            phi = arctan2(r13,-r23)
+            psi = arctan2(r31,r32)
 
-    return theta,phi,psi
+        if ((r33==1)or(r33==-1)):
+            theta = 0
+            phi = 0
+            psi = arctan2(r21,r11)
+
+    if ((axis=="ZYZ")or(axis=="XZX")): pass
+
+    if ((axis=="XZX")or(axis=="xzx")): pass
+
+    if ((axis=="XYX")or(axis=="xyx")): pass
+
+    if ((axis=="YZY")or(axis=="yzy")): pass
+
+    if ((axis=="YXY")or(axis=="yxy")): pass
+
+    if deg:
+        return rad2deg(phi), rad2deg(theta), rad2deg(psi)
+
+    return phi,theta,psi
 
 def rot2RPY(R):
     """
@@ -120,7 +135,7 @@ def rot2RPY(R):
         psi = arctan2(r32, r33)
 
     if ((r31==1)or(r31==-1)):
-        theta = 0
+        theta = pi/2
         phi = 0
         psi = arctan2(-r12, r22)
 
@@ -149,8 +164,8 @@ def htmDH(a,al,d,t, deg=False ):
 
 if __name__=="__main__":
 
-    R = np.array([[0.8666,-0.5,0],
-                  [0.25,0.433,-0.8666],
-                  [0.433,0.75,0.5]])
+    H = np.array([[0.8666, -0.5, 0],
+                  [0.25, 0.433, -0.8666],
+                  [0.433, 0.75, 0.5]])
 
-    print(rot2eul(R))
+    print(rot2eul(H,"zxz"))
