@@ -95,7 +95,7 @@ def rot2eul(R, axis, deg = False):
             phi = 0
             psi = arctan2(r21,r11)
 
-    if ((axis=="ZYZ")or(axis=="XZX")): pass
+    if ((axis=="ZYZ")or(axis=="zyz")): pass
 
     if ((axis=="XZX")or(axis=="xzx")): pass
 
@@ -105,12 +105,12 @@ def rot2eul(R, axis, deg = False):
 
     if ((axis=="YXY")or(axis=="yxy")): pass
 
-    if deg:
+    if deg: # If theta is given in degrees -> convert to radians
         return rad2deg(phi), rad2deg(theta), rad2deg(psi)
 
     return phi,theta,psi
 
-def rot2RPY(R):
+def rot2RPY(R, deg = False):
     """
     Calculates the Roll, Pitch, Yaw angles from a rotation matrix on the XYZ axis
 
@@ -139,7 +139,13 @@ def rot2RPY(R):
         phi = 0
         psi = arctan2(-r12, r22)
 
-    return theta, phi, psi
+    if deg: # If theta is given in degrees -> convert to radians
+        return deg2rad(phi), deg2rad(theta), deg2rad(psi)
+
+    return phi, theta, psi
+
+def axis_angle(R, deg = False): pass
+
 
 def htmDH(a,al,d,t, deg=False ):
     """
