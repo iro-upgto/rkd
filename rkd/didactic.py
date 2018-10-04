@@ -102,7 +102,7 @@ def _htm2zxz(H):
     """
     R = H[:3,:3] # rotation sub-matrix
     r33,r13,r23,r31,r32,r11,r12,r21 = R[2,2],R[0,2],R[1,2],R[2,0],R[2,1],R[0,0],R[0,1],R[1,0]
-    if r23!=0 or r13!=0:
+    if abs(r33) != 1:
         theta = atan2(sqrt(1-r33**2), r33)
         phi = atan2(r13, -r23)
         psi = atan2(r31, r32)
