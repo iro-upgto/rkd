@@ -1,7 +1,6 @@
 #mathematical_algorithms
 from numpy import *
 import numpy as np
-init_printing(use_latex=True)
 
 def newton_raphson():
 	k=1
@@ -12,7 +11,7 @@ def newton_raphson():
 		for jj,ky  in enumerate(X0):
 			X0[ky] += (x[jj]).evalf()
 		k += 1
-    return X0, x, k
+	return X0, x, k
 
 def m_mult(*matrices):
 	f,_ = ( matrices[0] ).shape
