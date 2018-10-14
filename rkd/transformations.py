@@ -259,7 +259,11 @@ def rot2RPY(R, deg = False, sol = False):
 
 def rot2axa(R, deg = False):
     """
+    Calculates the axis / angle ratio from a rotation matrix
 
+    ** The angles must be given in radians by default **
+
+    Important: The rotation matrix must be 3x3
     """
     r11 = R[0,0] # Position in the matrix [1,1]
     r12 = R[0,1] # Position in the matrix [1,2]
@@ -282,7 +286,7 @@ def rot2axa(R, deg = False):
 
 def htmDH(a,al,d,t, deg=False ):
     """
-    Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameter
+    Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameters
 
     ** The angles must be given in radians by default **
     """
