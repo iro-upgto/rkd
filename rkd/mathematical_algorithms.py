@@ -2,15 +2,15 @@
 from numpy import *
 import numpy as np
 
-def newton_raphson():
+def newton_raphson(J, b, X0, eps=1e-6):
     """
     Calculates the numerical method Newton - Raphson
     """
 
     k=1
-    b=b.subs(vals).evalf()
+    b=b.evalf()
     while True:
-        x=((J.subs(X0).subs(vals)).inv()*b.subs(X0)).evalf()
+        x=((J.X0).inv()*bX0).evalf()
         if x.norm()<eps: break
         for jj,ky  in enumerate(X0):
             X0[ky] += (x[jj]).evalf()
