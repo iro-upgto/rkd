@@ -1,6 +1,7 @@
 #mathematical_algorithms
 from numpy import *
 import numpy as np
+from numpy.linalg import solve, norm
 
 def newton_raphson(J, b, X0, eps=1e-6):
     """
