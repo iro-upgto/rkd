@@ -61,6 +61,9 @@ def kinematics_inv(J, b, x0, deg = False,eps = 1e-6):
 
     ** Solved from the numerical method 'Newton - Raphson' **
 
+    *deg* : bool
+        ¿Is theta given in degrees?
+
     IMPORT: You must create your two functions of J (Jacobian), b (initial values ​​evaluated)
     """
     k = 0 #iterations
