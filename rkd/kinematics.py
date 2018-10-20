@@ -8,7 +8,7 @@ from rkd.mathematical_algorithms import *
 
 def jacobian(*args):
     """
-    Calculate the Jacobian matrix to determine the differential kinematics of manipulators / robots
+    Calculates the Jacobian matrix to determine the differential kinematics of manipulators / robots
     """
     Ts = []
     type = []
@@ -55,9 +55,9 @@ def p(i,Ts):
 
 #Kinematics inverse
 
-def kinematics_inv(J, b, x0, deg = False,eps = 1e-6):
+def reverse_kinematics(J, b, x0, deg = False,eps = 1e-6):
     """
-    Calculate the inverse kinematics from a numerical method
+    Calculates the inverse kinematics from a numerical method
 
     ** Solved from the numerical method 'Newton - Raphson' **
 
