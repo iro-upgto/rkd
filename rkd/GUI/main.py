@@ -10,7 +10,7 @@ from rkd.kinematics import *
 class GUI():
     """
     """
-    
+
     def __init__(self):
         self.main = Tk()
         self.main.title("Fundamentals of Robotics")
