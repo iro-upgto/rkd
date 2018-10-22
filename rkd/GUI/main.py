@@ -14,7 +14,7 @@ class GUI():
     def __init__(self):
         self.main = Tk()
         self.main.title("Fundamentals of Robotics")
-        self.main.geometry("650x450+400+50")
+        self.main.geometry("650x450+400+60")
         self.main.minsize(600, 480)
         self.main.maxsize(650, 500)
         frame1 = Frame(self.main, width = 650, height = 500)
