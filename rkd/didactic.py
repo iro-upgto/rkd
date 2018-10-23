@@ -11,8 +11,11 @@ init_printing(use_latex=True)
 
 def deg2rad(theta):
     """ Convert degrees to radians """
-    return theta*pi/180
+    return theta*(pi/180)
     
+def rad2deg(theta):
+    """ Convert radians to degrees """
+    return ( theta*(180/pi) ).evalf()
 
 def rotz(theta, deg=False):
     """
@@ -84,22 +87,32 @@ def dh(a,alpha,d,theta):
                   [0,0,0,1]])
     return M
     
-
-def htm2eul(H, seq="zxz"):
+    
+def eul2htm(phi,theta,psi,seq="zxz",deg=False):
+    if deg: # If angles are given in degrees -> convert to radians
+        phi,theta,psi = deg2rad(Matrix([phi,theta,psi])).evalf()
     if seq in ("ZXZ","zxz"):
-        return _htm2zxz(H)
+        H = htmrot(phi,"z")*htmrot(theta,"x")*htmrot(psi,"z")
+    else:
+        H = eye(4)
+    return H
+    
+
+def htm2eul(H, seq="zxz", deg=False):
+    if seq in ("ZXZ","zxz"):
+        return _htm2zxz(H, deg)
     elif seq in ("ZYZ","zyz"):
-        return _htm2zyz(H)
+        return _htm2zyz(H, deg)
     else:
         pass # raise exception (to impl)
 
-def _htm2zxz(H):
+def _htm2zxz(H, deg=False):
     """
     Calculates ZXZ Euler Angles from a homogenous transformation matrix
     """
     R = H[:3,:3] # rotation sub-matrix
     r33,r13,r23,r31,r32,r11,r12,r21 = R[2,2],R[0,2],R[1,2],R[2,0],R[2,1],R[0,0],R[0,1],R[1,0]
-    if r23!=0 or r13!=0:
+    if abs(r33) != 1:
         theta = atan2(sqrt(1-r33**2), r33)
         phi = atan2(r13, -r23)
         psi = atan2(r31, r32)
@@ -115,6 +128,10 @@ def _htm2zxz(H):
         theta = atan2(sqrt(1-r33**2), r33)
         phi = atan2(r13,-r23)
         psi = atan2(r31,r32)
+        
+    if deg:
+        return rad2deg(phi), rad2deg(theta), rad2deg(psi)
+        
     return phi,theta,psi
 
 
@@ -371,5 +388,5 @@ def test_rb2():
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    test_robot()
-    # ~ test_rb2()
+    # ~ test_robot()
+    test_rb2()

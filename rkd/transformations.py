@@ -3,6 +3,10 @@ from numpy import *
 import numpy as np
 from rkd.util import *
 from rkd.abc import *
+<<<<<<< HEAD
+init_printing(use_latex=True)
+=======
+>>>>>>> d14187be7cf8ef8cd4ca3bb7bee3967e60e37cd3
 
 
 def rotz(theta, deg=False):
