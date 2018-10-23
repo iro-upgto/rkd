@@ -87,16 +87,26 @@ def dh(a,alpha,d,theta):
                   [0,0,0,1]])
     return M
     
-
-def htm2eul(H, seq="zxz"):
+    
+def eul2htm(phi,theta,psi,seq="zxz",deg=False):
+    if deg: # If angles are given in degrees -> convert to radians
+        phi,theta,psi = deg2rad(Matrix([phi,theta,psi])).evalf()
     if seq in ("ZXZ","zxz"):
-        return _htm2zxz(H)
+        H = htmrot(phi,"z")*htmrot(theta,"x")*htmrot(psi,"z")
+    else:
+        H = eye(4)
+    return H
+    
+
+def htm2eul(H, seq="zxz", deg=False):
+    if seq in ("ZXZ","zxz"):
+        return _htm2zxz(H, deg)
     elif seq in ("ZYZ","zyz"):
-        return _htm2zyz(H)
+        return _htm2zyz(H, deg)
     else:
         pass # raise exception (to impl)
 
-def _htm2zxz(H):
+def _htm2zxz(H, deg=False):
     """
     Calculates ZXZ Euler Angles from a homogenous transformation matrix
     """
@@ -118,6 +128,10 @@ def _htm2zxz(H):
         theta = atan2(sqrt(1-r33**2), r33)
         phi = atan2(r13,-r23)
         psi = atan2(r31,r32)
+        
+    if deg:
+        return rad2deg(phi), rad2deg(theta), rad2deg(psi)
+        
     return phi,theta,psi
 
 

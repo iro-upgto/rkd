@@ -2,8 +2,8 @@
 from sympy import *
 from numpy import *
 import numpy as np
-from util import *
-from abc import *
+from rkd.util import *
+from rkd.abc import *
 init_printing(use_latex=True)
 
 
