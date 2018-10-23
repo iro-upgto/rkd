@@ -1,10 +1,12 @@
 # Transformations
-from sympy import *
 from numpy import *
 import numpy as np
 from rkd.util import *
 from rkd.abc import *
+<<<<<<< HEAD
 init_printing(use_latex=True)
+=======
+>>>>>>> d14187be7cf8ef8cd4ca3bb7bee3967e60e37cd3
 
 
 def rotz(theta, deg=False):
@@ -64,7 +66,7 @@ def roty(theta, deg=False):
                   [-st,0,ct]])
     return R
 
-def rot2eul(R, axis, deg = False):
+def rot2eul(R, axis, deg = False, sol = False):
     """
     Calculates the Euler angles from a rotation matrix with differents combinations of axis
 
@@ -86,14 +88,19 @@ def rot2eul(R, axis, deg = False):
 
     if ((axis=="ZXZ")or(axis=="zxz")): # Condition for the ZXZ axis
         if ((r33!=1)or(r33!=-1)):
-            theta = arctan2((sqrt(1-(r33**2))),r33)
-            phi = arctan2(r13,-r23)
-            psi = arctan2(r31,r32)
+            theta = arctan2((sqrt(1-(r33**2))), r33)
+            phi = arctan2(r13, -r23)
+            psi = arctan2(r31, r32)
+
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2((-sqrt(1-(r33**2))), r33)
+            phi = arctan2(-r13, r23)
+            psi = arctan2(-r31, -r32)
 
         if r33==1:
             theta = 0
             phi = 0
-            psi = arctan2(r21,r11)
+            psi = arctan2(r21, r11)
 
         if r33==-1:
             theta = pi
@@ -105,6 +112,11 @@ def rot2eul(R, axis, deg = False):
             theta = arctan2((sqrt(1-(r33**2))), r33)
             phi = arctan2(r23, r13)
             psi = arctan2(r32, -r31)
+
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2((-sqrt(1-(r33**2))), r33)
+            phi = arctan2(-r23, -r13)
+            psi = arctan2(-r32, r31)
 
         if r33==1:
             theta = 0
@@ -122,6 +134,11 @@ def rot2eul(R, axis, deg = False):
             phi = arctan2(r31, r21)
             psi = arctan2(r13, -r12)
 
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            phi = arctan2(-r31, -r21)
+            psi = arctan2(-r13, r12)
+
         if r11==1:
             theta = 0
             phi = 0
@@ -138,6 +155,16 @@ def rot2eul(R, axis, deg = False):
             phi = arctan2(r21, -r31)
             psi = arctan2(r12, r13)
 
+        if sol:
+            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            phi = arctan2(-r21, r31)
+            psi = arctan2(-r12, -r13)
+
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            phi = arctan2(-r21, r31)
+            psi = arctan2(-r12, -r13)
+
         if r11==1:
             theta = 0
             phi = 0
@@ -150,9 +177,14 @@ def rot2eul(R, axis, deg = False):
 
     if ((axis=="YZY")or(axis=="yzy")): # Condition for the YZY axis
         if ((r22!=1)or(r22!=-1)):
-            theta = arctan2((1-(r22**2)), r22)
+            theta = arctan2(sqrt(1-(r22**2)), r22)
             phi = arctan2(r32, -r12)
             psi = arctan2(r23, r21)
+
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2(-sqrt(1-(r22**2)), r22)
+            phi = arctan2(-r32, r12)
+            psi = arctan2(-r23, -r21)
 
         if r22==1:
             theta = 0
@@ -170,6 +202,11 @@ def rot2eul(R, axis, deg = False):
             phi = arctan2(r12, r32)
             psi = arctan2(r21, -r23)
 
+        if sol: # Solution 2 in the case of "Theta"
+            theta = arctan2((-sqrt(1-(r22**2))), r22)
+            phi = arctan2(-r12, -r32)
+            psi = arctan2(-r21, r23)
+
         if r22==1:
             theta = 0
             phi = 0
@@ -185,7 +222,7 @@ def rot2eul(R, axis, deg = False):
 
     return phi,theta,psi
 
-def rot2RPY(R, deg = False):
+def rot2RPY(R, deg = False, sol = False):
     """
     Calculates the Roll, Pitch, Yaw angles from a rotation matrix on the XYZ axis
 
@@ -209,10 +246,15 @@ def rot2RPY(R, deg = False):
         phi = arctan2(r21, r11)
         psi = arctan2(r32, r33)
 
-    if ((r31==1)or(r31==-1)):
+    if r31==1:
         theta = pi/2
         phi = 0
-        psi = arctan2(-r12, r22)
+        psi = arctan2(-r21, r22)
+
+    if r31==-1:
+        theta = (3*pi)/2
+        phi = 0
+        psi = arctan2(r21, -r22)
 
     if deg: # Convert the angles to degrees
         return deg2rad(phi), deg2rad(theta), deg2rad(psi)
@@ -221,7 +263,11 @@ def rot2RPY(R, deg = False):
 
 def rot2axa(R, deg = False):
     """
+    Calculates the axis / angle ratio from a rotation matrix
 
+    ** The angles must be given in radians by default **
+
+    Important: The rotation matrix must be 3x3
     """
     r11 = R[0,0] # Position in the matrix [1,1]
     r12 = R[0,1] # Position in the matrix [1,2]
@@ -244,7 +290,7 @@ def rot2axa(R, deg = False):
 
 def htmDH(a,al,d,t, deg=False ):
     """
-    Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameter
+    Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameters
 
     ** The angles must be given in radians by default **
     """
@@ -265,8 +311,9 @@ def htmDH(a,al,d,t, deg=False ):
 
 if __name__=="__main__":
 
-    H = np.array([[0, -((sqrt(3))/2), 1/2],
-                  [1/2, -((sqrt(3))/4), -3/4],
-                  [((sqrt(3))/2), 1/4, ((sqrt(3))/4)]])
+    H = np.array([[0.06699, -0.933, 0.3536, 1],
+                  [0.933, -0.0699, -0.3536, 1],
+                  [0.3536, 0.3536, 0.866, 1],
+                  [0, 0, 0, 1]])
 
-    print(rot2axa(H, True))
+    print("RESULTADO: ", rot2eul(H, "zxz", True, True))
