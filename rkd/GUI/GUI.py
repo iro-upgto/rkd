@@ -1,12 +1,20 @@
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox
+import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+# Implement the default Matplotlib key bindings.
+from matplotlib.figure import Figure
+
+import numpy as np
 
 class GUI(Tk):
 
     def __init__(self, *args, **kwargs):
-        Tk.__init__(self, *args, **kwargs)
-        
+        Tk.__init__(self, *args, **kwargs)        
         self.title_font = font.Font(family = "Helvetica", size = 18, weight = "bold", slant = "italic")
         self.Arial16 = font.Font(family = "Arial", size = 16, weight = "bold")
         self.Arial14 = font.Font(family = "Arial", size = 14, weight = "bold")
@@ -17,31 +25,26 @@ class GUI(Tk):
         # will be raised above the others
 
         self.title("Robot Kinematics")
-
         img = PhotoImage(file = "img/robot.png")        
         self.call("wm", "iconphoto", self._w, img)
-
         self.geometry("1200x650+300+10")
         self.minsize(1150, 600)
         self.maxsize(1200, 650)
-
         barMenu = Menu(self)
         menuInfo = Menu(barMenu)
         menuhelp = Menu(barMenu)        
         menuInfo.add_command(label = "Open Message", command = self.info)
-        menuhelp.add_command(label = "Open Message")# command = self.help1)        
+        menuhelp.add_command(label = "Open Message", command = self.help)        
         barMenu.add_cascade(label = "Information", menu = menuInfo)
         barMenu.add_cascade(label = "Help", menu = menuhelp)        
         self.config(menu = barMenu)
-
-
         container = Frame(self)
         container.pack(side="top", fill="both", expand=True)
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (main, transformations, rotations):
+        for F in (main, transformations, forward_kinematics, rotations):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -61,32 +64,34 @@ class GUI(Tk):
     def info(self):
         messagebox.showinfo("Information","Version: 1.0\n\nMIT License\n\nCopyright (c) 2018 IRO\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.")
 
+    def help(self):
+        messagebox.showinfo("Help", "Hello world")
+
 class main(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller        
         label = Label(self, text="Robot Kinematics", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
+        label.pack(side="top", fill="x", pady=10)        
         btn_transformations = Button(self, text = "Transformations", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations"))
         btn_transformations.pack(padx = 10, pady = 20)
-        btn_kinematics = Button(self, text = "Forward Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1")# command = self.m_fwd_kinematics)
+        btn_kinematics = Button(self, text = "Forward Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("forward_kinematics"))
         btn_kinematics.pack(padx = 10, pady = 10)
         btn_rkinematics = Button(self, text = "Inverse Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1")# command = self.m_inverse_kinematics)
         btn_rkinematics.pack(padx = 10, pady = 10)
         btn_dkinematics = Button(self, text = "Differential Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1")# command = self.m_differential_kinematics)
-        btn_dkinematics.pack(padx = 10, pady = 10)      
+        btn_dkinematics.pack(padx = 10, pady = 10)
 
+#First level of windows
 
 class transformations(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
-
-        label = Label(self, text="Transformations", font=controller.title_font)
+        label = Label(self, text="Transformations", font = controller.title_font)
         label.pack(side="top", fill="x", pady=10)
-
         btn_rotations = Button(self, text = "Rotations", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("rotations"))
         btn_rotations.pack(padx = 10, pady = 20)
         btn_parameterization = Button(self, text = "Parameterization\nof\nrotations", font = controller.Arial14, width = 20, height = 5, borderwidth = 5)# cursor = "hand1")
@@ -98,25 +103,44 @@ class transformations(Frame):
         btn_back = Button(self, text = "Back", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("main")) 
         btn_back.pack(padx = 10, pady = 10)
 
+class forward_kinematics(Frame):    
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        btn_back = Button(self, text = "Back", font = controller.Arial14, width = 15, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("main"))
+        btn_back.pack()
+        f = Figure(figsize = (5,5), dpi = 100)
+        a = f.add_subplot(111)
+        a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
+
+        canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+
+        toolbar = NavigationToolbar2Tk(canvas, self)
+        toolbar.update()
+        canvas.get_tk_widget().pack(side= TOP, fill=BOTH, expand=True)
+        
+
+#Second level of windows
 
 class rotations(Frame):
 
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
-        self.controller = controller
-
-        txt1 = StringVar()
-        txt2 = StringVar()
-        Label(self, text = "Axis:", font = controller.Arial14).pack(side = "left", anchor = "n", padx = 10, pady = 20)        
+        self.controller = controller        
+        label = Label(self, text = "Rotations", font = controller.title_font)
+        label.pack(side = "top", fill = "x", pady = 5)
+        Label(self, text = "Axis:", font = controller.Arial14).pack(side = TOP, pady = 5)        
         txt_axis = Entry(self, font = controller.Arial14)
-        txt_axis.pack(side = "left", anchor = "n",padx = 10, pady = 20)
-        Label(self, text = "Angle:", font = controller.Arial14).pack(side = "left", anchor = "n", padx = 10, pady = 20)
+        txt_axis.pack(side = TOP, pady = 5)
+        Label(self, text = "Angle:", font = controller.Arial14).pack(side = TOP, pady = 5)
         txt_angle = Entry(self, font = controller.Arial14)
-        txt_angle.pack(side = "left", anchor = "n", padx = 10, pady = 20)
-        btn_go = Button(self, text = "GO", font = controller.Arial14, width = 15, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: self.go_pulse(txt_axis.get(), txt_angle.get()))
-        btn_go.pack(side = "left", anchor = "n", padx = 100, pady = 10)
-        btn_back = Button(self, text = "Back", font = controller.Arial14, width = 15, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
-        btn_back.pack(side = "left", anchor = "n", padx = 10, pady = 10)
+        txt_angle.pack(side = TOP, pady = 5)
+        btn_go = Button(self, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.go_pulse(txt_axis.get(), txt_angle.get()))
+        btn_go.pack(side = TOP, pady = 5)
+        btn_back = Button(self, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+        btn_back.pack(side = TOP, pady = 5)        
 
     #Functions for buttons
     
@@ -126,6 +150,28 @@ class rotations(Frame):
 
         if ((axis != "") or (angle != "")):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
+            if ((answer == "sí") or (answer == "Sí") or (answer == "yes") or (answer == "Yes")):
+                f = Figure(figsize = (5,2), dpi = 100)
+                a = f.add_subplot(111, projection='3d')
+                self.draw_uvw(np.eye(4))
+                canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
+                canvas.draw()
+                canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+
+                toolbar = NavigationToolbar2Tk(canvas, self)
+                toolbar.update()
+                canvas.get_tk_widget().pack(side= TOP, fill=BOTH, expand=True)                
+
+    def draw_uvw(self, T):
+        O=T[:3,3]
+        U=T[:3,0]
+        V=T[:3,1]
+        W=T[:3,2]        
+        plt.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="yellow") # Eje u
+        plt.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="blue") # Eje v
+        plt.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="white") # Eje w
+        return
+                
 
 
 if __name__ == "__main__":
