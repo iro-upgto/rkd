@@ -8,9 +8,10 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 # Implement the default Matplotlib key bindings.
 from matplotlib.figure import Figure
 import numpy as np
+from numpy import *
 from rkd.transformations import *
 from rkd.kinematics import *
-global a
+
 
 class GUI(Tk):
 
@@ -135,15 +136,14 @@ class rotations(Frame):
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         Label(frame1, text = "Axis:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
         txt_axis = Entry(frame1, font = controller.Arial14)
-        txt_axis.pack(side = TOP, padx = 5, pady = 2)
+        txt_axis.pack(side = TOP, padx = 25, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         Label(frame1, text = "Angle:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         txt_angle = Entry(frame1, font = controller.Arial14)
-        txt_angle.pack(side = TOP, padx = 5, pady = 2)
+        txt_angle.pack(side = TOP, padx = 25, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         f = Figure(figsize = (5,5), dpi = 100)
         a = f.add_subplot(111, projection='3d')
-        a.mouse_init(self)     
         a.clear()
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
@@ -164,16 +164,37 @@ class rotations(Frame):
 
         if ((axis != "") or (angle != "")):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
-            if ((answer == "sí") or (answer == "Sí") or (answer == "yes") or (answer == "Yes")):             
-                a = ax
-                canvas = canvas
-                a.clear()
-                self.draw_uvw(np.eye(4), a)
-                if ((axis == "x") or (axis == "X")):                    
+            a = ax
+            canvas = canvas
+            a.clear()                
+            self.draw_uvw(np.eye(4), a)
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):                
+                if ((axis == "x") or (axis == "X")):
                     rot_x = rotx(float(angle), True)                    
                     self.draw_uvw_rot(rot_x, a)
 
-                canvas.draw()
+                if ((axis == "y") or (axis == "Y")):
+                    rot_y = roty(float(angle), True)
+                    self.draw_uvw_rot(rot_y, a)
+
+                if ((axis == "z") or (axis == "Z")):
+                    rot_z = rotz(float(angle), True)
+                    self.draw_uvw_rot(rot_z, a)
+
+            if ((answer == "no") or (answer == "No") or (answer == "NO")):
+                if ((axis == "x") or (axis == "x")):
+                    rot_x = rotx(float(angle))
+                    self.draw_uvw_rot(rot_x, a)
+
+                if ((axis == "y") or (axis == "Y")):
+                    rot_y = roty(float(angle))
+                    self.draw_uvw_rot(rot_y, a)
+
+                if ((axis == "z") or (axis == "Z")):
+                    rot_z = rotz(float(angle))
+                    self.draw_uvw_rot(rot_z, a)
+
+            canvas.draw()
                 
             
                 
@@ -183,9 +204,9 @@ class rotations(Frame):
         U=T[:3,0]
         V=T[:3,1]
         W=T[:3,2]        
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="red", alpha = 0.4, label = "Xo") # Eje u
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="green", alpha = 0.4, label = "Yo") # Eje v
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="blue", alpha = 0.4, label = "Zo") # Eje w
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="red", alpha = 0.4, label = "$X_o$") # Eje u
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="green", alpha = 0.4, label = "$Y_o$") # Eje v
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="blue", alpha = 0.4, label = "$Z_o$") # Eje w
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')
@@ -201,9 +222,9 @@ class rotations(Frame):
         U=T[:3,0]
         V=T[:3,1]
         W=T[:3,2]        
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="red", label = "Xr") # Eje u
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="green", label = "Yr") # Eje v
-        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="blue", label = "Zr") # Eje w
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="red", label = "$X_r$") # Eje u
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="green", label = "$Y_r$") # Eje v
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="blue", label = "$Z_r$") # Eje w
         ax.set_xlabel('X axis')
         ax.set_ylabel('Y axis')
         ax.set_zlabel('Z axis')

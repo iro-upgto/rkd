@@ -21,7 +21,7 @@ class GUI():
         img = PhotoImage(file="img/robot.png") #icon of the main
         self.main.call("wm","iconphoto", self.main._w, img) #icon of the main        
         frame1 = Frame(self.main, width = 650, height = 500)
-        frame1.pack(side = "left", anchor = "n")         
+        frame1.pack(side = "left", anchor = "n")     
         Arial16 = font.Font(family = "Arial", size = 16, weight = "bold")
         logo = PhotoImage(file = "img/upg(1).png")
         Label(self.main, image = logo, height = 150).place(x = 900, y = 20)
