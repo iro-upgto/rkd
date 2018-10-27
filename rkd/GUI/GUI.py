@@ -154,6 +154,7 @@ class rotations(Frame):
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
         btn_back.pack(side = TOP, padx = 5, pady = 10)
+        a.mouse_init() # for mouse rotation
         
 
     #Functions for buttons
