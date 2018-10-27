@@ -89,6 +89,42 @@ def rotx(theta, deg=False):
     return R
 
 
+def _rot(theta, axis, deg=False):
+    if axis in ("X","x",1,"1"):
+        R = rotx(theta, deg)
+    elif axis in ("Y","y",2,"2"):
+        R = roty(theta, deg)
+    elif axis in ("Z","z",3,"3"):
+        R = rotz(theta, deg)
+    else:
+        R = eye(3)
+    return R
+    
+
+
+def compose_rotations(*rotations):
+    """
+    rot: (angle, axis, frame, deg)
+    """
+    R = eye(3) # I3x3 matrix
+    for rot in rotations:
+        angle,axis,frame,*_ = rot
+        if len(rot)==4:
+            deg = rot[-1]
+        else:
+            deg = False # default value
+        crm = _rot(angle,axis)
+        if frame in ("world","fixed","global","w","0",0):
+            R = crm*R
+        elif frame in ("current","movable","local","c","1",1):
+            R = R*crm
+        else:
+            pass # Nothing to do here -> raise except. (to impl.)
+            
+    return R
+    
+
+
 def dh(a,alpha,d,theta):
     """
     Return the Denavit-Hartenberg matrix given the four parameters
@@ -202,16 +238,19 @@ def _rot2htm(R):
     return H
     
 
-def htm2axa(H):
-    R = H[:3,:3]
+def rot2axa(R, deg=False):
     r32,r23 = R[2,1],R[1,2]
     r13,r31 = R[0,2],R[2,0]
     r21,r12 = R[1,0],R[0,1]
     theta = acos((R.trace() - 1)/2)
-    k = (1/(2*sin(theta)))*Matrix([r32-r23, r13-r31, r21-r12])
-    return theta,k
+    k = ( (1/(2*sin(theta)))*Matrix([r32-r23, r13-r31, r21-r12]) ).evalf()
+    if deg:
+        theta = rad2deg(theta)
+    return k,theta
     
-def axa2htm(theta,k):
+def axa2rot(k,theta):
+    if isinstance(k,(list,tuple)):
+        k = Matrix(k)
     ct = cos(theta)
     st = sin(theta)
     vt = 1 - cos(theta)
@@ -226,7 +265,7 @@ def axa2htm(theta,k):
     r23 = ky*kz*vt - kx*st 
     r33 = kz**2*vt + ct 
     R = Matrix([[r11,r12,r13],[r21,r22,r23],[r31,r32,r33]])
-    return _rot2htm(R)
+    return R
 
 
 class Robot(object):
