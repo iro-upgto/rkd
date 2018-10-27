@@ -17,7 +17,7 @@ def rotz(theta, deg=False):
         ¿Is theta given in degrees?
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = rad2deg(theta)
+        theta = deg2rad(theta)
     ct = np.cos(theta)
     st = np.sin(theta)
     R = np.array([[ct, -st, 0],
@@ -36,7 +36,7 @@ def rotx(theta, deg=False):
         ¿Is theta given in degrees?
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = rad2deg(theta)
+        theta = deg2rad(theta)
     ct = np.cos(theta)
     st = np.sin(theta)
     R = np.array([[1,0,0],
@@ -55,7 +55,7 @@ def roty(theta, deg=False):
         ¿Is theta given in degrees?
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = rad2deg(theta)
+        theta = deg2rad(theta)
     ct = np.cos(theta)
     st = np.sin(theta)
     R = np.array([[ct,0,st],
@@ -307,10 +307,10 @@ def htmDH(a,al,d,t, deg=False ):
     return H
 
 if __name__=="__main__":
-
     H = np.array([[0.06699, -0.933, 0.3536, 1],
                   [0.933, -0.0699, -0.3536, 1],
                   [0.3536, 0.3536, 0.866, 1],
                   [0, 0, 0, 1]])
 
     print("RESULTADO: ", rot2eul(H, "zxz", True, True))
+    print("RESULTADO: ", rotx(30, True))
