@@ -1,6 +1,10 @@
-#
-#
-#
+"""
+This module has been designed for academic purposes, using SymPy as base library. 
+It's easy to check that SymPy is slower than NumPy specially in matrix algebra, 
+however SymPy is more convenient to use as didactic tool due to the given facilities 
+as the symbolic manipulation, calculation of partial and ordinary derivatives, 
+matricial multiplication using asterisk symbol, "init_printing" function and so on.
+"""
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import operator, functools
@@ -9,6 +13,10 @@ from sympy.matrices import Matrix,eye
 from rkd.abc import *
 init_printing(use_latex=True)
 
+# ~ ==========================================
+# ~ Conversions
+# ~ ==========================================
+
 def deg2rad(theta):
     """ Convert degrees to radians """
     return theta*(pi/180)
@@ -16,6 +24,10 @@ def deg2rad(theta):
 def rad2deg(theta):
     """ Convert radians to degrees """
     return ( theta*(180/pi) ).evalf()
+    
+# ~ ==========================================
+# ~ Transformation operations
+# ~ ==========================================
 
 def rotz(theta, deg=False):
     """
@@ -79,7 +91,8 @@ def rotx(theta, deg=False):
 
 def dh(a,alpha,d,theta):
     """
-    Denavit-Hartenberg matrix
+    Return the Denavit-Hartenberg matrix given the four parameters
+    (a, alpha, d, theta)
     """
     M = Matrix([[cos(theta),-sin(theta)*cos(alpha),sin(theta)*sin(alpha),a*cos(theta)],
                   [sin(theta),cos(theta)*cos(alpha),-cos(theta)*sin(alpha),a*sin(theta)],
@@ -89,6 +102,11 @@ def dh(a,alpha,d,theta):
     
     
 def eul2htm(phi,theta,psi,seq="zxz",deg=False):
+    """
+    Given a set of Euler Angles (phi,theta,psi) for specific 
+    sequence this function return the homogeneous transformation 
+    matrix associated. Default sequence is ZXZ.
+    """
     if deg: # If angles are given in degrees -> convert to radians
         phi,theta,psi = deg2rad(Matrix([phi,theta,psi])).evalf()
     if seq in ("ZXZ","zxz"):
@@ -97,8 +115,14 @@ def eul2htm(phi,theta,psi,seq="zxz",deg=False):
         H = eye(4)
     return H
     
-
+    
 def htm2eul(H, seq="zxz", deg=False):
+    """
+    Given a homogeneous transformation matrix this function 
+    return the equivalent set of Euler Angles. 
+    
+    If "deg" is True then Euler Angles are converted to degrees.
+    """
     if seq in ("ZXZ","zxz"):
         return _htm2zxz(H, deg)
     elif seq in ("ZYZ","zyz"):
@@ -106,9 +130,10 @@ def htm2eul(H, seq="zxz", deg=False):
     else:
         pass # raise exception (to impl)
 
+
 def _htm2zxz(H, deg=False):
     """
-    Calculates ZXZ Euler Angles from a homogenous transformation matrix
+    Calculates ZXZ Euler Angles from a homogeneous transformation matrix
     """
     R = H[:3,:3] # rotation sub-matrix
     r33,r13,r23,r31,r32,r11,r12,r21 = R[2,2],R[0,2],R[1,2],R[2,0],R[2,1],R[0,0],R[0,1],R[1,0]
@@ -137,7 +162,7 @@ def _htm2zxz(H, deg=False):
 
 def htmtra(d):
     """
-    Calculate the homogeneous transformation matrix of a translation  
+    Calculate the homogeneous transformation matrix of a translation
     """
     dx,dy,dz = d[0],d[1],d[2]
     M = Matrix([[1,0,0,dx],
@@ -148,8 +173,13 @@ def htmtra(d):
     
 
 def htmrot(theta, axis="z", deg=False):
-    if deg:
+    """
+    Return a homogeneous transformation matrix that represents a 
+    rotation "theta" about "axis". 
+    """
+    if deg: # Is theta given in degrees? -> then convert to radians
         theta = deg2rad(theta)
+        
     if axis in ("z","Z",3,"3"):
         R = rotz(theta)
     elif axis in ("y","Y",2,"2"):
@@ -163,15 +193,45 @@ def htmrot(theta, axis="z", deg=False):
 
 
 def _rot2htm(R):
+    """
+    Given a SO(3) matrix return a SE(3) homogeneous 
+    transformation matrix.
+    """
     _H = R.row_join(zeros(3,1))
     H = _H.col_join(Matrix([0,0,0,1]).T)
     return H
+    
 
+def htm2axa(H):
+    R = H[:3,:3]
+    r32,r23 = R[2,1],R[1,2]
+    r13,r31 = R[0,2],R[2,0]
+    r21,r12 = R[1,0],R[0,1]
+    theta = acos((R.trace() - 1)/2)
+    k = (1/(2*sin(theta)))*Matrix([r32-r23, r13-r31, r21-r12])
+    return theta,k
+    
+def axa2htm(theta,k):
+    ct = cos(theta)
+    st = sin(theta)
+    vt = 1 - cos(theta)
+    kx,ky,kz = k.normalized()
+    r11 = kx**2*vt + ct
+    r21 = kx*ky*vt + kz*st
+    r31 = kx*kz*vt - ky*st
+    r12 = kx*ky*vt - kz*st
+    r22 = ky**2*vt + ct
+    r32 = ky*kz*vt + kx*st
+    r13 = kx*kz*vt + ky*st 
+    r23 = ky*kz*vt - kx*st 
+    r33 = kz**2*vt + ct 
+    R = Matrix([[r11,r12,r13],[r21,r22,r23],[r31,r32,r33]])
+    return _rot2htm(R)
 
 
 class Robot(object):
     """
-    Define a robot-arm given the DH parameters
+    Define a robot-serial-arm given the Denavit-Hartenberg parameters
     """
     def __init__(self,*args):
         self.Ts = [] # Transformation matrices i to i-1
@@ -281,19 +341,19 @@ class Robot(object):
 
 class RigidBody2D(object):
     """
-    Define un cuerpo rígido en el plano mediante un sistema de partículas (puntos) 
-    que lo conforman.
+    Defines a rigid body through a series of points that 
+    make it up.
     """
     def __init__(self,points):
-        self._points = points # Puntos que conforman el sólido rígido
-        self.Hs = [eye(4),] # Matrices de transformación
+        self._points = points # Points
+        self.Hs = [eye(4),] # Transformation matrices
     
     @property
     def points(self):
         _points = []
-        H = self.H # Aplicando MTH
+        H = self.H #
         for p in self._points:
-            Q = Matrix([p[0],p[1],0,1]) # Coords. Homog.
+            Q = Matrix([p[0],p[1],0,1]) # Homogeneous coordinates
             _points.append(H*Q)
         return _points
     
@@ -388,5 +448,5 @@ def test_rb2():
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    # ~ test_robot()
-    test_rb2()
+    test_robot()
+    # ~ test_rb2()
