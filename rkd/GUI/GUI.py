@@ -44,7 +44,7 @@ class GUI(Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (main, transformations, forward_kinematics, rotations):
+        for F in (main, transformations, forward_kinematics, rotations,parameterization):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -94,7 +94,7 @@ class transformations(Frame):
         label.pack(side="top", fill="x", pady=10)
         btn_rotations = Button(self, text = "Rotations", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("rotations"))
         btn_rotations.pack(padx = 10, pady = 20)
-        btn_parameterization = Button(self, text = "Parameterization\nof\nrotations", font = controller.Arial14, width = 20, height = 5, borderwidth = 5)# cursor = "hand1")
+        btn_parameterization = Button(self, text = "Parameterization\nof\nrotations", font = controller.Arial14, width = 20, height = 5, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("parameterization"))
         btn_parameterization.pack(padx = 10, pady = 20)
         btn_axis_angle = Button(self, text = "Axis / Angle", font = controller.Arial14, width = 20, height = 5, borderwidth = 5, cursor = "hand1")
         btn_axis_angle.pack(padx = 10, pady = 20)
@@ -213,7 +213,7 @@ class rotations(Frame):
         ax.set_xlim([-1,1])
         ax.set_ylim([-1,1])
         ax.set_zlim([-1,1])
-        ax.legend()
+        ax.legend(loc = 0)
         ax.set_aspect("equal")
         return
 
@@ -231,9 +231,16 @@ class rotations(Frame):
         ax.set_xlim([-1,1])
         ax.set_ylim([-1,1])
         ax.set_zlim([-1,1])
-        ax.legend()
+        ax.legend(loc = 1)
         ax.set_aspect("equal")
         return
+
+class parameterization(Frame):    
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        Label(self, text = "Parameterization\nof\nrotations", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        
 
 if __name__ == "__main__":
     app = GUI()
