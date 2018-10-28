@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox
+from tkinter import ttk
 import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -9,7 +10,9 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from matplotlib.figure import Figure
 import numpy as np
 from numpy import *
+from rkd.abc import *
 from rkd.transformations import *
+from rkd.mathematical_algorithms import *
 from rkd.kinematics import *
 
 
@@ -17,7 +20,7 @@ class GUI(Tk):
 
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)        
-        self.title_font = font.Font(family = "Helvetica", size = 18, weight = "bold", slant = "italic")
+        self.title_font = font.Font(family = "Helvetica", size = 20, weight = "bold", slant = "italic")
         self.Arial16 = font.Font(family = "Arial", size = 16, weight = "bold")
         self.Arial14 = font.Font(family = "Arial", size = 14, weight = "bold")
         self.Arial12 = font.Font(family = "Arial", size = 12, weight = "bold")
@@ -108,19 +111,7 @@ class forward_kinematics(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         btn_back = Button(self, text = "Back", font = controller.Arial14, width = 15, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("main"))
-        btn_back.pack()
-        f = Figure(figsize = (5,5), dpi = 100)
-        a = f.add_subplot(111, projection="3d")
-        a.plot([1,2,3,4,5,6,7,8],[5,6,1,3,8,9,3,5])
-
-        canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
-
-        toolbar = NavigationToolbar2Tk(canvas, self)
-        toolbar.update()
-        canvas.get_tk_widget().pack(side= TOP, fill=BOTH, expand=True)
-        
+        btn_back.pack()        
 
 #Second level of windows
 
@@ -134,24 +125,32 @@ class rotations(Frame):
         label = Label(frame1, text = "Rotations", font = controller.title_font)
         label.pack(side = "top", fill = "x", padx = 5, pady = 10)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        Label(frame1, text = "Axis:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
-        txt_axis = Entry(frame1, font = controller.Arial14)
-        txt_axis.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "Axis X:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
+        txt_angle_x = Entry(frame1, font = controller.Arial14)
+        txt_angle_x.pack(side = TOP, padx = 25, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        Label(frame1, text = "Angle:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        txt_angle = Entry(frame1, font = controller.Arial14)
-        txt_angle.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "Axis Y:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        txt_angle_y = Entry(frame1, font = controller.Arial14)
+        txt_angle_y.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "Axis Z:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
+        txt_angle_z = Entry(frame1, font = controller.Arial14)
+        txt_angle_z.pack(side = TOP, padx = 25, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         f = Figure(figsize = (5,5), dpi = 100)
-        a = f.add_subplot(111, projection='3d')
+        a = f.add_subplot(111, projection='3d')        
         a.clear()
+        self.draw_uvw(np.eye(4), a)
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
+        canvas.draw()
         toolbar = NavigationToolbar2Tk(canvas, self)
         toolbar.update()
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
-        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.go_pulse(txt_axis.get(), txt_angle.get(), a, canvas))
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(txt_angle_x.get(), txt_angle_y.get(), txt_angle_z.get(), a, canvas))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         a.mouse_init() # for mouse rotation
@@ -159,48 +158,48 @@ class rotations(Frame):
 
     #Functions for buttons
     
-    def go_pulse(self, axis, angle, ax, canvas):
-        if ((axis == "") or (angle == "")):
-            messagebox.showwarning("Warning", "Check the TextBox")
+    def GO(self, x, y, z, ax, canvas):
+        if ((x == "") or (y == "") or (z == "")):
+            messagebox.showwarning("Warning", "Check the 'Text Boxes'")
 
-        if ((axis != "") or (angle != "")):
+        if ((x != "") or (y != "") or (z != "")):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
             a = ax
             canvas = canvas
-            a.clear()                
-            self.draw_uvw(np.eye(4), a)
-            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):                
-                if ((axis == "x") or (axis == "X")):
-                    rot_x = rotx(float(angle), True)                    
-                    self.draw_uvw_rot(rot_x, a)
-
-                if ((axis == "y") or (axis == "Y")):
-                    rot_y = roty(float(angle), True)
-                    self.draw_uvw_rot(rot_y, a)
-
-                if ((axis == "z") or (axis == "Z")):
-                    rot_z = rotz(float(angle), True)
-                    self.draw_uvw_rot(rot_z, a)
+            a.clear()
+            self.draw_uvw1(np.eye(4), a)
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
+                H = m_mult(rotx(float(x), True),roty(float(y), True),rotz(float(z), True))
+                self.draw_uvw_rot(H, a)
 
             if ((answer == "no") or (answer == "No") or (answer == "NO")):
-                if ((axis == "x") or (axis == "x")):
-                    rot_x = rotx(float(angle))
-                    self.draw_uvw_rot(rot_x, a)
+                H = m_mult(rotx(float(x)),roty(float(y)),rotz(float(z)))
+                self.draw_uvw_rot(H, a)
 
-                if ((axis == "y") or (axis == "Y")):
-                    rot_y = roty(float(angle))
-                    self.draw_uvw_rot(rot_y, a)
-
-                if ((axis == "z") or (axis == "Z")):
-                    rot_z = rotz(float(angle))
-                    self.draw_uvw_rot(rot_z, a)
 
             canvas.draw()
-                
-            
-                
+
+
 
     def draw_uvw(self, T, ax):
+        O=(0,0,0)
+        U=T[:3,0]
+        V=T[:3,1]
+        W=T[:3,2]        
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(U[0]),float(U[1]),float(U[2]),color="red", label = "$X$") # Eje u
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(V[0]),float(V[1]),float(V[2]),color="green", label = "$Y$") # Eje v
+        ax.quiver(float(O[0]),float(O[1]),float(O[2]),float(W[0]),float(W[1]),float(W[2]),color="blue", label = "$Z$") # Eje w
+        ax.set_xlabel('X axis')
+        ax.set_ylabel('Y axis')
+        ax.set_zlabel('Z axis')
+        ax.set_xlim([-1,1])
+        ax.set_ylim([-1,1])
+        ax.set_zlim([-1,1])
+        ax.legend(loc = 0)
+        ax.set_aspect("equal")
+        return
+
+    def draw_uvw1(self, T, ax):
         O=(0,0,0)
         U=T[:3,0]
         V=T[:3,1]
@@ -236,11 +235,157 @@ class rotations(Frame):
         ax.set_aspect("equal")
         return
 
+    def reset(self, ax, canvas):
+        a = ax
+        canvas = canvas
+        a.clear()
+        self.draw_uvw(np.eye(4), a)
+        canvas.draw()
+
 class parameterization(Frame):    
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
-        Label(self, text = "Parameterization\nof\nrotations", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = "Parameterization of rotations", font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "Rotation matrix:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        txt_rotation_matrix = Entry(frame1, font = controller.Arial14)
+        txt_rotation_matrix.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "Types of angles:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        option_angles = ttk.Combobox(frame1, font = controller.Arial14, width = 25)
+        option_angles.pack(side = TOP, padx = 15, pady = 2)
+        option_angles["values"] = ['' ,"Euler angles", "Roll, Pitch, Yaw angles"]
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "Choose an option:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        options_angles_euler = ttk.Combobox(frame1, font = controller.Arial14, width = 5)
+        options_angles_euler.pack(side = TOP, padx = 5, pady = 2)
+        options_angles_euler["values"] = ['' ,"XYX", "XZX", "YXY", "YZY", "ZXZ", "ZYZ"]
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = 'Theta angle solutions:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        solutions = ttk.Combobox(frame1, font = controller.Arial14, width = 5)
+        solutions.pack(side = TOP, padx = 5, pady = 2)
+        solutions['values'] = ['', '# 1', '# 2']
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(txt_rotation_matrix.get(), option_angles.get(), options_angles_euler.get(), solutions.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)        
+        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+        btn_back.pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = "").pack(side = TOP, padx = 5, pady = 50)
+        Label(self, text = 'Phi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+        Label(self, text = phi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+        Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Theta:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+        Label(self, text = theta, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+        Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Psi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+        Label(self, text = psi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+
+    def GO(self, rotation_matrix, type_of_angles, combination_euler, solutions):
+        matrix = rotation_matrix
+        type_a = type_of_angles
+        combination_e = combination_euler
+        sol = solutions
+
+        Arial16 = font.Font(family = 'Arial', size = 16, weight = 'bold')
+
+        if ((matrix == '') or (sol == '')):
+            messagebox.showwarning("Warning", "Check your 'Matrix' or 'Theta Solutions'")
+
+        if type_a == '':
+            messagebox.showwarning('Warning', "Check you 'Types of angles'")
+
+        if ((type_a == "Roll, Pitch, Yaw angles") and (matrix != '') and (sol != '') and ((combination_e == "XYX") or (combination_e == "XZX") or (combination_e == "YXY") or (combination_e == "YZY") or (combination_e == "ZXZ") or (combination_e == "ZYZ"))):
+            messagebox.showerror('Error', "You can't use a combination of angles with this type of angle")
+            messagebox.showinfo('Information', "If you want to use a combination of angles, we suggest using 'Euler angles' in the angle types section")
+
+        if ((type_a == 'Roll, Pitch, Yaw angles') and (combination_e == '') and (matrix != '') and (sol != '')):
+            answer = messagebox.askquestion('Important to answer','Do you want the angles in degrees?')
+
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
+                if sol == '# 1':
+                    H = eval(matrix.split()[0])
+                    matrix = np.array(H)
+                    results = rot2RPY(matrix, True)
+                    r = []
+                    r.append((results))    
+                    result = np.array(r)
+                    phi = result[0,0]
+                    phi = round(phi, 5)
+                    theta = result[0,1]
+                    theta = round(theta, 5)
+                    psi = result[0,2]
+                    psi = round(psi, 5)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 50)
+                    Label(self, text = 'Phi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = phi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Theta:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = theta, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Psi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = psi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                elif sol == '# 2':
+                    H = eval(matrix.split()[0])
+                    matrix = np.array(H)
+                    results = rot2RPY(matrix, True, True)
+                    r = []
+                    r.append((results))    
+                    result = np.array(r)
+                    phi = result[0,0]
+                    phi = round(phi, 5)
+                    theta = result[0,1]
+                    theta = round(theta, 5)
+                    psi = result[0,2]
+                    psi = round(psi, 5)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 50)
+                    Label(self, text = 'Phi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = phi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Theta:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = theta, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Psi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = psi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+
+            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                if sol == '# 1':
+                    H = eval(matrix.split()[0])
+                    matrix = np.array(H)
+                    results = rot2RPY(matrix)
+                    r = []
+                    r.append((results))    
+                    result = np.array(r)
+                    phi = result[0,0]
+                    phi = round(phi, 5)
+                    theta = result[0,1]
+                    theta = round(theta, 5)
+                    psi = result[0,2]
+                    psi = round(psi, 5)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 50)
+                    Label(self, text = 'Phi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = phi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Theta:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = theta, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+                    Label(self, text = 'Psi:', font = Arial16).pack(side = TOP, padx = 100, pady = 2)
+                    Label(self, text = psi, font = Arial16, fg = 'red').pack(side = TOP, padx = 100, pady = 2)
+                elif sol == '# 2':
+                    H = eval(matrix.split()[0])
+                    matrix = np.array(H)
+                    results = rot2RPY(matrix, False, True)
+                    r = []
+                    r.append((results))    
+                    result = np.array(r)
+                    phi = result[0,0]
+                    phi = round(phi, 5)
+                    theta = result[0,1]
+                    theta = round(theta, 5)
+                    psi = result[0,2]
+                    psi = round(psi, 5)
         
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from numpy import *
 import numpy as np
 from rkd.util import *
 from rkd.abc import *
+from rkd.mathematical_algorithms import *
 init_printing(use_latex=True)
 
 
@@ -90,7 +91,7 @@ def rot2eul(R, axis, deg = False, sol = False):
             psi = arctan2(r31, r32)
 
         if sol: # Solution 2 in the case of "Theta"
-            theta = arctan2((-sqrt(1-(r33**2))), r33)
+            theta = arctan2(-sqrt(1-(r33**2)), r33)
             phi = arctan2(-r13, r23)
             psi = arctan2(-r31, -r32)
 
@@ -111,7 +112,7 @@ def rot2eul(R, axis, deg = False, sol = False):
             psi = arctan2(r32, -r31)
 
         if sol: # Solution 2 in the case of "Theta"
-            theta = arctan2((-sqrt(1-(r33**2))), r33)
+            theta = arctan2(-sqrt(1-(r33**2)), r33)
             phi = arctan2(-r23, -r13)
             psi = arctan2(-r32, r31)
 
@@ -132,7 +133,7 @@ def rot2eul(R, axis, deg = False, sol = False):
             psi = arctan2(r13, -r12)
 
         if sol: # Solution 2 in the case of "Theta"
-            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            theta = arctan2(-sqrt(1-(r11**2)), r11)
             phi = arctan2(-r31, -r21)
             psi = arctan2(-r13, r12)
 
@@ -153,12 +154,12 @@ def rot2eul(R, axis, deg = False, sol = False):
             psi = arctan2(r12, r13)
 
         if sol:
-            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            theta = arctan2(-sqrt(1-(r11**2)), r11)
             phi = arctan2(-r21, r31)
             psi = arctan2(-r12, -r13)
 
         if sol: # Solution 2 in the case of "Theta"
-            theta = arctan2((-sqrt(1-(r11**2))), r11)
+            theta = arctan2(-sqrt(1-(r11**2)), r11)
             phi = arctan2(-r21, r31)
             psi = arctan2(-r12, -r13)
 
@@ -200,7 +201,7 @@ def rot2eul(R, axis, deg = False, sol = False):
             psi = arctan2(r21, -r23)
 
         if sol: # Solution 2 in the case of "Theta"
-            theta = arctan2((-sqrt(1-(r22**2))), r22)
+            theta = arctan2(-sqrt(1-(r22**2)), r22)
             phi = arctan2(-r12, -r32)
             psi = arctan2(-r21, r23)
 
@@ -243,6 +244,11 @@ def rot2RPY(R, deg = False, sol = False):
         phi = arctan2(r21, r11)
         psi = arctan2(r32, r33)
 
+    if sol: # Solution 2 in the case of "Theta"
+        theta = arctan2(r31, -sqrt(1-(r31**2)))
+        phi = arctan2(-r21, -r11)
+        psi = arctan2(-r32, -r33)
+
     if r31==1:
         theta = pi/2
         phi = 0
@@ -254,7 +260,7 @@ def rot2RPY(R, deg = False, sol = False):
         psi = arctan2(r21, -r22)
 
     if deg: # Convert the angles to degrees
-        return deg2rad(phi), deg2rad(theta), deg2rad(psi)
+        return rad2deg(phi), rad2deg(theta), rad2deg(psi)
 
     return phi, theta, psi
 
@@ -307,10 +313,6 @@ def htmDH(a,al,d,t, deg=False ):
     return H
 
 if __name__=="__main__":
-    H = np.array([[0.06699, -0.933, 0.3536, 1],
-                  [0.933, -0.0699, -0.3536, 1],
-                  [0.3536, 0.3536, 0.866, 1],
-                  [0, 0, 0, 1]])
-
-    print("RESULTADO: ", rot2eul(H, "zxz", True, True))
-    print("RESULTADO: ", rotx(30, True))
+    matrix = [[0.0669,-0.933,0.3536],[0.933,-0.669,-0.3536],[0.3536,0.3536,0.866]]
+    H = np.array(matrix)
+    print("RESULTADO: ", rot2RPY(H, False, True))

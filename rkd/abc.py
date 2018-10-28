@@ -1,6 +1,7 @@
 from sympy.abc import *
 from sympy import symbols
 
+Theta, Psi, Phi = symbols('theta, psi, phi')
 t1,t2,t3,t4,t5,t6 = symbols('\\theta_1:7')
 l1,l2,l3,l4,l5,l6 = symbols('l_1:7')
 d1,d2,d3,d4,d5,d6 = symbols('d_1:7')
