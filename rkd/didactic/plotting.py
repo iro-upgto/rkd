@@ -16,13 +16,26 @@ from rkd.didactic.util import *
 def plot_euler(phi,theta,psi,seq="zxz"):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
-    draw_uvw(eye(4), ax)
-    R1 = 0
-    draw_uvw(H, ax)
+    if seq in ("zxz","ZXZ"):
+        R1 = rotz(phi)
+        R2 = R1*rotx(theta)
+        R3 = R2*rotz(psi)
+    draw_uvw(eye(4), ax, "k", 8)
+    draw_uvw(R1, ax, "r", 6)
+    draw_uvw(R2, ax, "g", 4)
+    draw_uvw(R3, ax, "b", 3)
+    ax.set_xlim([-1,1])
+    ax.set_ylim([-1,1])
+    ax.set_zlim([-1,1])
+    ax.set_aspect("equal")
+    ax.axis('off')
     plt.show()
     
     
-def draw_uvw(H,ax,sz=1):
+    
+    
+    
+def draw_uvw(H,ax,color=("r","g","b"),sz=1):
     u = H[:3,0]
     v = H[:3,1]
     w = H[:3,2]
@@ -31,10 +44,17 @@ def draw_uvw(H,ax,sz=1):
     else:
         o = Matrix([0,0,0])
     L = sz/5
-    ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2], color="r", length=L)
-    ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2], color="g", length=L)
-    ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2], color="b", length=L)
+    if isinstance(color,str):
+        colorl = (color,color,color)
+    else:
+        colorl = color
+    ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2], color=colorl[0], 
+              length=L, arrow_length_ratio=0.2)
+    ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2], color=colorl[1], 
+              length=L, arrow_length_ratio=0.2)
+    ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2], color=colorl[2], 
+              length=L, arrow_length_ratio=0.2)
 
 
 if __name__=="__main__":
-    plot_euler(pi/4,pi/4,pi/4)
+    plot_euler(pi/3,pi/3,pi/3)
