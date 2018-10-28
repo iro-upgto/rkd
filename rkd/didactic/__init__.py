@@ -14,4 +14,7 @@ matricial multiplication using asterisk symbol, "init_printing" function and so 
 from sympy import * 
 from rkd.abc import * # To use common symbolic variables
 from .core import *
+from .plotting import *
+from .transformations import *
+from .util import *
 init_printing(use_latex=True) # Get "pretty print"

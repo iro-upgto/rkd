@@ -29,9 +29,22 @@ def ishtm(H):
 
 def isrot(R):
     nrow,ncol = R.shape
-    if nrow == ncol == 3:
+    if (nrow == ncol == 3) and isorthonormal(R):
         return True
     return False
+    
+def isorthonormal(R):
+    """
+    Check if R is orthonormal
+    """
+    nrow,ncol = R.shape
+    for i,j in combinations(range(ncol), 2):
+        if ( R[:,i].dot(R[:,j]) ).simplify() != 0:
+            return False
+    for i in range(ncol):
+        if R[:,i].norm().simplify() != 1:
+            return False
+    return True
 
 
 

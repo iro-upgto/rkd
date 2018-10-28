@@ -10,13 +10,14 @@ from mpl_toolkits.mplot3d import Axes3D
 from sympy import *
 from sympy.matrices import Matrix,eye
 from rkd.didactic.transformations import *
+from rkd.didactic.util import *
 
 
 def plot_euler(phi,theta,psi,seq="zxz"):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection="3d")
     draw_uvw(eye(4), ax)
-    R1 = 
+    R1 = 0
     draw_uvw(H, ax)
     plt.show()
     
@@ -26,7 +27,9 @@ def draw_uvw(H,ax,sz=1):
     v = H[:3,1]
     w = H[:3,2]
     if ishtm(H):
-    o = H[:3,3]
+        o = H[:3,3]
+    else:
+        o = Matrix([0,0,0])
     L = sz/5
     ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2], color="r", length=L)
     ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2], color="g", length=L)
