@@ -30,9 +30,7 @@ def plot_euler(phi,theta,psi,seq="zxz"):
     ax.set_aspect("equal")
     ax.axis('off')
     plt.show()
-    
-    
-    
+
     
     
 def draw_uvw(H,ax,color=("r","g","b"),sz=1):

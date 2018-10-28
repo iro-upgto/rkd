@@ -8,9 +8,6 @@ matricial multiplication using asterisk symbol, "init_printing" function and so 
 from sympy import *
 from sympy.matrices import Matrix,eye
 
-# ~ ==========================================
-# ~ Conversions
-# ~ ==========================================
 
 def deg2rad(theta):
     """ Convert degrees to radians """
@@ -22,12 +19,18 @@ def rad2deg(theta):
     return ( theta*(180/pi) ).evalf()
     
 def ishtm(H):
+    """
+    Is H a homogeneous transformation matrix ?
+    """
     nrow,ncol = H.shape
     if nrow == ncol == 4:
         return True
     return False
 
 def isrot(R):
+    """
+    Is R a rotation matrix ?
+    """
     nrow,ncol = R.shape
     if (nrow == ncol == 3) and isorthonormal(R):
         return True

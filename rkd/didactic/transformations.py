@@ -253,17 +253,16 @@ def axa2rot(k,theta):
     R = Matrix([[r11,r12,r13],[r21,r22,r23],[r31,r32,r33]])
     return R
     
-    
+
 def skew(u):
     """
     Return skew-symmetric matrix associated to u vector
     """
     ux,uy,uz = u
-    S = Matrix([[0, -wz, wy],
-                [wz, 0, -wx], 
-                [-wy, wx, 0]])
+    S = Matrix([[0, -uz, uy],
+                [uz, 0, -ux], 
+                [-uy, ux, 0]])
     return S
-
     
 
 if __name__=="__main__":
