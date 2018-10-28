@@ -266,6 +266,18 @@ def axa2rot(k,theta):
     r33 = kz**2*vt + ct 
     R = Matrix([[r11,r12,r13],[r21,r22,r23],[r31,r32,r33]])
     return R
+    
+    
+def skew(u):
+    """
+    Return skew-symmetric matrix associated to u vector
+    """
+    ux,uy,uz = u
+    S = Matrix([[0, -wz, wy],
+                [wz, 0, -wx], 
+                [-wy, wx, 0]])
+    return S
+
 
 
 class Robot(object):
