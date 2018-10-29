@@ -153,11 +153,6 @@ def rot2eul(R, axis, deg = False, sol = False):
             phi = arctan2(r21, -r31)
             psi = arctan2(r12, r13)
 
-        if sol:
-            theta = arctan2(-sqrt(1-(r11**2)), r11)
-            phi = arctan2(-r21, r31)
-            psi = arctan2(-r12, -r13)
-
         if sol: # Solution 2 in the case of "Theta"
             theta = arctan2(-sqrt(1-(r11**2)), r11)
             phi = arctan2(-r21, r31)
