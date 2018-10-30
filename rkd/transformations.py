@@ -310,4 +310,4 @@ def htmDH(a,al,d,t, deg=False ):
 if __name__=="__main__":
     matrix = [[0.0669,-0.933,0.3536],[0.933,-0.669,-0.3536],[0.3536,0.3536,0.866]]
     H = np.array(matrix)
-    print("RESULTADO: ", rot2RPY(H, False, True))
+    print("RESULTADO: ", rot2axa(H, True))
