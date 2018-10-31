@@ -459,7 +459,7 @@ class matrixDH(Frame):
         btn_go.pack(side = TOP, padx = 35, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('transformations'))
         btn_back.pack(side = TOP, padx = 35, pady = 10)
-        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 50)
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 55)
         Label(self, text = 'Matrix', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
 
 if __name__ == "__main__":
