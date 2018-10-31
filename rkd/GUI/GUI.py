@@ -50,7 +50,7 @@ class GUI(Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (main, transformations, forward_kinematics, rotations,parameterization, axis_angle):
+        for F in (main, transformations, forward_kinematics, rotations,parameterization, axis_angle, matrixDH):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -104,7 +104,7 @@ class transformations(Frame):
         btn_parameterization.pack(padx = 10, pady = 20)
         btn_axis_angle = Button(self, text = "Axis / Angle", font = controller.Arial14, width = 20, height = 5, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame('axis_angle'))
         btn_axis_angle.pack(padx = 10, pady = 20)
-        btn_htmDH = Button(self, text = "Matrix DH", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1")
+        btn_htmDH = Button(self, text = "Matrix DH", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame('matrixDH'))
         btn_htmDH.pack(padx = 10, pady = 10)        
         btn_back = Button(self, text = "Back", font = controller.Arial14, width = 20, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("main")) 
         btn_back.pack(padx = 10, pady = 10)
@@ -326,65 +326,17 @@ class parameterization(Frame):
 
                 if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
                     if sol == '# 1':                    
-                        results = rot2RPY(matrix, True)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)
+                        results = rot2RPY(matrix, True)                        
                         
                     elif sol == '# 2':                        
-                        results = rot2RPY(matrix, True, True)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)                        
+                        results = rot2RPY(matrix, True, True)                        
 
                 if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
                     if sol == '# 1':                        
-                        results = rot2RPY(matrix)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)
+                        results = rot2RPY(matrix)                        
 
                     elif sol == '# 2':                        
-                        results = rot2RPY(matrix, False, True)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)           
+                        results = rot2RPY(matrix, False, True)                         
 
             if ((type_a == 'Euler angles') and (matrix != '') and (sol != '') and (combination_e == '')):
                 messagebox.showwarning('Warning', 'You must choose a combination of angles')
@@ -395,80 +347,57 @@ class parameterization(Frame):
                 if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
                     if sol == '# 1':                        
                         results = rot2eul(matrix, combination_e, True)                        
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)
                         
                     elif sol == '# 2':                        
-                        results = rot2eul(matrix, combination_e, True, True)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)                            
+                        results = rot2eul(matrix, combination_e, True, True)                                                
 
                 if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
                     if sol == '# 1':                        
-                        results = rot2eul(matrix, combination_e)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)
+                        results = rot2eul(matrix, combination_e)                        
 
                     elif sol == '# 2':
                         results = rot2eul(matrix, combination_e, False, True)
-                        r = []
-                        r.append((results))    
-                        result = np.array(r)
-                        phi = result[0,0]
-                        phi = round(phi, 5)
-                        theta = result[0,1]
-                        theta = round(theta, 5)
-                        psi = result[0,2]
-                        psi = round(psi, 5)
-                        self.Phi_value.configure(text = phi)
-                        self.Theta_value.configure(text = theta)
-                        self.Psi_value.configure(text = psi)
+            
+            r = []
+            r.append((results))    
+            result = np.array(r)
+            phi = result[0,0]
+            phi = round(phi, 5)
+            theta = result[0,1]
+            theta = round(theta, 5)
+            psi = result[0,2]
+            psi = round(psi, 5)
+            self.Phi_value.configure(text = phi)
+            self.Theta_value.configure(text = theta)
+            self.Psi_value.configure(text = psi)
 
         
 
 class axis_angle(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
-        self.controller = controller
+        self.controller = controller 
         Label(self, text = 'Axis / Angle', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)   
         Label(self, text = "Rotation matrix:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         txt_rotation_matrix = Entry(self, font = controller.Arial14)
         txt_rotation_matrix.pack(side = TOP, padx = 5, pady = 2)
         btn_go = Button(self, text = 'GO', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(txt_rotation_matrix.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(self, text = 'Back', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('transformations'))
-        btn_back.pack(side = TOP, padx = 5, pady = 10)
+        btn_back.pack(side = TOP, padx = 5, pady = 10)      
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 20)
+        Label(self, text = '\u03b8 :', font = controller. Arial14).pack(side = TOP, padx = 50, pady = 2)
+        self.Theta_value = Label(self, text = '', font = controller.Arial14, fg = 'red')
+        self.Theta_value.pack(side = TOP, padx = 50, pady = 2)
+        Label(self, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'k :', font = controller. Arial14).pack(side = TOP, padx = 50, pady = 2)
+        self.k_value = Label(self, text = '', font = controller.Arial14, fg = 'red')
+        self.k_value.pack(side = TOP, padx = 50, pady = 2)
+        #self.ky_value = Label(self, text = '', font = controller.Arial14, fg = 'red')
+        #self.ky_value.pack(side = TOP, padx = 50, pady = 2)
+        #self.kz_value = Label(self, text = '', font = controller.Arial14, fg = 'red')
+        #self.kz_value.pack(side = TOP, padx = 50, pady = 2)
 
     def GO(self, matrix):
         if matrix == '':
@@ -479,14 +408,59 @@ class axis_angle(Frame):
             matrix = np.array(H)
             nrow, ncolumn = matrix.shape
 
-            answer = messagebox.askquestion('Important to answer', 'Do you want the angle in degrees?')
+            if ((nrow != 3) or (ncolumn != 3)):
+                messagebox.showerror('Error', 'Check your Rotation Matrix is 3x3')
 
-            if ((answer == 'sí') or (answer == 'si') or (answer == 'Sí') or (answer == 'Si') or (answer == 'SÍ') or (answer == 'SI') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                results = rot2axa(matrix, True)
-                r = []
-                r.append((results))    
-                result = np.array(r)
-                print(result)
+            if ((nrow == 3) and (ncolumn == 3)):
+
+                answer = messagebox.askquestion('Important to answer', 'Do you want the angle in degrees?')
+
+                if ((answer == 'sí') or (answer == 'si') or (answer == 'Sí') or (answer == 'Si') or (answer == 'SÍ') or (answer == 'SI') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
+                    theta, k = rot2axa(matrix, True)                    
+
+                if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                    theta, k = rot2axa(matrix)
+                
+                kx = k[0,0]
+                ky = k[1,0]
+                kz = k[2,0]
+                kx = round(kx, 5)
+                ky = round(ky, 5)
+                kz = round(kz, 5)
+
+                self.Theta_value.configure(text = str(theta))
+                self.k_value.configure(text = '['+str(kx)+', '+str(ky)+', '+str(kz)+']')
+
+class matrixDH(Frame):    
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        Label(self, text = 'Matrix DH (Denavir - Hartenberg)', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 35, pady = 15)
+        Label(frame1, text = 'ai:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
+        ai = Entry(frame1, font = controller.Arial14)
+        ai.pack(side = TOP, padx = 15, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 5)
+        Label(frame1, text = '\u03b1i:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
+        alphai = Entry(frame1, font = controller.Arial14)
+        alphai.pack(side = TOP, padx = 15, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 5)
+        Label(frame1, text = 'di:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
+        di = Entry(frame1, font = controller.Arial14)
+        di.pack(side = TOP, padx = 15, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 5)
+        Label(frame1, text = '\u03b8i:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
+        thetai = Entry(frame1, font = controller.Arial14)
+        thetai.pack(side = TOP, padx = 15, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 15)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1')
+        btn_go.pack(side = TOP, padx = 35, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('transformations'))
+        btn_back.pack(side = TOP, padx = 35, pady = 10)
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 50)
+        Label(self, text = 'Matrix', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
 
 if __name__ == "__main__":
     app = GUI()
