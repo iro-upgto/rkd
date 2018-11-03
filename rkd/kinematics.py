@@ -55,7 +55,7 @@ def p(i,Ts):
 
 #Kinematics inverse
 
-def reverse_kinematics(J, b, x0, deg = False,eps = 1e-6):
+def reverse_kinematics(J, b, x0, names_var, matrixJ, matrixF, deg = False,eps = 1e-6):
     """
     Calculates the inverse kinematics from a numerical method
 
@@ -66,9 +66,9 @@ def reverse_kinematics(J, b, x0, deg = False,eps = 1e-6):
 
     IMPORT: You must create your two functions of J (Jacobian), b (initial values ​​evaluated)
     """
-    k = 0 #iterations
+    k = 1 #iterations    
     while True:
-        x = np.linalg.solve(J(x0), -b(x0))
+        x = np.linalg.solve(J(matrixJ, x0, names_var), -b(matrixF, x0, names_var))
         if norm(x) < eps: break
         x0 += x
         k += 1 #Increase of iterations counter
@@ -76,25 +76,43 @@ def reverse_kinematics(J, b, x0, deg = False,eps = 1e-6):
         return rad2deg(x0), x, k
     return x0, x, k
 
-def j1(x0):
+def j1(J, x0, names_var):
     """
     Calculates the Jacobian matrix evaluated with the initial values
     """
-    t1,t2 = x0
-    J = np.array([[-100*sin(t1) - 100*sin(t1 + t2), -100*sin(t1 + t2)],
-                  [100*cos(t1) + 100*cos(t1 + t2), 100*cos(t1 + t2)]])
+    var = names_var
+
+    var1 = var[0]
+    var2 = var[1]
+
+    if ((var1 == 'var1') and (var2 == 'var2')):
+        var1,var2 = x0
+        J = eval(J)
+        J = np.array(J)    
+        F = J
     return J
 
-def b1(x0):
+def b1(F, x0, names_var):
     """
-    calculates the aproximation of vector 'bi' on the method 'Newton - Rapshon'
+    calculates the approximation of vector 'bi' on the method 'Newton - Rapshon'
     """
-    t1,t2 = x0
-    F = np.array([100*cos(t1) + 100*cos(t1 + t2) - 100, 100*sin(t1) + 100*sin(t1 + t2) - 100])
+    var = names_var
+    var1 = var[0]
+    var2 = var[1]
+
+    if ((var1 == 'var1') and (var2 == 'var2')):          
+        var1, var2 = x0
+        F = eval(F)
+        F = np.array(F)    
+        F = F
     return F
 
 if __name__=="__main__":
 
-    x0 = np.array([pi/6, pi/8])
+    x0 = np.array([pi/6, pi/8])    
+    J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
+    F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
 
-    print(kinematics_inv(j1, b1, x0, True))
+    names_var = ['var1','var2']
+    
+    print(reverse_kinematics(j1, b1, x0, names_var, J, F, True))
