@@ -529,7 +529,7 @@ class forward_kinematics(Frame):
         Label(frame1, text = 'Choose the number of degrees of freedom:', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)        
         self.dof = ttk.Combobox(frame1, font = controller.Arial12, width = 3)
         self.dof.pack(side = TOP, padx = 5, pady = 2)
-        self.dof['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+        self.dof['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         Label(frame1, text = 'DH1 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
         self.DH1 = Entry(frame1, font = controller.Arial12)
         self.DH1.pack(side = TOP, padx = 5, pady = 2)
@@ -581,7 +581,7 @@ class forward_kinematics(Frame):
             messagebox.showwarning('Warning', 'You must choose an option')
         if dof == '1':
             if DH1 == '':
-                messagebox.showwarning('Warning', 'Check your DH1')
+                messagebox.showwarning('Warning', 'Check your DH1 probably this empty')
             if ((DH2 != '') or (DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH2 to DH9')
             if ((DH1 != '') and (DH2 == '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -623,7 +623,7 @@ class forward_kinematics(Frame):
 
         if dof == '2':
             if ((DH1 == '') or (DH2 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1 and DH2')
+                messagebox.showwarning('Warning', 'Check your DH1 and DH2, probably this empty some')
             if ((DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH3 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -675,7 +675,7 @@ class forward_kinematics(Frame):
                     messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
         if dof == '3':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2 and DH3')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2 and DH3, probably this empty some')
             if ((DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH4 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -738,7 +738,7 @@ class forward_kinematics(Frame):
 
         if dof == '4':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3 and DH4')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3 and DH4, probably this empty some')
             if ((DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH5 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -811,7 +811,7 @@ class forward_kinematics(Frame):
 
         if dof == '5':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4 and DH5')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4 and DH5, probably this empty some')
             if ((DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH6 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -893,7 +893,7 @@ class forward_kinematics(Frame):
                     messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
         if dof == '6':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5 and DH6')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5 and DH6, probably this empty some')
             if ((DH7 != '') or (DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH7 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
@@ -986,7 +986,7 @@ class forward_kinematics(Frame):
 
         if dof == '7':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6 and DH7')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6 and DH7, probably this empty some')
             if ((DH8 != '') or (DH9 != '')):
                 messagebox.showerror('Error', 'You must leave the text boxes of DH8 to DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 == '') and (DH9 == '')):
@@ -1089,7 +1089,7 @@ class forward_kinematics(Frame):
 
         if dof == '8':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '') or (DH8 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7 and DH8')
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7 and DH8, probably this empty some')
             if DH9 != '':
                 messagebox.showerror('Error', 'You must leave the text box DH9')
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 != '') and (DH9 == '')):
@@ -1202,7 +1202,7 @@ class forward_kinematics(Frame):
 
         if dof == '9':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '') or (DH8 == '') or (DH9 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7, DH8 and DH9')            
+                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7, DH8 and DH9, probably this empty some')            
             if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 != '') and (DH9 != '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
@@ -1342,8 +1342,47 @@ class inverse_kinematics(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         Label(self, text = 'Inverse Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
-        btn_back = Button(self, text = 'Back', font = controller.Arial16, weight = 15, height = 3, borderwidth = 5, command = lambda: controller.show_frame('main'))
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = 'J (Matrix J):', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.matrixJ = Entry(frame1, font = controller.Arial14)
+        self.matrixJ.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = 'b (Matrx F):', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.matrixF = Entry(frame1, font = controller.Arial14)
+        self.matrixF.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = 'Number of variables', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.number_var = ttk.Combobox(frame1, font = controller.Arial14, width = 3)
+        self.number_var.pack(side = TOP, padx = 5, pady = 2)
+        self.number_var['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = 'Starting Initials:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.x0 = Entry(frame1, font = controller.Arial14)
+        self.x0.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = 'Names of the variables:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.names_var  = Entry(frame1, font = controller.Arial14)
+        self.names_var.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get(), self.names_var.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5)
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: controller.show_frame('main'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
+
+    def GO(self, matrixJ, matrixF, number_var, x0, names_var):
+        if matrixJ == '':
+            messagebox.showwarning('Warning', 'Matrix J is empty')
+        if matrixF == '':
+            messagebox.showwarning('Warning', 'Matrix F is empty')
+        if number_var == '':
+            messagebox.showwarning('Warning', 'Number of variables is empty')
+        if x0 == '':
+            messagebox.showwarning('Warning', 'Starting Initials is empty')
+        if names_var == '':
+            messagebox.showwarning('Warning', 'Names of the variables is empty')
         
 
 if __name__ == "__main__":
