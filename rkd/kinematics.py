@@ -55,7 +55,7 @@ def p(i,Ts):
 
 #Kinematics inverse
 
-def reverse_kinematics(J, b, x0, names_var, matrixJ, matrixF, deg = False,eps = 1e-6):
+def reverse_kinematics(J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
     """
     Calculates the inverse kinematics from a numerical method
 
@@ -66,9 +66,10 @@ def reverse_kinematics(J, b, x0, names_var, matrixJ, matrixF, deg = False,eps = 
 
     IMPORT: You must create your two functions of J (Jacobian), b (initial values ​​evaluated)
     """
-    k = 1 #iterations    
+    k = 1 #iterations
+    num_var = number_of_variables
     while True:
-        x = np.linalg.solve(J(matrixJ, x0, names_var), -b(matrixF, x0, names_var))
+        x = np.linalg.solve(J(matrixJ, x0, num_var), -b(matrixF, x0, num_var))
         if norm(x) < eps: break
         x0 += x
         k += 1 #Increase of iterations counter
@@ -76,35 +77,172 @@ def reverse_kinematics(J, b, x0, names_var, matrixJ, matrixF, deg = False,eps = 
         return rad2deg(x0), x, k
     return x0, x, k
 
-def j1(J, x0, names_var):
+def j1(J, x0, number_of_variables):
     """
     Calculates the Jacobian matrix evaluated with the initial values
     """
-    var = names_var
+    var = ['var1', 'var2', 'var3', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
+    num_var = number_of_variables
 
-    var1 = var[0]
-    var2 = var[1]
-
-    if ((var1 == 'var1') and (var2 == 'var2')):
-        var1,var2 = x0
-        J = eval(J)
-        J = np.array(J)    
-        F = J
+    if num_var == '1':
+        var1 = var[0]
+        if var1 == 'var1':
+            var1 = x0            
+    if num_var == '2':
+        var1 = var[0]
+        var2 = var[1]
+        if ((var1 == 'var1') and (var2 == 'var2')):
+            var1, var2 = x0
+    if num_var == '3':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3')):
+            var1, var2, var3 = x0
+    if num_var == '4':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4')):
+            var1, var2, var3, var4 = x0
+    if num_var == '5':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5')):
+            var1, var2, var3, var4, var5 = x0
+    if num_var == '6':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6')):
+            var1, var2, var3, var4, var5, var6 = x0
+    if num_var == '7':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')):
+            var1, var2, var3, var4, var5, var6, var7 = x0
+    if num_var == '8':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        var8 = var[7]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8')):
+            var1, var2, var3, var4, var5, var6, var7, var8 = x0
+    if num_var == '9':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        var8 = var[7]
+        var9 = var[8]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
+            var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
+    J = eval(J)
+    J = np.array(J)    
+    F = J
     return J
 
-def b1(F, x0, names_var):
+def b1(F, x0, number_of_variables):
     """
     calculates the approximation of vector 'bi' on the method 'Newton - Rapshon'
     """
-    var = names_var
-    var1 = var[0]
-    var2 = var[1]
+    var = ['var1', 'var2', 'var3', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
+    num_var = number_of_variables
 
-    if ((var1 == 'var1') and (var2 == 'var2')):          
-        var1, var2 = x0
-        F = eval(F)
-        F = np.array(F)    
-        F = F
+    if num_var == '1':
+        var1 = var[0]
+        if var1 == 'var1':
+            var1 = x0            
+    if num_var == '2':
+        var1 = var[0]
+        var2 = var[1]
+        if ((var1 == 'var1') and (var2 == 'var2')):
+            var1, var2 = x0
+    if num_var == '3':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3')):
+            var1, var2, var3 = x0
+    if num_var == '4':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4')):
+            var1, var2, var3, var4 = x0
+    if num_var == '5':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5')):
+            var1, var2, var3, var4, var5 = x0
+    if num_var == '6':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6')):
+            var1, var2, var3, var4, var5, var6 = x0
+    if num_var == '7':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')):
+            var1, var2, var3, var4, var5, var6, var7 = x0
+    if num_var == '8':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        var8 = var[7]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8')):
+            var1, var2, var3, var4, var5, var6, var7, var8 = x0
+    if num_var == '9':
+        var1 = var[0]
+        var2 = var[1]
+        var3 = var[2]
+        var4 = var[3]
+        var5 = var[4]
+        var6 = var[5]
+        var7 = var[6]
+        var8 = var[7]
+        var9 = var[8]
+        if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
+            var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
+    F = eval(F)
+    F = np.array(F)    
+    F = F
     return F
 
 if __name__=="__main__":
@@ -112,7 +250,5 @@ if __name__=="__main__":
     x0 = np.array([pi/6, pi/8])    
     J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
     F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
-
-    names_var = ['var1','var2']
     
-    print(reverse_kinematics(j1, b1, x0, names_var, J, F, True))
+    print(reverse_kinematics(j1, b1, x0, '2', J, F, True))

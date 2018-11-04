@@ -1357,22 +1357,18 @@ class inverse_kinematics(Frame):
         self.number_var.pack(side = TOP, padx = 5, pady = 2)
         self.number_var['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
-        Label(frame1, text = 'Starting Initials:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'Initials Values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.x0 = Entry(frame1, font = controller.Arial14)
         self.x0.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
-        Label(frame1, text = 'Names of the variables:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.names_var  = Entry(frame1, font = controller.Arial14)
-        self.names_var.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get(), self.names_var.get()))
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5)
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: controller.show_frame('main'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
 
-    def GO(self, matrixJ, matrixF, number_var, x0, names_var):
+    def GO(self, matrixJ, matrixF, number_var, x0):
         if matrixJ == '':
             messagebox.showwarning('Warning', 'Matrix J is empty')
         if matrixF == '':
@@ -1380,10 +1376,25 @@ class inverse_kinematics(Frame):
         if number_var == '':
             messagebox.showwarning('Warning', 'Number of variables is empty')
         if x0 == '':
-            messagebox.showwarning('Warning', 'Starting Initials is empty')
-        if names_var == '':
-            messagebox.showwarning('Warning', 'Names of the variables is empty')
+            messagebox.showwarning('Warning', 'Initials Values is empty')        
         
+        nvar = number_var
+        mJ = matrixJ
+        mF = matrixF
+
+        if ((mJ != '') and (mF != '') and (x0 != '') and (nvar != '')):
+            x0 = '['+'['+x0+']'+']'
+            x0 = eval(x0)
+            x0 = np.array(x0)
+            try:
+                nrowx0, ncolumnx0 = x0.shape
+                if nvar == '1':
+                    if ncolumnx0 != nvar:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == nvar:
+                        pass
+            except:
+                messagebox.showerror('Error', 'It caused an error check your data')
 
 if __name__ == "__main__":
     app = GUI()
