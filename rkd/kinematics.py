@@ -55,7 +55,7 @@ def p(i,Ts):
 
 #Kinematics inverse
 
-def reverse_kinematics(J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
+def inverse_kinematics(J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
     """
     Calculates the inverse kinematics from a numerical method
 
@@ -156,6 +156,7 @@ def j1(J, x0, number_of_variables):
         var9 = var[8]
         if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
             var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
+    J = '['+J+']'
     J = eval(J)
     J = np.array(J)    
     F = J
@@ -251,4 +252,4 @@ if __name__=="__main__":
     J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
     F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
     
-    print(reverse_kinematics(j1, b1, x0, '2', J, F, True))
+    print(inverse_kinematics(j1, b1, x0, '2', J, F))
