@@ -5,6 +5,7 @@ from math import *
 from rkd.util import *
 from rkd.transformations import *
 from rkd.mathematical_algorithms import *
+from scipy.optimize import *
 
 def jacobian(*args):
     """
@@ -246,10 +247,14 @@ def b1(F, x0, number_of_variables):
     F = F
     return F
 
+def ec(x):
+    return np.array([(x[0]*cos(x[1])*sin(x[2])), (x[0]*sin(x[1])*sin(x[2])), (10-(x[0]*cos(x[2])))])
 if __name__=="__main__":
 
-    x0 = np.array([pi/6, pi/8])    
+    x0 = np.array([[80, pi/6, pi/4]])
     J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
     F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
     
-    print(inverse_kinematics(j1, b1, x0, '2', J, F))
+    #print(inverse_kinematics(j1, b1, x0, '2', J, F, True))
+
+    print(root(ec, x0))

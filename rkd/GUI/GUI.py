@@ -10,6 +10,7 @@ from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationTool
 from matplotlib.figure import Figure
 import numpy as np
 from numpy import *
+from scipy.optimize import *
 from rkd.abc import *
 from rkd.util import *
 from rkd.transformations import *
@@ -53,7 +54,7 @@ class GUI(Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (main, transformations, forward_kinematics, inverse_kinematics, rotations,parameterization, axis_angle, matrixDH):
+        for F in (main, transformations, forward_kinematics, inverse_kinematics, newton_raphson, mixed_root, rotations,parameterization, axis_angle, matrixDH):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -1341,7 +1342,18 @@ class inverse_kinematics(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
-        Label(self, text = 'Inverse Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('newton_raphson'))
+        btn_newton_raphson.pack(side = TOP, padx = 5, pady = 10)
+        btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('mixed_root'))
+        btn_mixed.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(self, text = 'Back', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('main'))
+        btn_back.pack(side = TOP, padx = 5, pady = 10)
+        
+class newton_raphson(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        Label(self, text = 'Inverse Kinematics for NEWTON - RAPHSON', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)        
         frame1 = Frame(self, width = 650, height = 500)
         frame1.pack(side = "left", anchor = "n")
         Label(frame1, text = 'J (Matrix J):', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
@@ -1361,23 +1373,53 @@ class inverse_kinematics(Frame):
         self.x0 = Entry(frame1, font = controller.Arial14)
         self.x0.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
-        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1')
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
-        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, command = lambda: controller.show_frame('main'))
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'APPROXIMATE VALUES:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
-        self.results_variables = Label(self, text = '', font = controller.Arial16, fg = 'red')
-        self.results_variables.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'Error range by variable', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
-        self.error_variables = Label(self, text = '', font = controller.Arial16, fg = 'red')
-        self.error_variables.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'Number of iterations', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
-        self.iterations = Label(self, text = '', font = controller.Arial16, fg = 'red')
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Approximate values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable1.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable2.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable3.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable4.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable5.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable6.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable7.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable8.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable9.pack(side = TOP, padx = 5, pady = 2)
+        Label(self, text = 'Error range by variable:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable1.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable2.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable3.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable4.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable5.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable6.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable7.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable8.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable9.pack(side = TOP, padx = 5, pady = 2)
+        Label(self, text = 'Number of iterations:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.iterations = Label(self, text = '', font = controller.Arial12, fg = 'red')
         self.iterations.pack(side = TOP, padx = 5, pady = 2)
 
     def GO(self, matrixJ, matrixF, number_var, x0):
@@ -1400,105 +1442,171 @@ class inverse_kinematics(Frame):
             x_0 = np.array(x_0)
             x0 = eval(x0)
             x0 = np.array(x0)
-            try:
-                nrowx0, ncolumnx0 = x_0.shape
-                if nvar == '1':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 1:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 1:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '2':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 2:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 2:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '3':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 3:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 3:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '4':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 4:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 4:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '5':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 5:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 5:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '6':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 6:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 6:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '7':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 7:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 7:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '8':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 8:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 8:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                if nvar == '9':
-                    if nrowx0 == 1:
-                        if ncolumnx0 != 9:
-                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                        if ncolumnx0 == 9:
-                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            #try:
+            nrowx0, ncolumnx0 = x_0.shape
+            if nvar == '1':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 1:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 1:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                            X0 = np.array(X0)
+                            x = np.array(x)
+                            result1 = X0[0]
+                            error1 = x[0]
+                            result1 = float(result1)
+                            error1 = float(error1)
+                            result1 = round(result1, 5)
+                            error1 = round(error1, 5)
+                            result1 = str(result1)
+                            error1 = str(error1)
+                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                            self.error_variable1.configure(text = 'Error 1 = '+error1)
+                            self.iterations.configure(text = k)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                            X0 = np.array(X0)
+                            x = np.array(x)
+                            result1 = X0[0]
+                            error1 = x[0]
+                            result1 = float(result1)
+                            error1 = float(error1)
+                            result1 = round(result1, 5)
+                            error1 = round(error1, 5)
+                            result1 = str(result1)
+                            error1 = str(error1)
+                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                            self.error_variable1.configure(text = 'Error 1 = '+error1)
+                            self.iterations.configure(text = k)
+            if nvar == '2':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 2:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 2:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)                            
+                            X0 = np.array(X0)
+                            x = np.array(x)
+                            result1 = X0[0]
+                            result2 = X0[1]
+                            error1 = x[0]
+                            error2 = x[1]
+                            result1 = float(result1)
+                            result2 = float(result2)
+                            error1 = float(error1)
+                            error2 = float(error2)
+                            result1 = round(result1, 5)
+                            result2 = round(result2, 5)
+                            error1 = round(error1, 5)
+                            error2 = round(error2, 5)
+                            result1 = str(result1)
+                            result2 = str(result2)
+                            error1 = str(error1)
+                            error2 = str(error2)
+                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                            self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                            self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                            self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                            self.iterations.configure(text = k)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)                            
+                            result1 = X0[0,0]
+                            result2 = X0[0,1]
+                            error1 = x[0,0]
+                            error2 = x[0,1]
+                            result1 = str(result1)
+                            result2 = str(result2)
+                            result1 = float(result1)
+                            result2 = float(result2)
+                            error1 = float(error1)
+                            error2 = float(error2)
+                            result1 = round(result1, 5)
+                            result2 = round(result2, 5)
+                            error1 = round(error1, 5)
+                            error2 = round(error2, 5)
+                            error1 = str(error1)
+                            error2 = str(error2)
+                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                            self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                            self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                            self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                            self.iterations.configure(text = k)
+            if nvar == '3':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 3:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 3:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '4':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 4:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 4:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '5':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 5:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 5:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '6':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 6:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 6:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '7':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 7:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 7:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '8':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 8:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 8:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            if nvar == '9':
+                if nrowx0 == 1:
+                    if ncolumnx0 != 9:
+                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                    if ncolumnx0 == 9:
+                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
 
-                self.results_variables.configure(text = X0)
-                self.error_variables.configure(text = x)
-                self.iterations.configure(text = k)
-
-            except:
-                messagebox.showerror('Error', 'It caused an error check your data')
+            #except:
+            #    messagebox.showerror('Error', 'It caused an error check your data')
 
     def inverse_kinematics(self, J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
         """
@@ -1526,7 +1634,7 @@ class inverse_kinematics(Frame):
         """
         Calculates the Jacobian matrix evaluated with the initial values
         """
-        var = ['var1', 'var2', 'var3', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
+        var = ['var1', 'var2', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
         num_var = number_of_variables
 
         if num_var == '1':
@@ -1603,15 +1711,15 @@ class inverse_kinematics(Frame):
                 var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
         J = '['+J+']'
         J = eval(J)
-        J = np.array(J)    
-        F = J
+        J = np.array(J)        
+        J = J
         return J
 
     def b1(self, F, x0, number_of_variables):
         """
         calculates the approximation of vector 'bi' on the method 'Newton - Rapshon'
         """
-        var = ['var1', 'var2', 'var3', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
+        var = ['var1', 'var2', 'var3', 'var4', 'var5', 'var6', 'var7', 'var8', 'var9']
         num_var = number_of_variables
 
         if num_var == '1':
@@ -1687,9 +1795,106 @@ class inverse_kinematics(Frame):
             if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
                 var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
         F = eval(F)
-        F = np.array(F)    
+        F = np.array(F)
         F = F
         return F
+
+class mixed_root(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        Label(self, text = 'Inverse Kinematics (mixed)', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = 'Equations:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.equations = Entry(frame1, font = controller.Arial16)
+        self.equations.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = 'Initials values', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.x0 = Entry(frame1, font = controller.Arial16)
+        self.x0.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.x0.get(), self.equations.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1')
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
+        btn_back.pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Approximate values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable1.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable2.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable3.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable4.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable5.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable6.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable7.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable8.pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable9.pack(side = TOP, padx = 5, pady = 2)
+        Label(self, text = 'Error range by variable:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable1.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable2.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable3.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable4.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable5.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable6.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable7.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable8.pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable9.pack(side = TOP, padx = 5, pady = 2)
+        Label(self, text = 'Number of iterations:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.iterations = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.iterations.pack(side = TOP, padx = 5, pady = 2)
+    
+    def GO(self, x0, equations):
+        if equations == '':
+            messagebox.showwarning('Warning', 'Equations is empty')
+        if x0 == '':
+            messagebox.showwarning('Warning', 'Initials values is empty')
+        if ((equations != '') and (x0 != '')):
+            x0 = '['+'['+x0+']'+']'
+            x0 = eval(x0)
+            x0 = np.array(x0)
+            results = root(self.equ, x0)
+            #NOTA: AGREGAR NUMERO DE VARIABLES A LA GUI Y MODIFICAR EL RESTO DE ESTA FUNCION
+            results1 = results.x[0]
+            results2 = results.x[1]
+            results3 = results.x[2]
+            results4 = results.x[3]
+            results5 = results.x[4]
+            results6 = results.x[5]
+            results7 = results.x[6]
+            results8 = results.x[7]
+            results9 = results.x[8]
+            self.results_variable1.configure(text = results1)
+            self.results_variable2.configure(text = results2)
+            self.results_variable3.configure(text = results3)
+            self.results_variable4.configure(text = results4)
+            self.results_variable5.configure(text = results5)
+            self.results_variable6.configure(text = results6)
+            self.results_variable7.configure(text = results7)
+            self.results_variable8.configure(text = results8)
+            self.results_variable9.configure(text = results9)
+    def equ(self, x):
+        equations = eval(self.equations.get())
+        return np.array(equations)
 
 if __name__ == "__main__":
     app = GUI()
