@@ -251,10 +251,17 @@ def ec(x):
     return np.array([(x[0]*cos(x[1])*sin(x[2])), (x[0]*sin(x[1])*sin(x[2])), (10-(x[0]*cos(x[2])))])
 if __name__=="__main__":
 
-    x0 = np.array([[80, pi/6, pi/4]])
-    J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
-    F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
+    #x0 = np.array([[80, pi/6, pi/4]])
+    #J = '[-100*sin(var1) - 100*sin(var1 + var2), -100*sin(var1 + var2)], [100*cos(var1) + 100*cos(var1 + var2), 100*cos(var1 + var2)]'
+    #F = '[100*cos(var1) + 100*cos(var1 + var2) - 100, 100*sin(var1) + 100*sin(var1 + var2) - 100]'
     
     #print(inverse_kinematics(j1, b1, x0, '2', J, F, True))
 
-    print(root(ec, x0))
+    #print(root(ec, x0))
+    DH1 = "0,1.570796327, 100, 0.785398163, 'r'"
+    DH2 = "0, 1.570796327, 0, 1.047197551, 'r'"
+    DH3 = "0, 0, 150, 0, 'p'"
+    DH1 = eval(DH1)
+    DH2 = eval(DH2)
+    DH3 = eval(DH3)
+    print(jacobian(DH1, DH2, DH3))

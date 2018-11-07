@@ -1,3 +1,4 @@
+
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox
@@ -54,7 +55,7 @@ class GUI(Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (main, transformations, forward_kinematics, inverse_kinematics, newton_raphson, mixed_root, rotations,parameterization, axis_angle, matrixDH):
+        for F in (main, transformations, forward_kinematics, inverse_kinematics, differential_kinematics, newton_raphson, mixed_root, rotations,parameterization, axis_angle, matrixDH):
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -90,7 +91,7 @@ class main(Frame):
         btn_kinematics.pack(padx = 10, pady = 10)
         btn_invkinematics = Button(self, text = "Inverse Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1", command =lambda: controller.show_frame('inverse_kinematics'))
         btn_invkinematics.pack(padx = 10, pady = 10)
-        btn_dkinematics = Button(self, text = "Differential Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1")# command = self.m_differential_kinematics)
+        btn_dkinematics = Button(self, text = "Differential Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame('differential_kinematics'))
         btn_dkinematics.pack(padx = 10, pady = 10)
 
 #First level of windows
@@ -530,7 +531,7 @@ class forward_kinematics(Frame):
         Label(frame1, text = 'Choose the number of degrees of freedom:', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)        
         self.dof = ttk.Combobox(frame1, font = controller.Arial12, width = 3)
         self.dof.pack(side = TOP, padx = 5, pady = 2)
-        self.dof['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        self.dof['values'] = ['', '1', '2', '3', '4', '5', '6']
         Label(frame1, text = 'DH1 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
         self.DH1 = Entry(frame1, font = controller.Arial12)
         self.DH1.pack(side = TOP, padx = 5, pady = 2)
@@ -549,15 +550,6 @@ class forward_kinematics(Frame):
         Label(frame1, text = 'DH6 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
         self.DH6 = Entry(frame1, font = controller.Arial12)
         self.DH6.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH7 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH7 = Entry(frame1, font = controller.Arial12)
-        self.DH7.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH8 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH8 = Entry(frame1, font = controller.Arial12)
-        self.DH8.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH9 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH9 = Entry(frame1, font = controller.Arial12)
-        self.DH9.pack(side = TOP, padx = 5, pady = 2)        
         btn_go = Button(frame1, text = 'GO', font = controller.Arial12, width = 10, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.dof.get(), self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get(), self.DH7.get(), self.DH8.get(), self.DH9.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 5)
         btn_reset = Button(frame1, text = 'Reset', font = controller.Arial12, width = 10, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
@@ -583,9 +575,9 @@ class forward_kinematics(Frame):
         if dof == '1':
             if DH1 == '':
                 messagebox.showwarning('Warning', 'Check your DH1 probably this empty')
-            if ((DH2 != '') or (DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH2 to DH9')
-            if ((DH1 != '') and (DH2 == '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if ((DH2 != '') or (DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '')):
+                messagebox.showerror('Error', 'You must leave the text boxes of DH2 to DH6')
+            if ((DH1 != '') and (DH2 == '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -625,9 +617,9 @@ class forward_kinematics(Frame):
         if dof == '2':
             if ((DH1 == '') or (DH2 == '')):
                 messagebox.showwarning('Warning', 'Check your DH1 and DH2, probably this empty some')
-            if ((DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH3 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if ((DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '')):
+                messagebox.showerror('Error', 'You must leave the text boxes of DH3 to DH6')
+            if ((DH1 != '') and (DH2 != '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -677,9 +669,9 @@ class forward_kinematics(Frame):
         if dof == '3':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '')):
                 messagebox.showwarning('Warning', 'Check your DH1, DH2 and DH3, probably this empty some')
-            if ((DH4 != '') or (DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH4 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 == '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if ((DH4 != '') or (DH5 != '') or (DH6 != '')):
+                messagebox.showerror('Error', 'You must leave the text boxes of DH4 to DH6')
+            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -740,9 +732,9 @@ class forward_kinematics(Frame):
         if dof == '4':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '')):
                 messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3 and DH4, probably this empty some')
-            if ((DH5 != '') or (DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH5 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 == '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if ((DH5 != '') or (DH6 != '')):
+                messagebox.showerror('Error', 'You must leave the text boxes of DH5 and DH6')
+            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 == '') and (DH6 == '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -813,9 +805,9 @@ class forward_kinematics(Frame):
         if dof == '5':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '')):
                 messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4 and DH5, probably this empty some')
-            if ((DH6 != '') or (DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH6 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 == '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if DH6 != '':
+                messagebox.showerror('Error', 'You must leave the text box DH6')
+            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 == '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -895,9 +887,7 @@ class forward_kinematics(Frame):
         if dof == '6':
             if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '')):
                 messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5 and DH6, probably this empty some')
-            if ((DH7 != '') or (DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH7 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 == '') and (DH8 == '') and (DH9 == '')):
+            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '')):
                 DH1 = '['+'['+DH1+']'+']'
                 dh1 = eval(DH1)
                 dh1 = np.array(dh1)
@@ -985,343 +975,6 @@ class forward_kinematics(Frame):
                 except:
                     messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
 
-        if dof == '7':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6 and DH7, probably this empty some')
-            if ((DH8 != '') or (DH9 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH8 to DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 == '') and (DH9 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                DH5 = '['+'['+DH5+']'+']'
-                dh5 = eval(DH5)
-                dh5 = np.array(dh5)
-                DH6 = '['+'['+DH6+']'+']'
-                dh6 = eval(DH6)
-                dh6 = np.array(dh6)
-                DH7 = '['+'['+DH7+']'+']'
-                dh7 = eval(DH7)
-                dh7 = np.array(dh7)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    nrow5, ncolumn5 = dh5.shape
-                    nrow6, ncolumn6 = dh6.shape
-                    nrow7, ncolumn7 = dh7.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (nrow5 != 1) or (nrow6 != 1) or (nrow7 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4) or (ncolumn5 != 4) or (ncolumn6 != 4) or (ncolumn7 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (nrow5 == 1) and (nrow6 == 1) and (nrow7 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4) and (ncolumn5 == 4) and (ncolumn6 == 4) and (ncolumn7 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        dh5_ai = dh5[0,0]
-                        dh5_alphai = dh5[0,1]
-                        dh5_di = dh5[0,2]
-                        dh5_thetai = dh5[0,3]
-                        dh6_ai = dh6[0,0]
-                        dh6_alphai = dh6[0,1]
-                        dh6_di = dh6[0,2]
-                        dh6_thetai = dh6[0,3]
-                        dh7_ai = dh7[0,0]
-                        dh7_alphai = dh7[0,1]
-                        dh7_di = dh7[0,2]
-                        dh7_thetai = dh7[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai, True)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai, True)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-
-        if dof == '8':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '') or (DH8 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7 and DH8, probably this empty some')
-            if DH9 != '':
-                messagebox.showerror('Error', 'You must leave the text box DH9')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 != '') and (DH9 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                DH5 = '['+'['+DH5+']'+']'
-                dh5 = eval(DH5)
-                dh5 = np.array(dh5)
-                DH6 = '['+'['+DH6+']'+']'
-                dh6 = eval(DH6)
-                dh6 = np.array(dh6)
-                DH7 = '['+'['+DH7+']'+']'
-                dh7 = eval(DH7)
-                dh7 = np.array(dh7)
-                DH8 = '['+'['+DH8+']'+']'
-                dh8 = eval(DH8)
-                dh8 = np.array(dh8)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    nrow5, ncolumn5 = dh5.shape
-                    nrow6, ncolumn6 = dh6.shape
-                    nrow7, ncolumn7 = dh7.shape
-                    nrow8, ncolumn8 = dh8.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (nrow5 != 1) or (nrow6 != 1) or (nrow7 != 1) or (nrow8 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4) or (ncolumn5 != 4) or (ncolumn6 != 4) or (ncolumn7 != 4) or (ncolumn8 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (nrow5 == 1) and (nrow6 == 1) and (nrow7 == 1) and (nrow8 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4) and (ncolumn5 == 4) and (ncolumn6 == 4) and (ncolumn7 == 4) and (ncolumn8 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        dh5_ai = dh5[0,0]
-                        dh5_alphai = dh5[0,1]
-                        dh5_di = dh5[0,2]
-                        dh5_thetai = dh5[0,3]
-                        dh6_ai = dh6[0,0]
-                        dh6_alphai = dh6[0,1]
-                        dh6_di = dh6[0,2]
-                        dh6_thetai = dh6[0,3]
-                        dh7_ai = dh7[0,0]
-                        dh7_alphai = dh7[0,1]
-                        dh7_di = dh7[0,2]
-                        dh7_thetai = dh7[0,3]
-                        dh8_ai = dh8[0,0]
-                        dh8_alphai = dh8[0,1]
-                        dh8_di = dh8[0,2]
-                        dh8_thetai = dh8[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai, True)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai, True)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai, True)
-                            DH8 = htmDH(dh8_ai, dh8_alphai, dh8_di, dh8_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7, DH8)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai)
-                            DH8 = htmDH(dh8_ai, dh8_alphai, dh8_di, dh8_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7, DH8)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-
-        if dof == '9':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '') or (DH7 == '') or (DH8 == '') or (DH9 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5, DH6, DH7, DH8 and DH9, probably this empty some')            
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '') and (DH7 != '') and (DH8 != '') and (DH9 != '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                DH5 = '['+'['+DH5+']'+']'
-                dh5 = eval(DH5)
-                dh5 = np.array(dh5)
-                DH6 = '['+'['+DH6+']'+']'
-                dh6 = eval(DH6)
-                dh6 = np.array(dh6)
-                DH7 = '['+'['+DH7+']'+']'
-                dh7 = eval(DH7)
-                dh7 = np.array(dh7)
-                DH8 = '['+'['+DH8+']'+']'
-                dh8 = eval(DH8)
-                dh8 = np.array(dh8)
-                DH9 = '['+'['+DH9+']'+']'
-                dh9 = eval(DH9)
-                dh9 = np.array(dh9)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    nrow5, ncolumn5 = dh5.shape
-                    nrow6, ncolumn6 = dh6.shape
-                    nrow7, ncolumn7 = dh7.shape
-                    nrow8, ncolumn8 = dh8.shape
-                    nrow9, ncolumn9 = dh9.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (nrow5 != 1) or (nrow6 != 1) or (nrow7 != 1) or (nrow8 != 1) or (nrow9 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4) or (ncolumn5 != 4) or (ncolumn6 != 4) or (ncolumn7 != 4) or (ncolumn8 != 4) or (ncolumn9 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (nrow5 == 1) and (nrow6 == 1) and (nrow7 == 1) and (nrow8 == 1) and (nrow9 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4) and (ncolumn5 == 4) and (ncolumn6 == 4) and (ncolumn7 == 4) and (ncolumn8 == 4) and (ncolumn9 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        dh5_ai = dh5[0,0]
-                        dh5_alphai = dh5[0,1]
-                        dh5_di = dh5[0,2]
-                        dh5_thetai = dh5[0,3]
-                        dh6_ai = dh6[0,0]
-                        dh6_alphai = dh6[0,1]
-                        dh6_di = dh6[0,2]
-                        dh6_thetai = dh6[0,3]
-                        dh7_ai = dh7[0,0]
-                        dh7_alphai = dh7[0,1]
-                        dh7_di = dh7[0,2]
-                        dh7_thetai = dh7[0,3]
-                        dh8_ai = dh8[0,0]
-                        dh8_alphai = dh8[0,1]
-                        dh8_di = dh8[0,2]
-                        dh8_thetai = dh8[0,3]
-                        dh9_ai = dh9[0,0]
-                        dh9_alphai = dh9[0,1]
-                        dh9_di = dh9[0,2]
-                        dh9_thetai = dh9[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai, True)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai, True)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai, True)
-                            DH8 = htmDH(dh8_ai, dh8_alphai, dh8_di, dh8_thetai, True)
-                            DH9 = htmDH(dh9_ai, dh9_alphai, dh9_di, dh9_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7, DH8, DH9)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai)
-                            DH7 = htmDH(dh7_ai, dh7_alphai, dh7_di, dh7_thetai)
-                            DH8 = htmDH(dh8_ai, dh8_alphai, dh8_di, dh8_thetai)
-                            DH9 = htmDH(dh9_ai, dh9_alphai, dh9_di, dh9_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6, DH7, DH8, DH9)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-
     def reset(self):
         self.dof.delete(0, 'end')
         self.DH1.delete(0, 'end')
@@ -1330,9 +983,6 @@ class forward_kinematics(Frame):
         self.DH4.delete(0, 'end')
         self.DH5.delete(0, 'end')
         self.DH6.delete(0, 'end')
-        self.DH7.delete(0, 'end')
-        self.DH8.delete(0, 'end')
-        self.DH9.delete(0, 'end')
         self.matrixDH_value.configure(text = '')
         self.position_x.configure(text = '')
         self.position_y.configure(text = '')
@@ -1367,7 +1017,7 @@ class newton_raphson(Frame):
         Label(frame1, text = 'Number of variables', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.number_var = ttk.Combobox(frame1, font = controller.Arial14, width = 3)
         self.number_var.pack(side = TOP, padx = 5, pady = 2)
-        self.number_var['values'] = ['', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        self.number_var['values'] = ['', '1', '2', '3', '4', '5', '6']
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = 'Initials Values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.x0 = Entry(frame1, font = controller.Arial14)
@@ -1375,51 +1025,39 @@ class newton_raphson(Frame):
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
-        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1')
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'Approximate values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Approximate values:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable1 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable1.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable2 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable2.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable3 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable3.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable4 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable4.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable5 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable5.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable6 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable6.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable7.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable8.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable9.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = 'Error range by variable:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'Error range by variable:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable1 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable1.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable2 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable2.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable3 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable3.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable4 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable4.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable5 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable5.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable6 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable6.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable7.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable8.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable9.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = 'Number of iterations:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.iterations = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'Number of iterations:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.iterations = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.iterations.pack(side = TOP, padx = 5, pady = 2)
 
     def GO(self, matrixJ, matrixF, number_var, x0):
@@ -1442,171 +1080,525 @@ class newton_raphson(Frame):
             x_0 = np.array(x_0)
             x0 = eval(x0)
             x0 = np.array(x0)
-            #try:
-            nrowx0, ncolumnx0 = x_0.shape
-            if nvar == '1':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 1:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 1:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                            X0 = np.array(X0)
-                            x = np.array(x)
-                            result1 = X0[0]
-                            error1 = x[0]
-                            result1 = float(result1)
-                            error1 = float(error1)
-                            result1 = round(result1, 5)
-                            error1 = round(error1, 5)
-                            result1 = str(result1)
-                            error1 = str(error1)
-                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
-                            self.error_variable1.configure(text = 'Error 1 = '+error1)
-                            self.iterations.configure(text = k)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-                            X0 = np.array(X0)
-                            x = np.array(x)
-                            result1 = X0[0]
-                            error1 = x[0]
-                            result1 = float(result1)
-                            error1 = float(error1)
-                            result1 = round(result1, 5)
-                            error1 = round(error1, 5)
-                            result1 = str(result1)
-                            error1 = str(error1)
-                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
-                            self.error_variable1.configure(text = 'Error 1 = '+error1)
-                            self.iterations.configure(text = k)
-            if nvar == '2':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 2:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 2:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)                            
-                            X0 = np.array(X0)
-                            x = np.array(x)
-                            result1 = X0[0]
-                            result2 = X0[1]
-                            error1 = x[0]
-                            error2 = x[1]
-                            result1 = float(result1)
-                            result2 = float(result2)
-                            error1 = float(error1)
-                            error2 = float(error2)
-                            result1 = round(result1, 5)
-                            result2 = round(result2, 5)
-                            error1 = round(error1, 5)
-                            error2 = round(error2, 5)
-                            result1 = str(result1)
-                            result2 = str(result2)
-                            error1 = str(error1)
-                            error2 = str(error2)
-                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
-                            self.results_variable2.configure(text = 'Variable 2 = '+result2)
-                            self.error_variable1.configure(text = 'Variable 1 = '+error1)
-                            self.error_variable2.configure(text = 'Variable 2 = '+error2)
-                            self.iterations.configure(text = k)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)                            
-                            result1 = X0[0,0]
-                            result2 = X0[0,1]
-                            error1 = x[0,0]
-                            error2 = x[0,1]
-                            result1 = str(result1)
-                            result2 = str(result2)
-                            result1 = float(result1)
-                            result2 = float(result2)
-                            error1 = float(error1)
-                            error2 = float(error2)
-                            result1 = round(result1, 5)
-                            result2 = round(result2, 5)
-                            error1 = round(error1, 5)
-                            error2 = round(error2, 5)
-                            error1 = str(error1)
-                            error2 = str(error2)
-                            self.results_variable1.configure(text = 'Variable 1 = '+result1)
-                            self.results_variable2.configure(text = 'Variable 2 = '+result2)
-                            self.error_variable1.configure(text = 'Variable 1 = '+error1)
-                            self.error_variable2.configure(text = 'Variable 2 = '+error2)
-                            self.iterations.configure(text = k)
-            if nvar == '3':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 3:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 3:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '4':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 4:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 4:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '5':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 5:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 5:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '6':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 6:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 6:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '7':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 7:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 7:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '8':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 8:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 8:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
-            if nvar == '9':
-                if nrowx0 == 1:
-                    if ncolumnx0 != 9:
-                        messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
-                    if ncolumnx0 == 9:
-                        answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+            try:
+                nrowx0, ncolumnx0 = x_0.shape
+                if nvar == '1':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 1:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 1:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                error1 = x[0]
+                                result1 = float(result1)
+                                error1 = float(error1)
+                                result1 = round(result1, 5)
+                                error1 = round(error1, 5)
+                                result1 = str(result1)
+                                error1 = str(error1)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.error_variable1.configure(text = 'Error 1 = '+error1)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                error1 = x[0]
+                                result1 = float(result1)
+                                error1 = float(error1)
+                                result1 = round(result1, 5)
+                                error1 = round(error1, 5)
+                                result1 = str(result1)
+                                error1 = str(error1)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.error_variable1.configure(text = 'Error 1 = '+error1)
+                                self.iterations.configure(text = k)
+                if nvar == '2':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 2:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 2:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)                            
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                error1 = x[0]
+                                error2 = x[1]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)                            
+                                result1 = X0[0,0]
+                                result2 = X0[0,1]
+                                error1 = x[0,0]
+                                error2 = x[0,1]
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.iterations.configure(text = k)
+                if nvar == '3':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 3:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 3:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.iterations.configure(text = k)
+                if nvar == '4':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 4:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 4:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.iterations.configure(text = k)
+                if nvar == '5':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 5:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 5:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.iterations.configure(text = k)
+                if nvar == '6':
+                    if nrowx0 == 1:
+                        if ncolumnx0 != 6:
+                            messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+                        if ncolumnx0 == 6:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                result6 = x0[5]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                error6 = x[5]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                result6 = float(result6)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                error6 = float(error6)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                result6 = round(result6, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                error6 = round(error6, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                result6 = str(result6)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                error6 = str(error6)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.results_variable6.configure(text = 'Variable 6 = '+result6)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.error_variable6.configure(text = 'Variable 6 = '+error6)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                result6 = x0[5]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                error6 = x[5]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                result6 = float(result6)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                error6 = float(error6)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                result6 = round(result6, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                error6 = round(error6, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                result6 = str(result6)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                error6 = str(error6)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.results_variable6.configure(text = 'Variable 6 = '+result6)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.error_variable6.configure(text = 'Variable 6 = '+error6)
+                                self.iterations.configure(text = k)                
 
-            #except:
-            #    messagebox.showerror('Error', 'It caused an error check your data')
+            except:
+                messagebox.showerror('Error', 'It caused an error check your data')
 
     def inverse_kinematics(self, J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
         """
@@ -1676,39 +1668,6 @@ class newton_raphson(Frame):
             var6 = var[5]
             if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6')):
                 var1, var2, var3, var4, var5, var6 = x0
-        if num_var == '7':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')):
-                var1, var2, var3, var4, var5, var6, var7 = x0
-        if num_var == '8':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            var8 = var[7]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8')):
-                var1, var2, var3, var4, var5, var6, var7, var8 = x0
-        if num_var == '9':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            var8 = var[7]
-            var9 = var[8]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
-                var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
         J = '['+J+']'
         J = eval(J)
         J = np.array(J)        
@@ -1752,52 +1711,29 @@ class newton_raphson(Frame):
             var5 = var[4]
             if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5')):
                 var1, var2, var3, var4, var5 = x0
-        if num_var == '6':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6')):
-                var1, var2, var3, var4, var5, var6 = x0
-        if num_var == '7':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')):
-                var1, var2, var3, var4, var5, var6, var7 = x0
-        if num_var == '8':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            var8 = var[7]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8')):
-                var1, var2, var3, var4, var5, var6, var7, var8 = x0
-        if num_var == '9':
-            var1 = var[0]
-            var2 = var[1]
-            var3 = var[2]
-            var4 = var[3]
-            var5 = var[4]
-            var6 = var[5]
-            var7 = var[6]
-            var8 = var[7]
-            var9 = var[8]
-            if ((var1 == 'var1') and (var2 == 'var2') and (var3 == 'var3') and (var4 == 'var4') and (var5 == 'var5') and (var6 == 'var6') and (var7 == 'var7')  and (var8 == 'var8') and (var9 == 'var9')):
-                var1, var2, var3, var4, var5, var6, var7, var8, var9 = x0
         F = eval(F)
         F = np.array(F)
         F = F
         return F
+
+    def reset(self):
+        self.matrixJ.delete(0, 'end')
+        self.matrixF.delete(0, 'end')
+        self.number_var.delete(0, 'end')
+        self.x0.delete(0, 'end')
+        self.results_variable1.configure(text = '')
+        self.results_variable2.configure(text = '')
+        self.results_variable3.configure(text = '')
+        self.results_variable4.configure(text = '')
+        self.results_variable5.configure(text = '')
+        self.results_variable6.configure(text = '')
+        self.error_variable1.configure(text = '')
+        self.error_variable2.configure(text = '')
+        self.error_variable3.configure(text = '')
+        self.error_variable4.configure(text = '')
+        self.error_variable5.configure(text = '')
+        self.error_variable6.configure(text = '')
+        self.iterations.configure(text = '')
 
 class mixed_root(Frame):
     def __init__(self, parent, controller):
@@ -1816,51 +1752,39 @@ class mixed_root(Frame):
         Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
         btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.x0.get(), self.equations.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
-        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1')
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
-        Label(self, text = 'Approximate values:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'Approximate values:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.results_variable1 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable1.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable2 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable2.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable3 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable3.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable4 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable4.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable5 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable5.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.results_variable6 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.results_variable6.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable7.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable8.pack(side = TOP, padx = 5, pady = 2)
-        self.results_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.results_variable9.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = 'Error range by variable:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable1 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'Error range by variable:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.error_variable1 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable1.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable2 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable2 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable2.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable3 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable3 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable3.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable4 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable4 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable4.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable5 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable5 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable5.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable6 = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        self.error_variable6 = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.error_variable6.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable7 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable7.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable8 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable8.pack(side = TOP, padx = 5, pady = 2)
-        self.error_variable9 = Label(self, text = '', font = controller.Arial12, fg = 'red')
-        self.error_variable9.pack(side = TOP, padx = 5, pady = 2)
-        Label(self, text = 'Number of iterations:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.iterations = Label(self, text = '', font = controller.Arial12, fg = 'red')
+        Label(self, text = 'Number of iterations:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.iterations = Label(self, text = '', font = controller.Arial14, fg = 'red')
         self.iterations.pack(side = TOP, padx = 5, pady = 2)
     
     def GO(self, x0, equations):
@@ -1872,29 +1796,225 @@ class mixed_root(Frame):
             x0 = '['+'['+x0+']'+']'
             x0 = eval(x0)
             x0 = np.array(x0)
-            results = root(self.equ, x0)
-            #NOTA: AGREGAR NUMERO DE VARIABLES A LA GUI Y MODIFICAR EL RESTO DE ESTA FUNCION
-            results1 = results.x[0]
-            results2 = results.x[1]
-            results3 = results.x[2]
-            results4 = results.x[3]
-            results5 = results.x[4]
-            results6 = results.x[5]
-            results7 = results.x[6]
-            results8 = results.x[7]
-            results9 = results.x[8]
-            self.results_variable1.configure(text = results1)
-            self.results_variable2.configure(text = results2)
-            self.results_variable3.configure(text = results3)
-            self.results_variable4.configure(text = results4)
-            self.results_variable5.configure(text = results5)
-            self.results_variable6.configure(text = results6)
-            self.results_variable7.configure(text = results7)
-            self.results_variable8.configure(text = results8)
-            self.results_variable9.configure(text = results9)
+            try:
+                nrowx0, ncolumnx0 = x0.shape            
+                if nrowx0 != 1:
+                    messagebox.showerror('Error', 'Check your Initials values')
+                if nrowx0 == 1:
+                    results = root(self.equ, x0)
+                    if ncolumnx0 == 1:
+                        results1 = results.x[0]
+                        error1 = results.fun[0]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results1 = round(results1, 5)
+                        error1 = float(error1)
+                        error1 = round(error1, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.iterations.configure(text = iterations)
+                    if ncolumnx0 == 2:
+                        results1 = results.x[0]
+                        results2 = results.x[1]
+                        error1 = results.fun[0]
+                        error2 = results.fun[1]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results2 = float(results2)
+                        error1 = float(error1)
+                        error2 = float(error2)
+                        results1 = round(results1, 5)
+                        results2 = round(results2, 5)
+                        error1 = round(error1, 5)
+                        error2 = round(error2, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.results_variable2.configure(text = 'Variable 2 = '+str(results2))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.error_variable2.configure(text = 'Variable 2 = '+str(error2))
+                        self.iterations.configure(text = iterations)
+                    if ncolumnx0 == 3:
+                        results1 = results.x[0]
+                        results2 = results.x[1]
+                        results3 = results.x[2]
+                        error1 = results.fun[0]
+                        error2 = results.fun[1]
+                        error3 = results.fun[2]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results2 = float(results2)
+                        results3 = float(results3)
+                        error1 = float(error1)
+                        error2 = float(error2)
+                        error3 = float(error3)
+                        results1 = round(results1, 5)
+                        results2 = round(results2, 5)
+                        results3 = round(results3, 5)
+                        error1 = round(error1, 5)
+                        error2 = round(error2, 5)
+                        error3 = round(error3, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.results_variable2.configure(text = 'Variable 2 = '+str(results2))
+                        self.results_variable3.configure(text = 'Variable 3 = '+str(results3))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.error_variable2.configure(text = 'Variable 2 = '+str(error2))
+                        self.error_variable3.configure(text = 'Variable 3 = '+str(error3))
+                        self.iterations.configure(text = iterations)
+                    if ncolumnx0 == 4:
+                        results1 = results.x[0]
+                        results2 = results.x[1]
+                        results3 = results.x[2]
+                        results4 = results.x[3]
+                        error1 = results.fun[0]
+                        error2 = results.fun[1]
+                        error3 = results.fun[2]
+                        error4 = results.fun[3]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results2 = float(results2)
+                        results3 = float(results3)
+                        results4 = float(results4)
+                        error1 = float(error1)
+                        error2 = float(error2)
+                        error3 = float(error3)
+                        error4 = float(error4)
+                        results1 = round(results1, 5)
+                        results2 = round(results2, 5)
+                        results3 = round(results3, 5)
+                        results4 = round(results4, 5)
+                        error1 = round(error1, 5)
+                        error2 = round(error2, 5)
+                        error3 = round(error3, 5)
+                        error4 = round(error4, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.results_variable2.configure(text = 'Variable 2 = '+str(results2))
+                        self.results_variable3.configure(text = 'Variable 3 = '+str(results3))
+                        self.results_variable4.configure(text = 'Variable 4 = '+str(results4))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.error_variable2.configure(text = 'Variable 2 = '+str(error2))
+                        self.error_variable3.configure(text = 'Variable 3 = '+str(error3))
+                        self.error_variable4.configure(text = 'Variable 4 = '+str(error4))
+                        self.iterations.configure(text = iterations)
+                    if ncolumnx0 == 5:
+                        results1 = results.x[0]
+                        results2 = results.x[1]
+                        results3 = results.x[2]
+                        results4 = results.x[3]
+                        results5 = results.x[4]
+                        error1 = results.fun[0]
+                        error2 = results.fun[1]
+                        error3 = results.fun[2]
+                        error4 = results.fun[3]
+                        error5 = results.fun[4]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results2 = float(results2)
+                        results3 = float(results3)
+                        results4 = float(results4)
+                        results5 = float(results5)
+                        error1 = float(error1)
+                        error2 = float(error2)
+                        error3 = float(error3)
+                        error4 = float(error4)
+                        error5 = float(error5)
+                        results1 = round(results1, 5)
+                        results2 = round(results2, 5)
+                        results3 = round(results3, 5)
+                        results4 = round(results4, 5)
+                        results5 = round(results5, 5)
+                        error1 = round(error1, 5)
+                        error2 = round(error2, 5)
+                        error3 = round(error3, 5)
+                        error4 = round(error4, 5)
+                        error5 = round(error5, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.results_variable2.configure(text = 'Variable 2 = '+str(results2))
+                        self.results_variable3.configure(text = 'Variable 3 = '+str(results3))
+                        self.results_variable4.configure(text = 'Variable 4 = '+str(results4))
+                        self.results_variable5.configure(text = 'Variable 5 = '+str(results5))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.error_variable2.configure(text = 'Variable 2 = '+str(error2))
+                        self.error_variable3.configure(text = 'Variable 3 = '+str(error3))
+                        self.error_variable4.configure(text = 'Variable 4 = '+str(error4))
+                        self.error_variable5.configure(text = 'Variable 5 = '+str(error5))
+                        self.iterations.configure(text = iterations)
+                    if ncolumnx0 == 6:
+                        results1 = results.x[0]
+                        results2 = results.x[1]
+                        results3 = results.x[2]
+                        results4 = results.x[3]
+                        results5 = results.x[4]
+                        results6 = results.x[5]
+                        error1 = results.fun[0]
+                        error2 = results.fun[1]
+                        error3 = results.fun[2]
+                        error4 = results.fun[3]
+                        error5 = results.fun[4]
+                        error6 = results.fun[5]
+                        iterations = results.nfev
+                        results1 = float(results1)
+                        results2 = float(results2)
+                        results3 = float(results3)
+                        results4 = float(results4)
+                        results5 = float(results5)
+                        results6 = float(results6)
+                        error1 = float(error1)
+                        error2 = float(error2)
+                        error3 = float(error3)
+                        error4 = float(error4)
+                        error5 = float(error5)
+                        error6 = float(error6)
+                        results1 = round(results1, 5)
+                        results2 = round(results2, 5)
+                        results3 = round(results3, 5)
+                        results4 = round(results4, 5)
+                        results5 = round(results5, 5)
+                        results6 = round(results6, 5)
+                        error1 = round(error1, 5)
+                        error2 = round(error2, 5)
+                        error3 = round(error3, 5)
+                        error4 = round(error4, 5)
+                        error5 = round(error5, 5)
+                        error6 = round(error6, 5)
+                        self.results_variable1.configure(text = 'Variable 1 = '+str(results1))
+                        self.results_variable2.configure(text = 'Variable 2 = '+str(results2))
+                        self.results_variable3.configure(text = 'Variable 3 = '+str(results3))
+                        self.results_variable4.configure(text = 'Variable 4 = '+str(results4))
+                        self.results_variable5.configure(text = 'Variable 5 = '+str(results5))
+                        self.results_variable6.configure(text = 'Variable 6 = '+str(results6))
+                        self.error_variable1.configure(text = 'Variable 1 = '+str(error1))
+                        self.error_variable2.configure(text = 'Variable 2 = '+str(error2))
+                        self.error_variable3.configure(text = 'Variable 3 = '+str(error3))
+                        self.error_variable4.configure(text = 'Variable 4 = '+str(error4))
+                        self.error_variable5.configure(text = 'Variable 5 = '+str(error5))
+                        self.error_variable6.configure(text = 'Variable 6 = '+str(error6))
+                        self.iterations.configure(text = iterations)
+            except:
+                messagebox.showerror('Error', 'It caused an error check your data')
     def equ(self, x):
         equations = eval(self.equations.get())
         return np.array(equations)
+
+    def reset(self):
+        self.equations.delete(0, 'end')
+        self.x0.delete(0, 'end')
+        self.results_variable1.configure(text = '')
+        self.results_variable2.configure(text = '')
+        self.results_variable3.configure(text = '')
+        self.results_variable4.configure(text = '')
+        self.results_variable5.configure(text = '')
+        self.results_variable6.configure(text = '')
+        self.error_variable1.configure(text = '')
+        self.error_variable2.configure(text = '')
+        self.error_variable3.configure(text = '')
+        self.error_variable4.configure(text = '')
+        self.error_variable5.configure(text = '')
+        self.error_variable6.configure(text = '')
+
+class differential_kinematics(Frame):
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        self.controller = controller
+        Label(self, text = 'Differential Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
 
 if __name__ == "__main__":
     app = GUI()
