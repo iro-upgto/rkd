@@ -1,4 +1,3 @@
-
 from tkinter import *
 from tkinter import font
 from tkinter import messagebox
@@ -7,7 +6,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
-# Implement the default Matplotlib key bindings.
 from matplotlib.figure import Figure
 import numpy as np
 from numpy import *
@@ -144,7 +142,7 @@ class rotations(Frame):
         self.draw_uvw(np.eye(4), a)
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
-        canvas.draw()        
+        canvas.draw()
         btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), a, canvas))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
@@ -229,7 +227,7 @@ class rotations(Frame):
         ax.set_xlim([-1,1])
         ax.set_ylim([-1,1])
         ax.set_zlim([-1,1])
-        ax.legend(loc = 1)
+        ax.legend(loc = 0)
         ax.set_aspect("equal")
         return
 
@@ -528,36 +526,35 @@ class forward_kinematics(Frame):
         Label(self, text = 'Forward Kinematics', font = controller.title_font).pack(side = TOP, padx = 10, pady = 15)
         frame1 = Frame(self, width = 650, height = 500)
         frame1.pack(side = "left", anchor = "n")
-        Label(frame1, text = 'Choose the number of degrees of freedom:', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)        
-        self.dof = ttk.Combobox(frame1, font = controller.Arial12, width = 3)
-        self.dof.pack(side = TOP, padx = 5, pady = 2)
-        self.dof['values'] = ['', '1', '2', '3', '4', '5', '6']
-        Label(frame1, text = 'DH1 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH1 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH1 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH1 = Entry(frame1, font = controller.Arial16)
         self.DH1.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH2 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH2 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH2 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH2 = Entry(frame1, font = controller.Arial16)
         self.DH2.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH3 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH3 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH3 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH3 = Entry(frame1, font = controller.Arial16)
         self.DH3.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH4 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH4 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH4 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH4 = Entry(frame1, font = controller.Arial16)
         self.DH4.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH5 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH5 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH5 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH5 = Entry(frame1, font = controller.Arial16)
         self.DH5.pack(side = TOP, padx = 5, pady = 2)
-        Label(frame1, text = 'DH6 :', font = controller.Arial12).pack(side = TOP, padx = 5, pady = 2)
-        self.DH6 = Entry(frame1, font = controller.Arial12)
+        Label(frame1, text = 'DH6 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.DH6 = Entry(frame1, font = controller.Arial16)
         self.DH6.pack(side = TOP, padx = 5, pady = 2)
-        btn_go = Button(frame1, text = 'GO', font = controller.Arial12, width = 10, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.dof.get(), self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get(), self.DH7.get(), self.DH8.get(), self.DH9.get()))
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 5)
-        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial12, width = 10, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
+        btn_wire_diagram = Button(frame1, text = 'Wire diagram', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.wire_diagram())
+        btn_wire_diagram.pack(side = TOP, padx = 5, pady = 5)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 5)
-        btn_back = Button(frame1, text = "Back", font = controller.Arial12, width = 10, height = 1, borderwidth = 2, cursor = "hand1", command = lambda: controller.show_frame("main"))
+        btn_back = Button(frame1, text = "Back", font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = "hand1", command = lambda: controller.show_frame("main"))
         btn_back.pack(side = TOP, padx = 5, pady = 5)
-        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 50)        
-        Label(self, text = 'Matrix', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 50)        
+        Label(self, text = 'Matrix', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
         self.matrixDH_value = Label(self, text = '', font = controller.Arial20, fg = 'red')
         self.matrixDH_value.pack(side = TOP, padx = 10, pady = 10)
         Label(self, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 20)
@@ -569,414 +566,183 @@ class forward_kinematics(Frame):
         self.position_z = Label(self, text = '', font = controller.Arial16, fg = 'red')
         self.position_z.pack(side = TOP, padx = 10, pady = 2)
 
-    def GO(self, dof, DH1, DH2, DH3, DH4, DH5, DH6, DH7, DH8, DH9):
-        if dof == '':
-            messagebox.showwarning('Warning', 'You must choose an option')
-        if dof == '1':
-            if DH1 == '':
-                messagebox.showwarning('Warning', 'Check your DH1 probably this empty')
-            if ((DH2 != '') or (DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH2 to DH6')
-            if ((DH1 != '') and (DH2 == '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                try:                    
-                    nrow1, ncolumn1 = dh1.shape                    
-                    if ((nrow1 != 1) or (ncolumn1 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
+    def GO(self, DH1, DH2, DH3, DH4, DH5, DH6):
+        try:
+            DH = []
+            for dh in [DH1, DH2, DH3, DH4, DH5,]:
+                if dh != '':
+                    DH.append(eval(dh))
+            self.Ts = []
+            for k in DH:
+                if len(k)>4:
+                    self.Ts.append(htmDH(k[0],k[1],k[2],k[3],k[4]))
+                else:
+                    self.Ts.append(htmDH(k[0],k[1],k[2],k[3]))
+            DH = m_mult(*self.Ts)
+            px = DH[0,3]
+            py = DH[1,3]
+            pz = DH[2,3]
+            px = round(px, 5)
+            py = round(py, 5)
+            pz = round(pz, 5)
+            px = str(px)
+            py = str(py)
+            pz = str(pz)
+            DH = str(DH)
+            DH = DH[1:-1]
+            self.matrixDH_value.configure(text = ' '+DH)
+            self.position_x.configure(text = 'X: '+px)
+            self.position_y.configure(text = 'Y: '+py)
+            self.position_z.configure(text = 'Z: '+pz)
+        except:
+            messagebox.showerror('Error', 'Check your entered data')
+            messagebox.showinfo('Information', 'Tip: Probably your mistake is that you are missing or you have too many values in your parameters')
+    
+    def wire_diagram(self):
+        self.window_wire_diagram = Toplevel()
+        self.window_wire_diagram.title('Wire diagram')        
+        f = Figure(figsize = (7,7), dpi = 100)
+        self.a = f.add_subplot(111, projection='3d')
+        a = self.a
+        a.clear()
+        self.canvas = FigureCanvasTkAgg(f, self.window_wire_diagram)  # A tk.DrawingArea.        
+        self.canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
+        canvas = self.canvas
+        Ts = self.Ts
+        if self.DH1.get() != '':
+            T1_0 = Ts[0]
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            a.plot([A[0],B[0]], 
+                    [A[1],B[1]], 
+                    [A[2],B[2]], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+        
+        if ((self.DH1.get() != '') and (self.DH2.get() != '')):
+            T1_0 = Ts[0]
+            T2_0 = Ts[0]*Ts[1]
 
-                    if ((nrow1 == 1) and (ncolumn1 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai, True)                            
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            C = T2_0[:3,3]
+            a.plot([A[0],B[0],C[0]], 
+                    [A[1],B[1],C[1]], 
+                    [A[2],B[2],C[2],], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+            self.draw_uvw(T2_0, a)
+        
+        if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '')):
+            T1_0 = Ts[0]
+            T2_0 = Ts[0]*Ts[1]
+            T3_0 = T2_0*Ts[2]
 
-        if dof == '2':
-            if ((DH1 == '') or (DH2 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1 and DH2, probably this empty some')
-            if ((DH3 != '') or (DH4 != '') or (DH5 != '') or (DH6 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH3 to DH6')
-            if ((DH1 != '') and (DH2 != '') and (DH3 == '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH = m_mult(DH1, DH2)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH = m_mult(DH1, DH2)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-        if dof == '3':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2 and DH3, probably this empty some')
-            if ((DH4 != '') or (DH5 != '') or (DH6 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH4 to DH6')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 == '') and (DH5 == '') and (DH6 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH = m_mult(DH1, DH2, DH3)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            C = T2_0[:3,3]
+            D = T3_0[:3,3]
 
-        if dof == '4':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3 and DH4, probably this empty some')
-            if ((DH5 != '') or (DH6 != '')):
-                messagebox.showerror('Error', 'You must leave the text boxes of DH5 and DH6')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 == '') and (DH6 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
+            a.plot([A[0],B[0],C[0],D[0]], 
+                    [A[1],B[1],C[1],D[1]], 
+                    [A[2],B[2],C[2],D[2]], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+            self.draw_uvw(T2_0, a)
+            self.draw_uvw(T3_0, a)
 
-        if dof == '5':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4 and DH5, probably this empty some')
-            if DH6 != '':
-                messagebox.showerror('Error', 'You must leave the text box DH6')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 == '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                DH5 = '['+'['+DH5+']'+']'
-                dh5 = eval(DH5)
-                dh5 = np.array(dh5)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    nrow5, ncolumn5 = dh5.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (nrow5 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4) or (ncolumn5 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (nrow5 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4) and (ncolumn5 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        dh5_ai = dh5[0,0]
-                        dh5_alphai = dh5[0,1]
-                        dh5_di = dh5[0,2]
-                        dh5_thetai = dh5[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-        if dof == '6':
-            if ((DH1 == '') or (DH2 == '') or (DH3 == '') or (DH4 == '') or (DH5 == '') or (DH6 == '')):
-                messagebox.showwarning('Warning', 'Check your DH1, DH2,DH3, DH4, DH5 and DH6, probably this empty some')
-            if ((DH1 != '') and (DH2 != '') and (DH3 != '') and (DH4 != '') and (DH5 != '') and (DH6 != '')):
-                DH1 = '['+'['+DH1+']'+']'
-                dh1 = eval(DH1)
-                dh1 = np.array(dh1)
-                DH2 = '['+'['+DH2+']'+']'
-                dh2 = eval(DH2)
-                dh2 = np.array(dh2)
-                DH3 = '['+'['+DH3+']'+']'
-                dh3 = eval(DH3)
-                dh3 = np.array(dh3)
-                DH4 = '['+'['+DH4+']'+']'
-                dh4 = eval(DH4)
-                dh4 = np.array(dh4)
-                DH5 = '['+'['+DH5+']'+']'
-                dh5 = eval(DH5)
-                dh5 = np.array(dh5)
-                DH6 = '['+'['+DH6+']'+']'
-                dh6 = eval(DH6)
-                dh6 = np.array(dh6)
-                try:
-                    nrow1, ncolumn1 = dh1.shape
-                    nrow2, ncolumn2 = dh2.shape
-                    nrow3, ncolumn3 = dh3.shape
-                    nrow4, ncolumn4 = dh4.shape
-                    nrow5, ncolumn5 = dh5.shape
-                    nrow6, ncolumn6 = dh6.shape
-                    if ((nrow1 != 1) or (nrow2 != 1) or (nrow3 != 1) or (nrow4 != 1) or (nrow5 != 1) or (nrow6 != 1) or (ncolumn1 != 4) or (ncolumn2 != 4) or (ncolumn3 != 4) or (ncolumn4 != 4) or (ncolumn5 != 4) or (ncolumn6 != 4)):
-                        messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
-                    if ((nrow1 == 1) and (nrow2 == 1) and (nrow3 == 1) and (nrow4 == 1) and (nrow5 == 1) and (nrow6 == 1) and (ncolumn1 == 4) and (ncolumn2 == 4) and (ncolumn3 == 4) and (ncolumn4 == 4) and (ncolumn5 == 4) and (ncolumn6 == 4)):
-                        answer = messagebox.askquestion('Important to answer', 'Are you entering the angles in degrees?')
-                        dh1_ai = dh1[0,0]
-                        dh1_alphai = dh1[0,1]
-                        dh1_di = dh1[0,2]
-                        dh1_thetai = dh1[0,3]
-                        dh2_ai = dh2[0,0]
-                        dh2_alphai = dh2[0,1]
-                        dh2_di = dh2[0,2]
-                        dh2_thetai = dh2[0,3]
-                        dh3_ai = dh3[0,0]
-                        dh3_alphai = dh3[0,1]
-                        dh3_di = dh3[0,2]
-                        dh3_thetai = dh3[0,3]
-                        dh4_ai = dh4[0,0]
-                        dh4_alphai = dh4[0,1]
-                        dh4_di = dh4[0,2]
-                        dh4_thetai = dh4[0,3]
-                        dh5_ai = dh5[0,0]
-                        dh5_alphai = dh5[0,1]
-                        dh5_di = dh5[0,2]
-                        dh5_thetai = dh5[0,3]
-                        dh6_ai = dh6[0,0]
-                        dh6_alphai = dh6[0,1]
-                        dh6_di = dh6[0,2]
-                        dh6_thetai = dh6[0,3]
-                        if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai,True)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai, True)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai, True)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai, True)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai, True)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai, True)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6)
-                        if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
-                            DH1 = htmDH(dh1_ai, dh1_alphai, dh1_di, dh1_thetai)
-                            DH2 = htmDH(dh2_ai, dh2_alphai, dh2_di, dh2_thetai)
-                            DH3 = htmDH(dh3_ai, dh3_alphai, dh3_di, dh3_thetai)
-                            DH4 = htmDH(dh4_ai, dh4_alphai, dh4_di, dh4_thetai)
-                            DH5 = htmDH(dh5_ai, dh5_alphai, dh5_di, dh5_thetai)
-                            DH6 = htmDH(dh6_ai, dh6_alphai, dh6_di, dh6_thetai)
-                            DH = m_mult(DH1, DH2, DH3, DH4, DH5, DH6)
-                        px = DH[0,3]
-                        py = DH[1,3]
-                        pz = DH[2,3]
-                        px = round(px, 5)
-                        py = round(py, 5)
-                        pz = round(pz, 5)
-                        px = str(px)
-                        py = str(py)
-                        pz = str(pz)
-                        DH = str(DH)
-                        DH = DH[1:-1]
-                        self.matrixDH_value.configure(text = ' '+DH)
-                        self.position_x.configure(text = 'X: '+px)
-                        self.position_y.configure(text = 'Y: '+py)
-                        self.position_z.configure(text = 'Z: '+pz)
-                except:
-                    messagebox.showerror('Error', 'There must be 4 parameters of DH, you are entering more or less')
+        if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '')):
+            T1_0 = Ts[0]
+            T2_0 = Ts[0]*Ts[1]
+            T3_0 = T2_0*Ts[2]
+            T4_0 = T3_0*Ts[3]
+
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            C = T2_0[:3,3]
+            D = T3_0[:3,3]
+            E = T4_0[:3,3]
+            a.plot([A[0],B[0],C[0],D[0],E[0]], 
+                    [A[1],B[1],C[1],D[1],E[1]], 
+                    [A[2],B[2],C[2],D[2],E[2]], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+            self.draw_uvw(T2_0, a)
+            self.draw_uvw(T3_0, a)
+            self.draw_uvw(T4_0, a)
+
+        if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '') and (self.DH5.get() != '')):
+            T1_0 = Ts[0]
+            T2_0 = Ts[0]*Ts[1]
+            T3_0 = T2_0*Ts[2]
+            T4_0 = T3_0*Ts[3]
+            T5_0 = T4_0*Ts[4]
+
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            C = T2_0[:3,3]
+            D = T3_0[:3,3]
+            E = T4_0[:3,3]
+            F = T5_0[:3,3]
+            a.plot([A[0],B[0],C[0],D[0],E[0],F[0]], 
+                    [A[1],B[1],C[1],D[1],E[1],F[1]], 
+                    [A[2],B[2],C[2],D[2],E[2],F[2]], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+            self.draw_uvw(T2_0, a)
+            self.draw_uvw(T3_0, a)
+            self.draw_uvw(T4_0, a)
+            self.draw_uvw(T5_0, a)
+
+        if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '') and (self.DH5.get() != '') and (self.DH6.get() != '')):
+            T1_0 = Ts[0]
+            T2_0 = Ts[0]*Ts[1]
+            T3_0 = T2_0*Ts[2]
+            T4_0 = T3_0*Ts[3]
+            T5_0 = T4_0*Ts[4]
+            T6_0 = T5_0*Ts[5]
+
+            A = np.array([0,0,0])
+            B = T1_0[:3,3]
+            C = T2_0[:3,3]
+            D = T3_0[:3,3]
+            E = T4_0[:3,3]
+            F = T5_0[:3,3]
+            G = T6_0[:3,3]
+            a.plot([A[0],B[0],C[0],D[0],E[0],F[0],G[0]], 
+                    [A[1],B[1],C[1],D[1],E[1],F[1],G[1]], 
+                    [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-o')
+            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(T1_0, a)
+            self.draw_uvw(T2_0, a)
+            self.draw_uvw(T3_0, a)
+            self.draw_uvw(T4_0, a)
+            self.draw_uvw(T5_0, a)
+            self.draw_uvw(T6_0, a)
+        a.set_xlim(-100,600)
+        a.set_ylim(-100,600)
+        a.set_zlim(-100,600)
+        canvas.draw()
+        a.set_xlabel('X axis')
+        a.set_ylabel('Y axis')
+        a.set_zlabel('Z axis')
+        a.set_aspect("equal")
+        a.mouse_init()
+        self.wait_window(self.window_wire_diagram)
+    
+    def draw_uvw(self,H,ax):
+        u = H[:3,0]
+        v = H[:3,1]
+        w = H[:3,2]
+        o = H[:3,3]
+        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=60)
+        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=60)
+        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=60)
+        ax.set_xlim([-1,1])
+        ax.set_ylim([-1,1])
+        ax.set_zlim([-1,1])
 
     def reset(self):
-        self.dof.delete(0, 'end')
         self.DH1.delete(0, 'end')
         self.DH2.delete(0, 'end')
         self.DH3.delete(0, 'end')
@@ -987,16 +753,17 @@ class forward_kinematics(Frame):
         self.position_x.configure(text = '')
         self.position_y.configure(text = '')
         self.position_z.configure(text = '')
+        self.a.clear()
 
 class inverse_kinematics(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
-        btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('newton_raphson'))
+        btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('newton_raphson'))
         btn_newton_raphson.pack(side = TOP, padx = 5, pady = 10)
-        btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('mixed_root'))
+        btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('mixed_root'))
         btn_mixed.pack(side = TOP, padx = 5, pady = 10)
-        btn_back = Button(self, text = 'Back', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, command = lambda: controller.show_frame('main'))
+        btn_back = Button(self, text = 'Back', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('main'))
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         
 class newton_raphson(Frame):
@@ -1797,7 +1564,7 @@ class mixed_root(Frame):
             x0 = eval(x0)
             x0 = np.array(x0)
             try:
-                nrowx0, ncolumnx0 = x0.shape            
+                nrowx0, ncolumnx0 = x0.shape
                 if nrowx0 != 1:
                     messagebox.showerror('Error', 'Check your Initials values')
                 if nrowx0 == 1:
@@ -2015,6 +1782,60 @@ class differential_kinematics(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         Label(self, text = 'Differential Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = 'DH1:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh1 = Entry(frame1, font = controller.Arial16)
+        self.dh1.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'DH2:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh2 = Entry(frame1, font = controller.Arial16)
+        self.dh2.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'DH3:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh3 = Entry(frame1, font = controller.Arial16)
+        self.dh3.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'DH4:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh4 = Entry(frame1, font = controller.Arial16)
+        self.dh4.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'DH5:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh5 = Entry(frame1, font = controller.Arial16)
+        self.dh5.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = 'DH6:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
+        self.dh6 = Entry(frame1, font = controller.Arial16)
+        self.dh6.pack(side = TOP, padx = 5, pady = 2)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.dh1.get(), self.dh2.get(), self.dh3.get(), self.dh4.get(), self.dh5.get(), self.dh6.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('main'))
+        btn_back.pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
+        Label(self, text = 'Jacobian Matrix', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
+        self.result_matrix = Label(self, text = '', font = controller.Arial20, fg = 'red')
+        self.result_matrix.pack(side = TOP, padx = 5, pady = 10)
+
+    def GO(self, DH1, DH2, DH3, DH4, DH5, DH6):
+        try:
+            DH = []
+            for dh in [DH1, DH2, DH3, DH4, DH5,]:
+                if dh != '':
+                    DH.append(eval(dh))                
+
+            J = jacobian(*DH)
+            J = str(J)
+            J = J[1:-1]
+            self.result_matrix.configure(text = ' '+J)
+        except:
+            messagebox.showerror('Error', 'Check your entered data')
+            messagebox.showinfo('Information', 'Tip: Probably your mistake is that you are missing or you have too many values in your parameters')
+
+    def reset(self):
+        self.dh1.delete(0, 'end')
+        self.dh2.delete(0, 'end')
+        self.dh3.delete(0, 'end')
+        self.dh4.delete(0, 'end')
+        self.dh5.delete(0, 'end')
+        self.dh6.delete(0, 'end')
+        self.result_matrix.configure(text = '')
 
 if __name__ == "__main__":
     app = GUI()
