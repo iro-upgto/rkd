@@ -10,6 +10,8 @@ from matplotlib.figure import Figure
 import numpy as np
 from numpy import *
 from scipy.optimize import *
+import webbrowser as wb
+import os
 from rkd.abc import *
 from rkd.util import *
 from rkd.transformations import *
@@ -33,7 +35,11 @@ class GUI(Tk):
         # will be raised above the others
 
         self.title("Robot Kinematics")
-        img = PhotoImage(file = "img/robot.png")        
+        self.OS = os.name
+        if self.OS == 'posix': #Operating systems Linux y Mac OS
+            img = PhotoImage(file = "img/robot.png")
+        if self.OS == 'nt': #Operating system Windows
+            img = PhotoImage(file = "img\robot.png")
         self.call("wm", "iconphoto", self._w, img)
         self.geometry("1200x650+300+10")        
         barMenu = Menu(self)
@@ -42,7 +48,7 @@ class GUI(Tk):
         menufile = Menu(barMenu)
         menufile.add_command(label = 'Exit', command = quit)
         menuInfo.add_command(label = "Open Message", command = self.info)
-        menuhelp.add_command(label = "Open Message", command = self.help)
+        menuhelp.add_command(label = "Open Manual in Spanish", command = self.manual_spanish)
         barMenu.add_cascade(label = 'File', menu = menufile)
         barMenu.add_cascade(label = "Information", menu = menuInfo)
         barMenu.add_cascade(label = "Help", menu = menuhelp)
@@ -73,8 +79,11 @@ class GUI(Tk):
     def info(self):
         messagebox.showinfo("Information","Version: 1.0\n\nMIT License\n\nCopyright (c) 2018 IRO\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.")
 
-    def help(self):
-        messagebox.showinfo("Help", "Hello world")
+    def manual_spanish(self):
+        if self.OS == 'posix':#Operating systems Linux y Mac OS
+            wb.open_new(r"Software management manuals/Manual del manejo del software en ESPAÑOL.pdf")
+        if self.OS == 'nt':#Operating system Windows
+            wb.open_new(r"Software management manuals\Manual del manejo del software en ESPAÑOL.pdf")
 
 class main(Frame):
 
@@ -545,13 +554,13 @@ class forward_kinematics(Frame):
         self.DH6 = Entry(frame1, font = controller.Arial16)
         self.DH6.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
-        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get()))
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 5)
-        btn_wire_diagram = Button(frame1, text = 'Wire diagram', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.wire_diagram())
-        btn_wire_diagram.pack(side = TOP, padx = 5, pady = 5)
-        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
+        btn_kinematics_diagram = Button(frame1, text = 'Kinematics diagram', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.kinematics_diagram())
+        btn_kinematics_diagram.pack(side = TOP, padx = 5, pady = 5)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 5)
-        btn_back = Button(frame1, text = "Back", font = controller.Arial16, width = 15, height = 1, borderwidth = 2, cursor = "hand1", command = lambda: controller.show_frame("main"))
+        btn_back = Button(frame1, text = "Back", font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = "hand1", command = lambda: controller.show_frame("main"))
         btn_back.pack(side = TOP, padx = 5, pady = 5)
         Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 50)        
         Label(self, text = 'Matrix', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
@@ -569,7 +578,7 @@ class forward_kinematics(Frame):
     def GO(self, DH1, DH2, DH3, DH4, DH5, DH6):
         try:
             DH = []
-            for dh in [DH1, DH2, DH3, DH4, DH5,]:
+            for dh in [DH1, DH2, DH3, DH4, DH5,DH6]:
                 if dh != '':
                     DH.append(eval(dh))
             self.Ts = []
@@ -578,6 +587,7 @@ class forward_kinematics(Frame):
                     self.Ts.append(htmDH(k[0],k[1],k[2],k[3],k[4]))
                 else:
                     self.Ts.append(htmDH(k[0],k[1],k[2],k[3]))
+                    
             DH = m_mult(*self.Ts)
             px = DH[0,3]
             py = DH[1,3]
@@ -598,14 +608,14 @@ class forward_kinematics(Frame):
             messagebox.showerror('Error', 'Check your entered data')
             messagebox.showinfo('Information', 'Tip: Probably your mistake is that you are missing or you have too many values in your parameters')
     
-    def wire_diagram(self):
-        self.window_wire_diagram = Toplevel()
-        self.window_wire_diagram.title('Wire diagram')        
+    def kinematics_diagram(self):
+        self.window_kinematics_diagram = Toplevel()
+        self.window_kinematics_diagram.title('Kinematics diagram')        
         f = Figure(figsize = (7,7), dpi = 100)
         self.a = f.add_subplot(111, projection='3d')
         a = self.a
         a.clear()
-        self.canvas = FigureCanvasTkAgg(f, self.window_wire_diagram)  # A tk.DrawingArea.        
+        self.canvas = FigureCanvasTkAgg(f, self.window_kinematics_diagram)  # A tk.DrawingArea.        
         self.canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
         canvas = self.canvas
         Ts = self.Ts
@@ -613,39 +623,74 @@ class forward_kinematics(Frame):
             T1_0 = Ts[0]
             A = np.array([0,0,0])
             B = T1_0[:3,3]
+            self.xmin = min([A[0],B[0]])
+            self.xmax = max([A[0],B[0]])
+            self.ymin = min([A[1],B[1]])
+            self.ymax = max([A[1],B[1]])
+            self.zmin = min([A[2],B[2]])
+            self.zmax = max([A[2],B[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0]], 
-                    [A[1],B[1]], 
-                    [A[2],B[2]], '-o')
+                   [A[1],B[1]], 
+                   [A[2],B[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
         
         if ((self.DH1.get() != '') and (self.DH2.get() != '')):
             T1_0 = Ts[0]
-            T2_0 = Ts[0]*Ts[1]
+            T2_0 = m_mult(Ts[0],Ts[1])
 
             A = np.array([0,0,0])
             B = T1_0[:3,3]
-            C = T2_0[:3,3]
+            C = T2_0[:3,3]            
+            self.xmin = min([A[0],B[0],C[0]])
+            self.xmax = max([A[0],B[0],C[0]])
+            self.ymin = min([A[1],B[1],C[1]])
+            self.ymax = max([A[1],B[1],C[1]])
+            self.zmin = min([A[2],B[2],C[2]])
+            self.zmax = max([A[2],B[2],C[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0]], 
-                    [A[1],B[1],C[1]], 
-                    [A[2],B[2],C[2],], '-o')
+                   [A[1],B[1],C[1]], 
+                   [A[2],B[2],C[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
         
         if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '')):
             T1_0 = Ts[0]
-            T2_0 = Ts[0]*Ts[1]
-            T3_0 = T2_0*Ts[2]
+            T2_0 = m_mult(Ts[0],Ts[1])
+            T3_0 = m_mult(T2_0,Ts[2])
 
             A = np.array([0,0,0])
             B = T1_0[:3,3]
             C = T2_0[:3,3]
             D = T3_0[:3,3]
-
+            self.xmin = min([A[0],B[0],C[0],D[0]])
+            self.xmax = max([A[0],B[0],C[0],D[0]])
+            self.ymin = min([A[1],B[1],C[1],D[1]])
+            self.ymax = max([A[1],B[1],C[1],D[1]])
+            self.zmin = min([A[2],B[2],C[2],D[2]])
+            self.zmax = max([A[2],B[2],C[2],D[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0]], 
-                    [A[1],B[1],C[1],D[1]], 
-                    [A[2],B[2],C[2],D[2]], '-o')
+                   [A[1],B[1],C[1],D[1]], 
+                   [A[2],B[2],C[2],D[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -653,18 +698,30 @@ class forward_kinematics(Frame):
 
         if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '')):
             T1_0 = Ts[0]
-            T2_0 = Ts[0]*Ts[1]
-            T3_0 = T2_0*Ts[2]
-            T4_0 = T3_0*Ts[3]
+            T2_0 = m_mult(Ts[0],Ts[1])
+            T3_0 = m_mult(T2_0,Ts[2])
+            T4_0 = m_mult(T3_0,Ts[3])
 
             A = np.array([0,0,0])
             B = T1_0[:3,3]
             C = T2_0[:3,3]
             D = T3_0[:3,3]
             E = T4_0[:3,3]
+            self.xmin = min([A[0],B[0],C[0],D[0],E[0]])
+            self.xmax = max([A[0],B[0],C[0],D[0],E[0]])
+            self.ymin = min([A[1],B[1],C[1],D[1],E[1]])
+            self.ymax = max([A[1],B[1],C[1],D[1],E[1]])
+            self.zmin = min([A[2],B[2],C[2],D[2],E[2]])
+            self.zmax = max([A[2],B[2],C[2],D[2],E[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0]], 
-                    [A[1],B[1],C[1],D[1],E[1]], 
-                    [A[2],B[2],C[2],D[2],E[2]], '-o')
+                   [A[1],B[1],C[1],D[1],E[1]], 
+                   [A[2],B[2],C[2],D[2],E[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -673,10 +730,10 @@ class forward_kinematics(Frame):
 
         if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '') and (self.DH5.get() != '')):
             T1_0 = Ts[0]
-            T2_0 = Ts[0]*Ts[1]
-            T3_0 = T2_0*Ts[2]
-            T4_0 = T3_0*Ts[3]
-            T5_0 = T4_0*Ts[4]
+            T2_0 = m_mult(Ts[0],Ts[1])
+            T3_0 = m_mult(T2_0,Ts[2])
+            T4_0 = m_mult(T3_0,Ts[3])
+            T5_0 = m_mult(T4_0,Ts[4])
 
             A = np.array([0,0,0])
             B = T1_0[:3,3]
@@ -684,9 +741,21 @@ class forward_kinematics(Frame):
             D = T3_0[:3,3]
             E = T4_0[:3,3]
             F = T5_0[:3,3]
+            self.xmin = min([A[0],B[0],C[0],D[0],E[0],F[0]])
+            self.xmax = max([A[0],B[0],C[0],D[0],E[0],F[0]])
+            self.ymin = min([A[1],B[1],C[1],D[1],E[1],F[1]])
+            self.ymax = max([A[1],B[1],C[1],D[1],E[1],F[1]])
+            self.zmin = min([A[2],B[2],C[2],D[2],E[2],F[2]])
+            self.zmax = max([A[2],B[2],C[2],D[2],E[2],F[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0],F[0]], 
-                    [A[1],B[1],C[1],D[1],E[1],F[1]], 
-                    [A[2],B[2],C[2],D[2],E[2],F[2]], '-o')
+                   [A[1],B[1],C[1],D[1],E[1],F[1]], 
+                   [A[2],B[2],C[2],D[2],E[2],F[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -696,11 +765,11 @@ class forward_kinematics(Frame):
 
         if ((self.DH1.get() != '') and (self.DH2.get() != '') and (self.DH3.get() != '') and (self.DH4.get() != '') and (self.DH5.get() != '') and (self.DH6.get() != '')):
             T1_0 = Ts[0]
-            T2_0 = Ts[0]*Ts[1]
-            T3_0 = T2_0*Ts[2]
-            T4_0 = T3_0*Ts[3]
-            T5_0 = T4_0*Ts[4]
-            T6_0 = T5_0*Ts[5]
+            T2_0 = m_mult(Ts[0],Ts[1])
+            T3_0 = m_mult(T2_0,Ts[2])
+            T4_0 = m_mult(T3_0,Ts[3])
+            T5_0 = m_mult(T4_0,Ts[4])
+            T6_0 = m_mult(T5_0,Ts[5])
 
             A = np.array([0,0,0])
             B = T1_0[:3,3]
@@ -709,9 +778,21 @@ class forward_kinematics(Frame):
             E = T4_0[:3,3]
             F = T5_0[:3,3]
             G = T6_0[:3,3]
+            self.xmin = min([A[0],B[0],C[0],D[0],E[0],F[0],G[0]])
+            self.xmax = max([A[0],B[0],C[0],D[0],E[0],F[0],G[0]])
+            self.ymin = min([A[1],B[1],C[1],D[1],E[1],F[1],G[1]])
+            self.ymax = max([A[1],B[1],C[1],D[1],E[1],F[1],G[1]])
+            self.zmin = min([A[2],B[2],C[2],D[2],E[2],F[2],G[2]])
+            self.zmax = max([A[2],B[2],C[2],D[2],E[2],F[2],G[2]])
+            xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+            xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+            ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+            ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+            zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+            zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0],F[0],G[0]], 
-                    [A[1],B[1],C[1],D[1],E[1],F[1],G[1]], 
-                    [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-o')
+                   [A[1],B[1],C[1],D[1],E[1],F[1],G[1]], 
+                   [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-o')
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -719,28 +800,33 @@ class forward_kinematics(Frame):
             self.draw_uvw(T4_0, a)
             self.draw_uvw(T5_0, a)
             self.draw_uvw(T6_0, a)
-        a.set_xlim(-100,600)
-        a.set_ylim(-100,600)
-        a.set_zlim(-100,600)
+        a.set_xlim(xmin,xmax)
+        a.set_ylim(ymin,ymax)
+        a.set_zlim(zmin,zmax)
         canvas.draw()
         a.set_xlabel('X axis')
         a.set_ylabel('Y axis')
         a.set_zlabel('Z axis')
         a.set_aspect("equal")
         a.mouse_init()
-        self.wait_window(self.window_wire_diagram)
+        self.wait_window(self.window_kinematics_diagram)
     
     def draw_uvw(self,H,ax):
         u = H[:3,0]
         v = H[:3,1]
         w = H[:3,2]
         o = H[:3,3]
-        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=60)
-        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=60)
-        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=60)
-        ax.set_xlim([-1,1])
-        ax.set_ylim([-1,1])
-        ax.set_zlim([-1,1])
+        xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+        xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+        ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+        ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+        zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+        zmax = self.zmax + 0.1*(self.zmax - self.zmin)      
+        prom = 0.1*((xmin+xmax+ymin+ymax+zmin+zmax)/6)
+        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=prom)
+        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=prom)
+        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=prom)
+        ax.set_aspect('equal')
 
     def reset(self):
         self.DH1.delete(0, 'end')
