@@ -639,6 +639,7 @@ class forward_kinematics(Frame):
                    [A[1],B[1]], 
                    [A[2],B[2]], '-o')
             self.draw_uvw(np.eye(4), a)
+            self.draw_uvw1(np.eye(4), a)
             self.draw_uvw(T1_0, a)
         
         if ((self.DH1.get() != '') and (self.DH2.get() != '')):
@@ -793,16 +794,18 @@ class forward_kinematics(Frame):
             a.plot([A[0],B[0],C[0],D[0],E[0],F[0],G[0]], 
                    [A[1],B[1],C[1],D[1],E[1],F[1],G[1]], 
                    [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-o')
-            self.draw_uvw(np.eye(4), a)
+            self.draw_uvw(np.eye(4), a)            
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
             self.draw_uvw(T3_0, a)
             self.draw_uvw(T4_0, a)
             self.draw_uvw(T5_0, a)
             self.draw_uvw(T6_0, a)
-        a.set_xlim(xmin,xmax)
-        a.set_ylim(ymin,ymax)
-        a.set_zlim(zmin,zmax)
+        axis_max = max(xmax,ymax,zmax)
+        axis_min = min(xmin,ymin,zmin)
+        a.set_xlim(axis_min,axis_max)
+        a.set_ylim(axis_min,axis_max)
+        a.set_zlim(axis_min,axis_max)
         canvas.draw()
         a.set_xlabel('X axis')
         a.set_ylabel('Y axis')
@@ -822,10 +825,32 @@ class forward_kinematics(Frame):
         ymax = self.ymax + 0.1*(self.ymax - self.ymin)
         zmin = self.zmin - 0.1*(self.zmax - self.zmin)
         zmax = self.zmax + 0.1*(self.zmax - self.zmin)      
-        prom = 0.1*((xmin+xmax+ymin+ymax+zmin+zmax)/6)
-        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=prom)
-        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=prom)
-        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=prom)
+        axis_max = max(xmax,ymax,zmax)
+        axis_min = min(xmin,ymin,zmin)
+        quiver_size = 0.1*(np.absolute(axis_max - axis_min))
+        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=quiver_size)
+        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=quiver_size)
+        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=quiver_size)
+        ax.set_aspect('equal')
+
+    def draw_uvw1(self,H,ax):
+        u = H[:3,0]
+        v = H[:3,1]
+        w = H[:3,2]
+        o = H[:3,3]
+        xmin = self.xmin - 0.1*(self.xmax - self.xmin)
+        xmax = self.xmax + 0.1*(self.xmax - self.xmin)
+        ymin = self.ymin - 0.1*(self.ymax - self.ymin)
+        ymax = self.ymax + 0.1*(self.ymax - self.ymin)
+        zmin = self.zmin - 0.1*(self.zmax - self.zmin)
+        zmax = self.zmax + 0.1*(self.zmax - self.zmin)      
+        axis_max = max(xmax,ymax,zmax)
+        axis_min = min(xmin,ymin,zmin)
+        quiver_size = 0.1*(np.absolute(axis_max - axis_min))
+        ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=quiver_size, label = "$X$")
+        ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=quiver_size, label = "$Y$")
+        ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=quiver_size, label = "$Z$")
+        ax.legend()
         ax.set_aspect('equal')
 
     def reset(self):
@@ -845,6 +870,7 @@ class inverse_kinematics(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
+        Label(self, text = 'Inverse Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
         btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('newton_raphson'))
         btn_newton_raphson.pack(side = TOP, padx = 5, pady = 10)
         btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('mixed_root'))
@@ -1842,7 +1868,7 @@ class mixed_root(Frame):
                         self.error_variable6.configure(text = 'Variable 6 = '+str(error6))
                         self.iterations.configure(text = iterations)
             except:
-                messagebox.showerror('Error', 'It caused an error check your data')
+                messagebox.showerror('Error', 'It caused an error, check your data')
     def equ(self, x):
         equations = eval(self.equations.get())
         return np.array(equations)
