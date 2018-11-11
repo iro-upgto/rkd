@@ -1,0 +1,112 @@
+\documentclass[12pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[autostyle, spanish = mexican]{csquotes}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{anysize}
+\usepackage[left=3cm,top=2.54cm,right=3cm,bottom=2.54cm]{geometry}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\renewcommand{\contentsname}{Contenido}
+\renewcommand{\figurename}{Figura}
+\begin{document}
+\title{Manual para el manejo del software}
+\author{Universidad Politécnica de Guanajuato | Departamento de Ingeniería Robótica}
+\date{\today}
+\begin{figure}
+	\begin{minipage}{.3\linewidth}
+		\centering
+		\includegraphics[width=3.5cm]{./capturas/logo_robotica.png}
+	\end{minipage}
+	\begin{minipage}{1.3\linewidth}
+		\centering
+		\includegraphics[width=5cm]{./capturas/logo_upg.png}
+	\end{minipage}
+\end{figure}
+\maketitle
+\thispagestyle{empty}
+\newpage
+$\ $
+\setcounter{page}{1}
+\tableofcontents
+\newpage
+$\ $
+\section{Fundamentos de Robótica}
+Esta es la ventana principal de la interfaz gráfica que le ayudara a entender mejor conocimientos de la carrera de ingeniería robótica, la cual se basa en los conocimientos a nivel matemático, análisis de los manipuladores/robots  y velocidades angulares de las articulaciones del manipulador/robot.\\
+Cada botón contiene un tema generalizado a tratar, el orden que lleva es orden de como se deben de ver los temas con los alumnos de la carrera.\\
+Los botones contarán con los siguientes nombres:
+\begin{itemize}
+	\item Rotations
+	\item Forward Kinematics
+	\item Inverse Kinematics
+	\item Differential Kinematics
+\end{itemize}
+Estos nombres también se puede visualizar en la Figura \ref{fig:1}.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./capturas/principal.png}
+	\caption{Ventana principal.} \label{fig:1}
+\end{figure}
+\subsection{Transformaciones}
+En esta ventana se encontrará con varios botones, los cuales le ofrecen varias tareas de manera independientes, en esas ventanas se diseñaron para que tuvieran lo necesario para que obtuviera datos o se visualizaran ciertos casos casos, ya dependerá al botón quede clic.\\
+\begin{itemize}
+	\item Rotations
+	\item Parameterization of rotations
+	\item Axis/angle
+	\item Matrix DH (Denavir - Hartenberg)
+\end{itemize}
+Estos nombres se pueden visualizar en la Figura \ref{fig:2}.
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.8\textwidth]{./capturas/transformaciones.png}
+	\caption{Ventana de transformaciones.} \label{fig:2}
+\end{figure}
+\subsubsection{Rotaciones}
+En esta ventana tendrá a su disposición la visualización de que forma es la que giran los ejes de un sistema de referencia, ya que en ocasiones se puede llegar a confundir de que manera quedaría nuestros ejes de referencia.\\
+\\
+{\large \textbf{Instrucciones:} }
+\begin{itemize}
+	\item Colar el valor del ángulo que se desea ingresar en el "eje x".
+	\item Colar el valor del ángulo que se desea ingresar en el "eje y".
+	\item Colar el valor del ángulo que se desea ingresar en el "eje z".
+\end{itemize}
+\subsubsection{Parametrización de rotaciones}
+En esta ventana será posible trabajar conversiones de matrices de rotación las cuales están restringidas a ser matrices de 3x3.\\
+Usted tendrá dos posibles conversiones de ángulos, las cuales son:
+\begin{itemize}
+	\item Ángulos de Euler
+	\item Ángulos Roll, Pitch and Yaw (RPY)
+\end{itemize}
+De acuerdo a su elección de "tipos de ángulos", lea los siguientes puntos:
+\begin{itemize}
+	\item En los ángulos de Euler tendrá que elegir una posible combinación que nos ofrecen dichos ángulos.
+	\item En los ángulos RPY ya no es necesario elegir una combinación de ángulos, aunque teóricamente sean un tipo de ángulos de euler, se programo para que hiciera la secuencia convencional de ejes que son: ZYX.
+\end{itemize}
+También debemos elegir el número de solución para el ángulo $\theta$, para el cuál siempre dispones de dos posibles soluciones y la ventana nos lo puede mostrar.
+Si requiere información extra para ver la teoría de estos tipos de ángulos, puede consultar los siguientes URL:
+\begin{itemize}
+	\item Ángulos de Euler: \small \url{https://es.wikipedia.org/wiki/%C3%81ngulos_de_Euler}
+	\item Ángulos RPY: \small \url{https://es.wikipedia.org/wiki/%C3%81ngulos_de_navegaci%C3%B3n}
+\end{itemize}
+\textbf{¿Cómo se debe de ingresar la matriz de rotación?}\\
+Es muy importante la manera en la que vamos a ingresar la matriz de rotación,si no, nos mandará un error la interfaz. Para evitar esto solo se necesita ingresar la matriz de manera de arregló, que sería entre corchetes ( [ ] ), lo único que se encerraría entre corchetes serían los renglones de la matriz y cada columna se debera separar por una coma ( , ).\\
+Esto se hace principalmente para que el programa vaya más rápido y nos devuelva el valor casi inmediatamente después de presionar el botón de ejecución.\\
+No sé preocupe si no entendio la parte anterior, puede acudir a ver los ejemplos sobre como usar esta ventana.\\
+\\
+\textbf{Botones}\\
+En los siguientes puntos se encontrarán los nombres de los botones y que funcionalidad tiene cada uno de ellos.
+\begin{itemize}
+	\item \textbf{GO:} Este botón prácticamente es nuestra ejecución para que nos muestre los resultados del tema relacionado a la ventana.
+	\item \textbf{Reset:} Este botón su única tarea es limpiar toda nuestra ventana quita: lo escrito en las cajas de texto y los resultados mostrados.
+	\item \textbf{Back:} Este botón nos regresa una ventana atrás, la ventaja de cuando nos regresamos y si tenemos un resultado nos lo mantiene mientras el programa siga en ejecución.
+\end{itemize}
+\subsubsection{Eje/ángulo}
+\subsubsection{Matriz de Denavir - Hartenberg}
+\subsection{Cinemática directa}
+\subsection{Cinemática inversa}
+\subsubsection{Cinemática inversa: Método de Newton - Raphson}
+\subsubsection{Cinemática inversa: Función científica de Python}
+\subsection{Cinemática diferencial}
+\end{document}

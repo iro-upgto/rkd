@@ -52,6 +52,15 @@ class GUI(Tk):
         barMenu.add_cascade(label = 'File', menu = menufile)
         barMenu.add_cascade(label = "Information", menu = menuInfo)
         barMenu.add_cascade(label = "Help", menu = menuhelp)
+
+        menuhelp.add_separator()
+
+        help_GUI = Menu(menuhelp)
+        help_GUI.add_command(label = 'Rotations')
+        help_GUI.add_command(label = 'Parameterization of rotations')
+
+        menuhelp.add_cascade(label = 'Help for the windows', menu = help_GUI)
+
         self.config(menu = barMenu)
         container = Frame(self)
         container.pack(side="top", fill="both", expand=True)
