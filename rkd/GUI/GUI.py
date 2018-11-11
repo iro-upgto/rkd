@@ -38,8 +38,8 @@ class GUI(Tk):
         self.OS = os.name
         if self.OS == 'posix': #Operating systems Linux y Mac OS
             img = PhotoImage(file = "img/robot.png")
-        if self.OS == 'nt': #Operating system Windows
-            img = PhotoImage(file = "img\robot.png")
+        if self.OS == 'nt': #Operating system Windows 
+            img = PhotoImage(file = "img\\robot.png")
         self.call("wm", "iconphoto", self._w, img)
         self.geometry("1200x650+300+10")        
         barMenu = Menu(self)
