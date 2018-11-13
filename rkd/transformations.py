@@ -6,6 +6,33 @@ from rkd.abc import *
 from rkd.mathematical_algorithms import *
 init_printing(use_latex=True)
 
+def rot(phi,theta,psi, sec, deg):
+    if ((sec == 'XYX') or (sec == 'xyx')):
+        H = m_mult(rotx(phi,deg), roty(theta,deg), rotx(psi,deg))
+    if ((sec == 'XZX') or (sec == 'xzx')):
+        H = m_mult(rotx(phi,deg), rotz(theta,deg), rotx(psi,deg))
+    if ((sec == 'YXY') or (sec == 'yxy')):
+        H = m_mult(roty(phi,deg), rotx(theta,deg), roty(psi,deg))
+    if ((sec == 'YZY') or (sec == 'yzy')):
+        H = m_mult(roty(phi,deg), rotz(theta,deg), roty(psi,deg))
+    if ((sec == 'ZXZ') or (sec == 'zxz')):
+        H = m_mult(rotz(phi,deg), rotx(theta,deg), rotz(psi,deg))
+    if ((sec == 'ZYZ') or (sec == 'zyz')):
+        H = m_mult(rotz(phi,deg), roty(theta,deg), rotz(psi,deg))
+    if ((sec == 'XYZ') or (sec == 'xyz')):
+        H = m_mult(rotx(phi,deg), roty(theta,deg), rotz(psi,deg))
+    if ((sec == 'XZY') or (sec == 'xzy')):
+        H = m_mult(rotx(phi,deg), rotz(theta,deg), roty(psi,deg))
+    if ((sec == 'YXZ') or (sec == 'yxz')):
+        H = m_mult(roty(phi,deg), rotx(theta,deg), rotz(psi,deg))
+    if ((sec == 'YZX') or (sec == 'yzx')):
+        H = m_mult(roty(phi,deg), rotz(theta,deg), rotx(psi,deg))
+    if ((sec == 'ZXY') or (sec == 'zxy')):
+        H = m_mult(rotz(phi,deg), rotx(theta,deg), roty(psi,deg))
+    if ((sec == 'ZYX') or (sec == 'zyx')):
+        H = m_mult(rotz(phi,deg), roty(theta,deg), rotx(psi,deg))
+
+    return H
 
 def rotz(theta, deg=False):
     """
