@@ -141,19 +141,19 @@ class rotations(Frame):
         frame1.pack(side = "left", anchor = "n")
         label = Label(frame1, text = "Rotations", font = controller.title_font)
         label.pack(side = "top", fill = "x", padx = 5, pady = 10)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = 'Sequence:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.sequence = Entry(frame1, font = controller.Arial14)
         self.sequence.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = "Axis X:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
         self.txt_angle_x = Entry(frame1, font = controller.Arial14)
         self.txt_angle_x.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = "Axis Y:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.txt_angle_y = Entry(frame1, font = controller.Arial14)
         self.txt_angle_y.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = "Axis Z:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
         self.txt_angle_z = Entry(frame1, font = controller.Arial14)
         self.txt_angle_z.pack(side = TOP, padx = 25, pady = 2)
@@ -165,11 +165,11 @@ class rotations(Frame):
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
         canvas.draw()
-        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), self.sequence.get(), a, canvas))
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), self.sequence.get(), a, canvas))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
-        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
+        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
-        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         a.mouse_init() # for mouse rotation
         
@@ -177,19 +177,25 @@ class rotations(Frame):
     #Functions for buttons
     
     def GO(self, phi, theta, psi, sec, ax, canvas):        
-        if ((phi == "") or (theta == "") or (psi == "")):
+        if ((phi == "") or (theta == "") or (psi == "") or (sec == '')):
             messagebox.showwarning("Warning", "Check the 'Text Boxes'")
 
-        if ((phi != "") or (theta != "") or (psi != "")):
+        if ((phi != "") or (theta != "") or (psi != "") or (sec != '')):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
             a = ax
             canvas = canvas
             a.clear()
             self.draw_uvw1(np.eye(4), a)
-            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):  pass
-                
+            phi = float(phi)
+            theta = float(theta)
+            psi = float(psi)
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
+                H = rot(phi,theta,psi,sec,True)
+                self.draw_uvw(H,a)
 
-            if ((answer == "no") or (answer == "No") or (answer == "NO")): pass
+            if ((answer == "no") or (answer == "No") or (answer == "NO")):
+                H = rot(phi,theta,psi,sec,False)
+                self.draw_uvw(H,a)
                 
 
 
@@ -260,6 +266,7 @@ class rotations(Frame):
         self.txt_angle_x.delete(0, 'end')
         self.txt_angle_y.delete(0, 'end')
         self.txt_angle_z.delete(0, 'end')
+        self.sequence.delete(0, 'end')
 
 class parameterization(Frame):    
     def __init__(self, parent, controller):
