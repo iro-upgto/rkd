@@ -1,9 +1,5 @@
 """
-This module has been designed for academic purposes, using SymPy as base library. 
-It's easy to check that SymPy is slower than NumPy specially in matrix algebra, 
-however SymPy is more convenient to use as didactic tool due to the given facilities 
-as the symbolic manipulation, calculation of partial and ordinary derivatives, 
-matricial multiplication using asterisk symbol, "init_printing" function and so on.
+
 """
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -231,5 +227,4 @@ def test_rb2():
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    test_robot()
-    # ~ test_rb2()
+    test_rb2()
