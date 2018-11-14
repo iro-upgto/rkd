@@ -52,6 +52,15 @@ class GUI(Tk):
         barMenu.add_cascade(label = 'File', menu = menufile)
         barMenu.add_cascade(label = "Information", menu = menuInfo)
         barMenu.add_cascade(label = "Help", menu = menuhelp)
+
+        menuhelp.add_separator()
+
+        help_GUI = Menu(menuhelp)
+        help_GUI.add_command(label = 'Rotations')
+        help_GUI.add_command(label = 'Parameterization of rotations')
+
+        menuhelp.add_cascade(label = 'Help for the windows', menu = help_GUI)
+
         self.config(menu = barMenu)
         container = Frame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -133,6 +142,10 @@ class rotations(Frame):
         label = Label(frame1, text = "Rotations", font = controller.title_font)
         label.pack(side = "top", fill = "x", padx = 5, pady = 10)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = 'Sequence:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.sequence = Entry(frame1, font = controller.Arial14)
+        self.sequence.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         Label(frame1, text = "Axis X:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
         self.txt_angle_x = Entry(frame1, font = controller.Arial14)
         self.txt_angle_x.pack(side = TOP, padx = 25, pady = 2)
@@ -152,7 +165,7 @@ class rotations(Frame):
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
         canvas.draw()
-        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), a, canvas))
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), self.sequence.get(), a, canvas))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
@@ -163,23 +176,21 @@ class rotations(Frame):
 
     #Functions for buttons
     
-    def GO(self, x, y, z, ax, canvas):        
-        if ((x == "") or (y == "") or (z == "")):
+    def GO(self, phi, theta, psi, sec, ax, canvas):        
+        if ((phi == "") or (theta == "") or (psi == "")):
             messagebox.showwarning("Warning", "Check the 'Text Boxes'")
 
-        if ((x != "") or (y != "") or (z != "")):
+        if ((phi != "") or (theta != "") or (psi != "")):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
             a = ax
             canvas = canvas
             a.clear()
             self.draw_uvw1(np.eye(4), a)
-            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
-                H = m_mult(rotx(float(x), True),roty(float(y), True),rotz(float(z), True))
-                self.draw_uvw_rot(H, a)
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):  pass
+                
 
-            if ((answer == "no") or (answer == "No") or (answer == "NO")):
-                H = m_mult(rotx(float(x)),roty(float(y)),rotz(float(z)))
-                self.draw_uvw_rot(H, a)
+            if ((answer == "no") or (answer == "No") or (answer == "NO")): pass
+                
 
 
             canvas.draw()
