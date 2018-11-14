@@ -2,8 +2,6 @@
 Universidad Politécnica de Guanajuato
 Departamento de Ingeniería Robótica
 
-rkd.didactic
-
 This module has been designed for academic purposes, using SymPy as base library. 
 It's easy to check that SymPy is slower than NumPy specially in matrix algebra, 
 however SymPy is more convenient to use as didactic tool due to the given facilities 
