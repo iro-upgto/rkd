@@ -46,6 +46,8 @@ class GUI(Tk):
         menuInfo = Menu(barMenu)
         menuhelp = Menu(barMenu)
         menufile = Menu(barMenu)
+        menufile.add_command(label = 'Go to Home', command = self.go_to_home)
+        menufile.add_separator()
         menufile.add_command(label = 'Exit', command = quit)
         menuInfo.add_command(label = "Open Message", command = self.info)
         menuhelp.add_command(label = "Open Manual in Spanish", command = self.manual_spanish)
@@ -56,10 +58,22 @@ class GUI(Tk):
         menuhelp.add_separator()
 
         help_GUI = Menu(menuhelp)
-        help_GUI.add_command(label = 'Rotations')
-        help_GUI.add_command(label = 'Parameterization of rotations')
+        help_transformations = Menu(help_GUI)
+        help_forward_kinematics = Menu(help_GUI)
+        help_inverse_kinematics = Menu(help_GUI)
+        help_differential_kinematics = Menu(help_GUI)
 
         menuhelp.add_cascade(label = 'Help for the windows', menu = help_GUI)
+        help_GUI.add_cascade(label = 'Transformations', menu = help_transformations)
+        help_transformations.add_command(label = 'Rotations')
+        help_transformations.add_command(label = 'Parameterization of rotations')
+        help_transformations.add_command(label = 'Axis/Angle')
+        help_transformations.add_command(label = 'Matrix DH')
+        help_GUI.add_command(label = 'Forward Kinematics')
+        help_GUI.add_cascade(label = 'Inverse Kinematics', menu = help_inverse_kinematics)
+        help_inverse_kinematics.add_command(label = 'Inverse Kinematics (N - R)')
+        help_inverse_kinematics.add_command(label = 'Inverse Kinematics (mixed)')
+        help_GUI.add_command(label = 'Differential Kinematics')
 
         self.config(menu = barMenu)
         container = Frame(self)
@@ -85,14 +99,21 @@ class GUI(Tk):
         frame = self.frames[page_name]
         frame.tkraise()
 
+    def go_to_home(self):
+        self.show_frame('main')
+
     def info(self):
         messagebox.showinfo("Information","Version: 1.0\n\nMIT License\n\nCopyright (c) 2018 IRO\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the Software), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED AS IS, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.")
 
+    #Funtions for HELP
     def manual_spanish(self):
         if self.OS == 'posix':#Operating systems Linux y Mac OS
-            wb.open_new(r"Software management manuals/Manual del manejo del software en ESPAÑOL.pdf")
+            wb.open_new("Software management manuals/Manual del manejo del software en ESPAÑOL.pdf")
         if self.OS == 'nt':#Operating system Windows
             wb.open_new(r"Software management manuals\Manual del manejo del software en ESPAÑOL.pdf")
+
+    def help_rotations(self):
+        messagebox.showinfo('Information ROTATIONS', 'Hola')
 
 class main(Frame):
 
@@ -141,22 +162,22 @@ class rotations(Frame):
         frame1.pack(side = "left", anchor = "n")
         label = Label(frame1, text = "Rotations", font = controller.title_font)
         label.pack(side = "top", fill = "x", padx = 5, pady = 10)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
         Label(frame1, text = 'Sequence:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.sequence = Entry(frame1, font = controller.Arial14)
         self.sequence.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        Label(frame1, text = "Axis X:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
-        self.txt_angle_x = Entry(frame1, font = controller.Arial14)
-        self.txt_angle_x.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        Label(frame1, text = "Axis Y:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
-        self.txt_angle_y = Entry(frame1, font = controller.Arial14)
-        self.txt_angle_y.pack(side = TOP, padx = 25, pady = 2)
-        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
-        Label(frame1, text = "Axis Z:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
-        self.txt_angle_z = Entry(frame1, font = controller.Arial14)
-        self.txt_angle_z.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = "Axis 1:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
+        self.txt_angle_1 = Entry(frame1, font = controller.Arial14)
+        self.txt_angle_1.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = "Axis 2:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.txt_angle_2 = Entry(frame1, font = controller.Arial14)
+        self.txt_angle_2.pack(side = TOP, padx = 25, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        Label(frame1, text = "Axis 3:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
+        self.txt_angle_3 = Entry(frame1, font = controller.Arial14)
+        self.txt_angle_3.pack(side = TOP, padx = 25, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
         f = Figure(figsize = (5,5), dpi = 100)
         a = f.add_subplot(111, projection='3d')        
@@ -165,11 +186,11 @@ class rotations(Frame):
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
         canvas.draw()
-        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_x.get(), self.txt_angle_y.get(), self.txt_angle_z.get(), self.sequence.get(), a, canvas))
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_1.get(), self.txt_angle_2.get(), self.txt_angle_3.get(), self.sequence.get(), a, canvas))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
-        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
+        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
-        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         a.mouse_init() # for mouse rotation
         
@@ -177,19 +198,25 @@ class rotations(Frame):
     #Functions for buttons
     
     def GO(self, phi, theta, psi, sec, ax, canvas):        
-        if ((phi == "") or (theta == "") or (psi == "")):
+        if ((phi == "") or (theta == "") or (psi == "") or (sec == '')):
             messagebox.showwarning("Warning", "Check the 'Text Boxes'")
 
-        if ((phi != "") or (theta != "") or (psi != "")):
+        if ((phi != "") or (theta != "") or (psi != "") or (sec != '')):
             answer = messagebox.askquestion("Important to answer", "Are you entering the angles in degrees?")
             a = ax
             canvas = canvas
             a.clear()
             self.draw_uvw1(np.eye(4), a)
-            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):  pass
-                
+            phi = float(phi)
+            theta = float(theta)
+            psi = float(psi)
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
+                H = rot(phi,theta,psi,sec,True)
+                self.draw_uvw(H,a)
 
-            if ((answer == "no") or (answer == "No") or (answer == "NO")): pass
+            if ((answer == "no") or (answer == "No") or (answer == "NO")):
+                H = rot(phi,theta,psi,sec,False)
+                self.draw_uvw(H,a)
                 
 
 
@@ -257,9 +284,10 @@ class rotations(Frame):
         a.clear()
         self.draw_uvw(np.eye(4), a)
         canvas.draw()
-        self.txt_angle_x.delete(0, 'end')
-        self.txt_angle_y.delete(0, 'end')
-        self.txt_angle_z.delete(0, 'end')
+        self.txt_angle_1.delete(0, 'end')
+        self.txt_angle_2.delete(0, 'end')
+        self.txt_angle_3.delete(0, 'end')
+        self.sequence.delete(0, 'end')
 
 class parameterization(Frame):    
     def __init__(self, parent, controller):
