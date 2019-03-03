@@ -1,0 +1,1 @@
+instalar opencv-python para "cv2"
