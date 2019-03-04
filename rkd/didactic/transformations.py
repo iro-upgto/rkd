@@ -261,7 +261,7 @@ def _htm2zxz(H, deg=False):
     elif r33==-1:
         theta = pi
         psi = 0
-        phi = atan2(-r21, -r11)
+        phi = atan2(r21, r11)
     else:
         theta = atan2(sqrt(1-r33**2), r33)
         phi = atan2(r13,-r23)
