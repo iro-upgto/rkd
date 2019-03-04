@@ -248,7 +248,8 @@ def b1(F, x0, number_of_variables):
     return F
 
 def ec(x):
-    return np.array([x[0]*cos(x[1])*sin(x[2]), x[0]*sin(x[1])*sin(x[2]), 10-(x[0]*cos(x[2]))])
+    return np.array([(x[0]*cos(x[1])*sin(x[2])), (x[0]*sin(x[1])*sin(x[2])), (10-(x[0]*cos(x[2])))])
+
 if __name__=="__main__":
 
     #x0 = np.array([[80, pi/6, pi/4]])

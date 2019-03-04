@@ -62,29 +62,23 @@ class Robot(object):
             M_[:,i] = jp
         return simplify(M_)
 
-    @property
-    def J_d(self):
+    def J_i(self,i):
         """
         Geometric Jacobian matrix
         """
-        n = self.dof
+        n = i
         M_ = zeros(6,n)
-        M = []
-        i = 0
-        while i <= n:
-            for i in range(self.dof):
-                if self.type[i]=='r':
-                    jp = self.z(i).cross(self.p(n) - self.p(i))
-                    jo = self.z(i)
-                else:
-                    jp = self.z(i)
-                    jo = zeros(3,1)
-                jp = jp.col_join(jo)
-                M_[:,i] = jp
-            i += 1
-        M.append(simplify(M_))
-        return M
-    
+        for i in range(n):
+            if self.type[i]=='r':
+                jp = self.z(i).cross(self.p(n) - self.p(i))
+                jo = self.z(i)
+            else:
+                jp = self.z(i)
+                jo = zeros(3,1)
+            jp = jp.col_join(jo)
+            M_[:,i] = jp
+        return simplify(M_)
+
     @property
     def T(self):
         """ 

@@ -23,11 +23,13 @@ class GUI(Tk):
     def __init__(self, *args, **kwargs):
         Tk.__init__(self, *args, **kwargs)        
         self.title_font = font.Font(family = "Helvetica", size = 20, weight = "bold", slant = "italic")
+
         self.Arial20 = font.Font(family = "Arial", size = 20)#, weight = "bold")
         self.Arial16 = font.Font(family = "Arial", size = 16)#, weight = "bold")
         self.Arial14 = font.Font(family = "Arial", size = 14)#, weight = "bold")
         self.Arial12 = font.Font(family = "Arial", size = 12)#, weight = "bold")
         self.Arial10 = font.Font(family = "Arial", size = 10)#, weight = "bold")
+
 
         # the container is where we'll stack a bunch of frames
         # on top of each other, then the one we want visible
@@ -42,6 +44,7 @@ class GUI(Tk):
             img = PhotoImage(file = "img/robot.png")
             self.call("wm", "iconphoto", self._w, img)
         self.geometry("1200x650+50+0")        
+
         barMenu = Menu(self)
         menuInfo = Menu(barMenu)
         menuhelp = Menu(barMenu)
@@ -65,6 +68,7 @@ class GUI(Tk):
 
         menuhelp.add_cascade(label = 'Help for the windows', menu = help_GUI)
         help_GUI.add_cascade(label = 'Transformations', menu = help_transformations)
+
         help_transformations.add_command(label = 'Rotations', command = self.help_rotations)
         help_transformations.add_command(label = 'Parameterization of rotations', command = self.help_parametrization)
         help_transformations.add_command(label = 'Axis/Angle', command = self.help_axis_angles)
@@ -76,6 +80,7 @@ class GUI(Tk):
         help_GUI.add_command(label = 'Differential Kinematics', command = self.help_DiffKinematics)
         menuhelp.add_separator()
         menuhelp.add_command(label = 'About Robotics Software', command = self.about_software)
+
 
         self.config(menu = barMenu)
         container = Frame(self)
@@ -110,6 +115,7 @@ class GUI(Tk):
     #Funtions for HELP
     def manual_spanish(self):
         if self.OS == 'posix':#Operating systems Linux y Mac OS
+
             wb.open_new("Manual del manejo del software en ESPAÑOL.pdf")
         if self.OS == 'nt':#Operating system Windows
             wb.open_new(r"Manual del manejo del software en ESPAÑOL.pdf")
@@ -141,6 +147,7 @@ class GUI(Tk):
     def about_software(self):
         messagebox.showinfo('Robotics Software', 'Robotics Software\n\nCopyright (c) 2018 Robotic Engineering || Polytechnic University of Guanajuato\n\nVersion: 0.1 Alpha\n\nBuild 1')
 
+
 class main(Frame):
 
     def __init__(self, parent, controller):
@@ -148,6 +155,7 @@ class main(Frame):
         self.controller = controller
         label = Label(self, text="Robot Kinematics", font=controller.title_font)
         label.pack(side="top", fill="x", pady=10)        
+
         btn_transformations = Button(self, text = "Transformations", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand2", command = lambda: controller.show_frame("transformations"))
         btn_transformations.pack(padx = 10, pady = 20)
         btn_kinematics = Button(self, text = "Forward Kinematics", font = controller.Arial16, width = 40, height = 3, borderwidth = 5, cursor = "hand2", command = lambda: controller.show_frame("forward_kinematics"))
@@ -204,27 +212,45 @@ class rotations(Frame):
         Label(frame1, text = "Axis 3:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)        
         self.txt_angle_3 = Entry(frame1, font = controller.Arial14)
         self.txt_angle_3.pack(side = TOP, padx = 25, pady = 2)
+<<<<<<< HEAD
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 1)
         f = Figure(figsize = (5,5), dpi = 100)
         a = f.add_subplot(111, projection='3d')
+=======
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        f = Figure(figsize = (5,5), dpi = 100)
+        a = f.add_subplot(111, projection='3d')        
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         a.clear()
         self.draw_uvw(np.eye(4), a)
         canvas = FigureCanvasTkAgg(f, self)  # A tk.DrawingArea.
         canvas.get_tk_widget().pack(side = BOTTOM, fill=BOTH, expand=True)
         canvas.draw()
+<<<<<<< HEAD
         btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand2", command = lambda: self.GO(self.txt_angle_1.get(), self.txt_angle_2.get(), self.txt_angle_3.get(), self.sequence.get(), a, canvas, f))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand2", command = lambda: self.reset(a, canvas))
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand2", command = lambda: controller.show_frame("transformations")) 
+=======
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_angle_1.get(), self.txt_angle_2.get(), self.txt_angle_3.get(), self.sequence.get(), a, canvas))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = "Reset", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: self.reset(a, canvas))
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         a.mouse_init() # for mouse rotation
         
 
     #Functions for buttons
     
+<<<<<<< HEAD
     def GO(self, phi, theta, psi, sec, ax, canvas, fig):
         fig = fig
+=======
+    def GO(self, phi, theta, psi, sec, ax, canvas):        
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         if ((phi == "") or (theta == "") or (psi == "") or (sec == '')):
             messagebox.showwarning("Warning", "Check the 'Text Boxes'")
 
@@ -237,6 +263,7 @@ class rotations(Frame):
             phi = float(phi)
             theta = float(theta)
             psi = float(psi)
+<<<<<<< HEAD
             sequence = sec
             #ax1 = sequence[0]
             #ax2 = sequence[1]
@@ -250,6 +277,22 @@ class rotations(Frame):
             self.draw_uvw(H,a)
             canvas.draw()
 
+=======
+            if ((answer == "sí") or (answer == "Sí") or (answer == "SI") or (answer == "SÍ") or (answer == "yes") or (answer == "Yes") or (answer == "YES")):
+                H = rot(phi,theta,psi,sec,True)
+                self.draw_uvw(H,a)
+
+            if ((answer == "no") or (answer == "No") or (answer == "NO")):
+                H = rot(phi,theta,psi,sec,False)
+                self.draw_uvw(H,a)
+                
+
+
+            canvas.draw()
+
+
+
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
     def draw_uvw(self, T, ax):
         O=(0,0,0)
         U=T[:3,0]
@@ -322,25 +365,42 @@ class parameterization(Frame):
         Label(self, text = "Parameterization of rotations", font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
         frame1 = Frame(self, width = 650, height = 500)
         frame1.pack(side = "left", anchor = "n")
+<<<<<<< HEAD
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 3)
         Label(frame1, text = "Rotation matrix:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.txt_rotation_matrix = Entry(frame1, font = controller.Arial14)
         self.txt_rotation_matrix.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 3)
+=======
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = "Rotation matrix:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
+        self.txt_rotation_matrix = Entry(frame1, font = controller.Arial14)
+        self.txt_rotation_matrix.pack(side = TOP, padx = 5, pady = 2)
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(frame1, text = "Types of angles:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.option_angles = ttk.Combobox(frame1, font = controller.Arial14, width = 25)
         self.option_angles.pack(side = TOP, padx = 50, pady = 2)
         self.option_angles["values"] = ['' ,"Euler angles", "Roll, Pitch, Yaw angles"]
+<<<<<<< HEAD
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 3)
+=======
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(frame1, text = "Choose an option:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.options_angles_euler = ttk.Combobox(frame1, font = controller.Arial14, width = 5)
         self.options_angles_euler.pack(side = TOP, padx = 5, pady = 2)
         self.options_angles_euler["values"] = ['' ,"XYX", "XZX", "YXY", "YZY", "ZXZ", "ZYZ"]
+<<<<<<< HEAD
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 3)
+=======
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(frame1, text = 'Theta angle solutions:', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.solutions = ttk.Combobox(frame1, font = controller.Arial14, width = 5)
         self.solutions.pack(side = TOP, padx = 5, pady = 2)
         self.solutions['values'] = ['', '# 1', '# 2']
+<<<<<<< HEAD
         Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 1)
         btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand2", command = lambda: self.GO(self.txt_rotation_matrix.get(), self.option_angles.get(), self.options_angles_euler.get(), self.solutions.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 5)
@@ -349,6 +409,16 @@ class parameterization(Frame):
         btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = "hand2", command = lambda: controller.show_frame("transformations")) 
         btn_back.pack(side = TOP, padx = 5, pady = 5)
         Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
+=======
+        Label(frame1, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 5)
+        btn_go = Button(frame1, text = "GO", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.GO(self.txt_rotation_matrix.get(), self.option_angles.get(), self.options_angles_euler.get(), self.solutions.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 5)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 5)
+        btn_back = Button(frame1, text = "Back", font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = "hand1", command = lambda: controller.show_frame("transformations")) 
+        btn_back.pack(side = TOP, padx = 5, pady = 5)
+        Label(self, text = "").pack(side = TOP, padx = 5, pady = 25)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(self, text = 'RESULTS', font = controller.title_font).pack(side = TOP, padx = 5, pady = 50)
         Label(self, text = "").pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = '\u03c6 :', font = controller.Arial16).pack(side = TOP, padx = 50, pady = 2)
@@ -464,12 +534,20 @@ class axis_angle(Frame):
         Label(self, text = "Rotation matrix:", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         self.txt_rotation_matrix = Entry(self, font = controller.Arial14)
         self.txt_rotation_matrix.pack(side = TOP, padx = 5, pady = 2)
+<<<<<<< HEAD
         Label(self, text = "", font = controller.Arial14).pack(side = TOP, padx = 5, pady = 2)
         btn_go = Button(self, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.GO(self.txt_rotation_matrix.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(self, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(self, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('transformations'))
+=======
+        btn_go = Button(self, text = 'GO', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.txt_rotation_matrix.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(self, text = 'Reset', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(self, text = 'Back', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('transformations'))
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)      
         Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 20)
         Label(self, text = '\u03b8 :', font = controller. Arial14).pack(side = TOP, padx = 50, pady = 2)
@@ -523,9 +601,16 @@ class matrixDH(Frame):
     def __init__(self, parent, controller):
         Frame.__init__(self, parent)
         self.controller = controller
+<<<<<<< HEAD
         Label(self, text = 'Matrix DH (Denavit - Hartenberg)', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
         frame1 = Frame(self, width = 650, height = 500)
         frame1.pack(side = "left", anchor = "n")
+=======
+        Label(self, text = 'Matrix DH (Denavir - Hartenberg)', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+        frame1 = Frame(self, width = 650, height = 500)
+        frame1.pack(side = "left", anchor = "n")
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 35, pady = 15)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(frame1, text = 'ai:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
         self.ai = Entry(frame1, font = controller.Arial14)
         self.ai.pack(side = TOP, padx = 15, pady = 2)
@@ -541,6 +626,7 @@ class matrixDH(Frame):
         Label(frame1, text = '\u03b8i:', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 2)
         self.thetai = Entry(frame1, font = controller.Arial14)
         self.thetai.pack(side = TOP, padx = 15, pady = 2)
+<<<<<<< HEAD
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 3)
         btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.GO(self.ai.get(), self.alphai.get(), self.di.get(), self.thetai.get()))
         btn_go.pack(side = TOP, padx = 35, pady = 10)
@@ -553,6 +639,20 @@ class matrixDH(Frame):
         Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 35, pady = 50)
         self.matrixDH_value = Label(self, text = '', font = controller.Arial20, fg = 'red')
         self.matrixDH_value.pack(side = TOP, padx = 10)
+=======
+        Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 35, pady = 5)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.ai.get(), self.alphai.get(), self.di.get(), self.thetai.get()))
+        btn_go.pack(side = TOP, padx = 35, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 35, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('transformations'))
+        btn_back.pack(side = TOP, padx = 35, pady = 10)
+        Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 50)        
+        Label(self, text = 'Matrix', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 35, pady = 50)
+        self.matrixDH_value = Label(self, text = '', font = controller.Arial20, fg = 'red')
+        self.matrixDH_value.pack(side = TOP, padx = 10, pady = 10)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
 
     def GO(self, ai, alphai, di, thetai):
 
@@ -581,11 +681,18 @@ class matrixDH(Frame):
 
             if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
                 DH = htmDH(ai, alphai, di, thetai)
+<<<<<<< HEAD
 
             DH = np.around(DH,decimals = 6)            
             DH = str(DH)
             DH = DH[1:-1]
             self.matrixDH_value.configure(text = DH)
+=======
+            
+            DH = str(DH)
+            DH = DH[1:-1]
+            self.matrixDH_value.configure(text = ' '+DH)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
 
     def reset(self):
         self.ai.delete(0, 'end')
@@ -619,6 +726,7 @@ class forward_kinematics(Frame):
         Label(frame1, text = 'DH6 :', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
         self.DH6 = Entry(frame1, font = controller.Arial16)
         self.DH6.pack(side = TOP, padx = 5, pady = 2)
+<<<<<<< HEAD
         btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand2', command = lambda: self.GO(self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 5)
         btn_kinematics_diagram = Button(frame1, text = 'Kinematics diagram', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand2', command = lambda: self.kinematics_diagram())
@@ -628,6 +736,18 @@ class forward_kinematics(Frame):
         btn_back = Button(frame1, text = "Back", font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = "hand2", command = lambda: controller.show_frame("main"))
         btn_back.pack(side = TOP, padx = 5, pady = 5)
         Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
+=======
+        Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.GO(self.DH1.get(), self.DH2.get(), self.DH3.get(), self.DH4.get(), self.DH5.get(), self.DH6.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 5)
+        btn_kinematics_diagram = Button(frame1, text = 'Kinematics diagram', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.kinematics_diagram())
+        btn_kinematics_diagram.pack(side = TOP, padx = 5, pady = 5)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 5)
+        btn_back = Button(frame1, text = "Back", font = controller.Arial16, width = 25, height = 1, borderwidth = 2, cursor = "hand1", command = lambda: controller.show_frame("main"))
+        btn_back.pack(side = TOP, padx = 5, pady = 5)
+        Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 50)        
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         Label(self, text = 'Matrix', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
         self.matrixDH_value = Label(self, text = '', font = controller.Arial20, fg = 'red')
         self.matrixDH_value.pack(side = TOP, padx = 10, pady = 10)
@@ -639,7 +759,11 @@ class forward_kinematics(Frame):
         self.position_y.pack(side = TOP, padx = 10, pady = 2)
         self.position_z = Label(self, text = '', font = controller.Arial16, fg = 'red')
         self.position_z.pack(side = TOP, padx = 10, pady = 2)
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
     def GO(self, DH1, DH2, DH3, DH4, DH5, DH6):
         try:
             DH = []
@@ -663,7 +787,10 @@ class forward_kinematics(Frame):
             px = str(px)
             py = str(py)
             pz = str(pz)
+<<<<<<< HEAD
             DH = np.around(DH,decimals = 6)
+=======
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             DH = str(DH)
             DH = DH[1:-1]
             self.matrixDH_value.configure(text = ' '+DH)
@@ -703,7 +830,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0]], 
                    [A[1],B[1]], 
+<<<<<<< HEAD
                    [A[2],B[2]], '-mo')
+=======
+                   [A[2],B[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw1(np.eye(4), a)
             self.draw_uvw(T1_0, a)
@@ -729,7 +860,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0]], 
                    [A[1],B[1],C[1]], 
+<<<<<<< HEAD
                    [A[2],B[2],C[2]], '-mo')
+=======
+                   [A[2],B[2],C[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -757,7 +892,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0]], 
                    [A[1],B[1],C[1],D[1]], 
+<<<<<<< HEAD
                    [A[2],B[2],C[2],D[2]], '-mo')
+=======
+                   [A[2],B[2],C[2],D[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -788,7 +927,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0]], 
                    [A[1],B[1],C[1],D[1],E[1]], 
+<<<<<<< HEAD
                    [A[2],B[2],C[2],D[2],E[2]], '-mo')
+=======
+                   [A[2],B[2],C[2],D[2],E[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -822,7 +965,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0],F[0]], 
                    [A[1],B[1],C[1],D[1],E[1],F[1]], 
+<<<<<<< HEAD
                    [A[2],B[2],C[2],D[2],E[2],F[2]], '-mo')
+=======
+                   [A[2],B[2],C[2],D[2],E[2],F[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -859,7 +1006,11 @@ class forward_kinematics(Frame):
             zmax = self.zmax + 0.1*(self.zmax - self.zmin)
             a.plot([A[0],B[0],C[0],D[0],E[0],F[0],G[0]], 
                    [A[1],B[1],C[1],D[1],E[1],F[1],G[1]], 
+<<<<<<< HEAD
                    [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-mo')
+=======
+                   [A[2],B[2],C[2],D[2],E[2],F[2],G[2]], '-o')
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             self.draw_uvw(np.eye(4), a)            
             self.draw_uvw(T1_0, a)
             self.draw_uvw(T2_0, a)
@@ -937,11 +1088,19 @@ class inverse_kinematics(Frame):
         Frame.__init__(self, parent)
         self.controller = controller
         Label(self, text = 'Inverse Kinematics', font = controller.title_font).pack(side = TOP, padx = 5, pady = 10)
+<<<<<<< HEAD
         btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('newton_raphson'))
         btn_newton_raphson.pack(side = TOP, padx = 5, pady = 10)
         btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('mixed_root'))
         btn_mixed.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(self, text = 'Back', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('main'))
+=======
+        btn_newton_raphson = Button(self, text = 'Inverse Kinematics (N - R)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('newton_raphson'))
+        btn_newton_raphson.pack(side = TOP, padx = 5, pady = 10)
+        btn_mixed = Button(self, text = 'Inverse Kinematics (Mixed)', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('mixed_root'))
+        btn_mixed.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(self, text = 'Back', font = controller.Arial16, width = 35, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('main'))
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         
 class newton_raphson(Frame):
@@ -968,11 +1127,19 @@ class newton_raphson(Frame):
         self.x0 = Entry(frame1, font = controller.Arial14)
         self.x0.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = '', font = controller.Arial14).pack(side = TOP, padx = 5, pady = 10)
+<<<<<<< HEAD
         btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('inverse_kinematics'))
+=======
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.matrixJ.get(), self.matrixF.get(), self.number_var.get(), self.x0.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial14, width = 15, height = 1, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'Approximate values:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
@@ -1032,6 +1199,7 @@ class newton_raphson(Frame):
                         if ncolumnx0 != 1:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
                         if ncolumnx0 == 1:
+<<<<<<< HEAD
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
                             X0 = np.array(X0)
                             x = np.array(x)
@@ -1046,11 +1214,45 @@ class newton_raphson(Frame):
                             self.results_variable1.configure(text = 'Variable 1 = '+result1)
                             self.error_variable1.configure(text = 'Error 1 = '+error1)
                             self.iterations.configure(text = k)
+=======
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                error1 = x[0]
+                                result1 = float(result1)
+                                error1 = float(error1)
+                                result1 = round(result1, 5)
+                                error1 = round(error1, 5)
+                                result1 = str(result1)
+                                error1 = str(error1)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.error_variable1.configure(text = 'Error 1 = '+error1)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                error1 = x[0]
+                                result1 = float(result1)
+                                error1 = float(error1)
+                                result1 = round(result1, 5)
+                                error1 = round(error1, 5)
+                                result1 = str(result1)
+                                error1 = str(error1)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.error_variable1.configure(text = 'Error 1 = '+error1)
+                                self.iterations.configure(text = k)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if nvar == '2':
                     if nrowx0 == 1:
                         if ncolumnx0 != 2:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
                         if ncolumnx0 == 2:
+<<<<<<< HEAD
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)                            
                             result1 = X0[0,0]
                             result2 = X0[0,1]
@@ -1073,11 +1275,63 @@ class newton_raphson(Frame):
                             self.error_variable1.configure(text = 'Variable 1 = '+error1)
                             self.error_variable2.configure(text = 'Variable 2 = '+error2)
                             self.iterations.configure(text = k)
+=======
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)                            
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                error1 = x[0]
+                                error2 = x[1]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)                            
+                                result1 = X0[0,0]
+                                result2 = X0[0,1]
+                                error1 = x[0,0]
+                                error2 = x[0,1]
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.iterations.configure(text = k)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if nvar == '3':
                     if nrowx0 == 1:
                         if ncolumnx0 != 3:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
                         if ncolumnx0 == 3:
+<<<<<<< HEAD
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
                             X0 = np.array(X0)
                             x = np.array(x)
@@ -1112,11 +1366,85 @@ class newton_raphson(Frame):
                             self.error_variable2.configure(text = 'Variable 2 = '+error2)
                             self.error_variable3.configure(text = 'Variable 3 = '+error3)
                             self.iterations.configure(text = k)
+=======
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.iterations.configure(text = k)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if nvar == '4':
                     if nrowx0 == 1:
                         if ncolumnx0 != 4:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
                         if ncolumnx0 == 4:
+<<<<<<< HEAD
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
                             X0 = np.array(X0)
                             x = np.array(x)
@@ -1161,11 +1489,105 @@ class newton_raphson(Frame):
                             self.error_variable3.configure(text = 'Variable 3 = '+error3)
                             self.error_variable4.configure(text = 'Variable 4 = '+error4)
                             self.iterations.configure(text = k)
+=======
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.iterations.configure(text = k)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if nvar == '5':
                     if nrowx0 == 1:
                         if ncolumnx0 != 5:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
                         if ncolumnx0 == 5:
+<<<<<<< HEAD
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
                             X0 = np.array(X0)
                             x = np.array(x)
@@ -1220,10 +1642,124 @@ class newton_raphson(Frame):
                             self.error_variable4.configure(text = 'Variable 4 = '+error4)
                             self.error_variable5.configure(text = 'Variable 5 = '+error5)
                             self.iterations.configure(text = k)
+=======
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.iterations.configure(text = k)
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if nvar == '6':
                     if nrowx0 == 1:
                         if ncolumnx0 != 6:
                             messagebox.showerror('Error', 'Check your initial values, probably do not match the number of variables')
+<<<<<<< HEAD
                         if ncolumnx0 == 6:                            
                             X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
                             X0 = np.array(X0)
@@ -1289,11 +1825,149 @@ class newton_raphson(Frame):
                             self.error_variable5.configure(text = 'Variable 5 = '+error5)
                             self.error_variable6.configure(text = 'Variable 6 = '+error6)
                             self.iterations.configure(text = k)                
+=======
+                        if ncolumnx0 == 6:
+                            answer = messagebox.askquestion('Important to answer', 'If you have entered angles as variables, do you want your results to return in degrees?')
+                            if ((answer == 'si') or (answer == 'sí') or (answer == 'Si') or (answer == 'Sí') or (answer == 'SI') or (answer == 'SÍ') or (answer == 'yes') or (answer == 'Yes') or (answer == 'YES')):                            
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF, True)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                result6 = x0[5]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                error6 = x[5]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                result6 = float(result6)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                error6 = float(error6)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                result6 = round(result6, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                error6 = round(error6, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                result6 = str(result6)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                error6 = str(error6)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.results_variable6.configure(text = 'Variable 6 = '+result6)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.error_variable6.configure(text = 'Variable 6 = '+error6)
+                                self.iterations.configure(text = k)
+                            if ((answer == 'no') or (answer == 'No') or (answer == 'NO')):
+                                X0, x, k = self.inverse_kinematics(self.j1, self.b1, x0, nvar, mJ, mF)
+                                X0 = np.array(X0)
+                                x = np.array(x)
+                                result1 = X0[0]
+                                result2 = X0[1]
+                                result3 = x0[2]
+                                result4 = x0[3]
+                                result5 = x0[4]
+                                result6 = x0[5]
+                                error1 = x[0]
+                                error2 = x[1]
+                                error3 = x[2]
+                                error4 = x[3]
+                                error5 = x[4]
+                                error6 = x[5]
+                                result1 = float(result1)
+                                result2 = float(result2)
+                                result3 = float(result3)
+                                result4 = float(result4)
+                                result5 = float(result5)
+                                result6 = float(result6)
+                                error1 = float(error1)
+                                error2 = float(error2)
+                                error3 = float(error3)
+                                error4 = float(error4)
+                                error5 = float(error5)
+                                error6 = float(error6)
+                                result1 = round(result1, 5)
+                                result2 = round(result2, 5)
+                                result3 = round(result3, 5)
+                                result4 = round(result4, 5)
+                                result5 = round(result5, 5)
+                                result6 = round(result6, 5)
+                                error1 = round(error1, 5)
+                                error2 = round(error2, 5)
+                                error3 = round(error3, 5)
+                                error4 = round(error4, 5)
+                                error5 = round(error5, 5)
+                                error6 = round(error6, 5)
+                                result1 = str(result1)
+                                result2 = str(result2)
+                                result3 = str(result3)
+                                result4 = str(result4)
+                                result5 = str(result5)
+                                result6 = str(result6)
+                                error1 = str(error1)
+                                error2 = str(error2)
+                                error3 = str(error3)
+                                error4 = str(error4)
+                                error5 = str(error5)
+                                error6 = str(error6)
+                                self.results_variable1.configure(text = 'Variable 1 = '+result1)
+                                self.results_variable2.configure(text = 'Variable 2 = '+result2)
+                                self.results_variable3.configure(text = 'Variable 3 = '+result3)
+                                self.results_variable4.configure(text = 'Variable 4 = '+result4)
+                                self.results_variable5.configure(text = 'Variable 5 = '+result5)
+                                self.results_variable6.configure(text = 'Variable 6 = '+result6)
+                                self.error_variable1.configure(text = 'Variable 1 = '+error1)
+                                self.error_variable2.configure(text = 'Variable 2 = '+error2)
+                                self.error_variable3.configure(text = 'Variable 3 = '+error3)
+                                self.error_variable4.configure(text = 'Variable 4 = '+error4)
+                                self.error_variable5.configure(text = 'Variable 5 = '+error5)
+                                self.error_variable6.configure(text = 'Variable 6 = '+error6)
+                                self.iterations.configure(text = k)                
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
 
             except:
                 messagebox.showerror('Error', 'It caused an error check your data')
 
+<<<<<<< HEAD
     def inverse_kinematics(self, J, b, x0, number_of_variables, matrixJ, matrixF,eps = 1e-6):
+=======
+    def inverse_kinematics(self, J, b, x0, number_of_variables, matrixJ, matrixF, deg = False,eps = 1e-6):
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         """
         Calculates the inverse kinematics from a numerical method
 
@@ -1311,6 +1985,11 @@ class newton_raphson(Frame):
             if norm(x) < eps: break
             x0 += x
             k += 1 #Increase of iterations counter
+<<<<<<< HEAD
+=======
+        if deg:
+            return rad2deg(x0), x, k
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         return x0, x, k
 
     def j1(self, J, x0, number_of_variables):
@@ -1441,11 +2120,19 @@ class mixed_root(Frame):
         self.x0 = Entry(frame1, font = controller.Arial16)
         self.x0.pack(side = TOP, padx = 5, pady = 2)
         Label(frame1, text = '', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
+<<<<<<< HEAD
         btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.GO(self.x0.get(), self.equations.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('inverse_kinematics'))
+=======
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.x0.get(), self.equations.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('inverse_kinematics'))
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'RESULTS', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'Approximate values:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
@@ -1726,11 +2413,19 @@ class differential_kinematics(Frame):
         Label(frame1, text = 'DH6:', font = controller.Arial16).pack(side = TOP, padx = 5, pady = 2)
         self.dh6 = Entry(frame1, font = controller.Arial16)
         self.dh6.pack(side = TOP, padx = 5, pady = 2)
+<<<<<<< HEAD
         btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.GO(self.dh1.get(), self.dh2.get(), self.dh3.get(), self.dh4.get(), self.dh5.get(), self.dh6.get()))
         btn_go.pack(side = TOP, padx = 5, pady = 10)
         btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: self.reset())
         btn_reset.pack(side = TOP, padx = 5, pady = 10)
         btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 1, borderwidth = 5, cursor = 'hand2', command = lambda: controller.show_frame('main'))
+=======
+        btn_go = Button(frame1, text = 'GO', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.GO(self.dh1.get(), self.dh2.get(), self.dh3.get(), self.dh4.get(), self.dh5.get(), self.dh6.get()))
+        btn_go.pack(side = TOP, padx = 5, pady = 10)
+        btn_reset = Button(frame1, text = 'Reset', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: self.reset())
+        btn_reset.pack(side = TOP, padx = 5, pady = 10)
+        btn_back = Button(frame1, text = 'Back', font = controller.Arial16, width = 15, height = 2, borderwidth = 5, cursor = 'hand1', command = lambda: controller.show_frame('main'))
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
         btn_back.pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'RESULTS', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
         Label(self, text = 'Jacobian Matrix', font = controller.Arial20).pack(side = TOP, padx = 5, pady = 10)
@@ -1740,12 +2435,19 @@ class differential_kinematics(Frame):
     def GO(self, DH1, DH2, DH3, DH4, DH5, DH6):
         try:
             DH = []
+<<<<<<< HEAD
             for dh in [DH1, DH2, DH3, DH4, DH5, DH6]:
+=======
+            for dh in [DH1, DH2, DH3, DH4, DH5,]:
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
                 if dh != '':
                     DH.append(eval(dh))                
 
             J = jacobian(*DH)
+<<<<<<< HEAD
             J = np.around(J,decimals = 6)
+=======
+>>>>>>> 29f0b12376c91b542f9acd710bc0131abcc84f4b
             J = str(J)
             J = J[1:-1]
             self.result_matrix.configure(text = ' '+J)

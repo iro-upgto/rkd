@@ -4,6 +4,7 @@ import numpy as np
 from rkd.util import *
 from rkd.abc import *
 from rkd.mathematical_algorithms import *
+init_printing(use_latex=True)
 
 def rot(phi,theta,psi, sec, deg):
     if ((sec == 'XYX') or (sec == 'xyx')):
@@ -337,9 +338,13 @@ if __name__=="__main__":
     #matrix = [[0.0669,-0.933,0.3536],[0.933,-0.669,-0.3536],[0.3536,0.3536,0.866]]
     #H = np.array(matrix)
     #print("RESULTADO: ", rot2axa(H, True))
-
     #DH1 = htmDH(5,0,10,45)
     #DH2 = htmDH(10,20,30,90)
     #DH3 = htmDH(25,10,9,2,True)
     
     print("RESULTADO: \n", rot(30,45,60,'zxz',True))
+    DH1 = htmDH(5,0,10,45)
+    DH2 = htmDH(10,20,30,90)
+    DH3 = htmDH(25,10,9,2,True)
+    
+    print("RESULTADO: \n", m_mult(DH1,DH2,DH3))

@@ -1,12 +1,12 @@
 """
 
 """
-from sympy import pi,sin,cos,tan
+from sympy import *
 from sympy.matrices import Matrix,eye
 from itertools import combinations
 from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
-
+from matplotlib.pyplot import *
 
 
 def deg2rad(theta):
@@ -48,10 +48,6 @@ def isorthonormal(R):
         if R[:,i].norm().simplify() != 1:
             return False
     return True
-
-
-def fun0(*args, **kwargs):
-    return alpha_shape(*args, **kwargs)
 
  
 def alpha_shape(points, alpha, only_outer=True):
@@ -104,6 +100,25 @@ def add_edge(edges, i, j, only_outer):
         return
     edges.add((i, j))
 
+
+def main():
+    # Constructing the input point data
+    np.random.seed(0)
+    x = 3.0 * np.random.rand(2000)
+    y = 2.0 * np.random.rand(2000) - 1.0
+    inside = ((x ** 2 + y ** 2 > 1.0) & ((x - 3) ** 2 + y ** 2 > 1.0))
+    points = np.vstack([x[inside], y[inside]]).T
+
+    # Computing the alpha shape
+    edges = alpha_shape(points, alpha=0.25, only_outer=True)
+
+    # Plotting the output
+    figure()
+    axis('equal')
+    plot(points[:, 0], points[:, 1], '.')
+    for i, j in edges:
+        plot(points[[i, j], 0], points[[i, j], 1])
+    show()
 
 
 if __name__=="__main__":

@@ -15,4 +15,5 @@ from .core import *
 from .plotting import *
 from .transformations import *
 from .util import *
+from .ws import *
 init_printing(use_latex=True) # Get "pretty print"
