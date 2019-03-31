@@ -77,7 +77,10 @@ class Robot(object):
                 jo = zeros(3,1)
             jp = jp.col_join(jo)
             M_[:,i] = jp
-        return simplify(M_)
+        return simplify(M_).evalf(6)
+
+    def dof(self):
+        return self.dof
 
     @property
     def T(self):

@@ -1,7 +1,11 @@
 from sympy import symbols
 
 t1,t2,t3,t4,t5,t6 = symbols('\\theta_1:7', real=True)
+q1,q2,q3,q4,q5,q6 = symbols('q_1:7', real=True)
+q1p,q2p,q3p,q4p,q5p,q6p = symbols('\\dot{q}_1:7')
+q1pp,q2pp,q3pp,q4pp,q5pp,q6pp = symbols('\\ddot{q}_1:7')
 l1,l2,l3,l4,l5,l6 = symbols('l_1:7', real=True)
+lc1,lc2,lc3,lc4,lc5,lc6 = symbols('l_c1:7', real=True)
 d1,d2,d3,d4,d5,d6 = symbols('d_1:7', real=True)
 a1,a2,a3,a4,a5,a6 = symbols('a_1:7', real=True)
 x0,x1,x2,x3,x4,x5,x6 = symbols("x_0:7", real=True)
