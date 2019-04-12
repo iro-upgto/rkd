@@ -4,7 +4,7 @@ import numpy as np
 from rkd.util import *
 from rkd.abc import *
 from rkd.mathematical_algorithms import *
-init_printing(use_latex=True)
+# init_printing(use_latex=True)
 
 def rot(phi,theta,psi, sec, deg):
     if ((sec == 'XYX') or (sec == 'xyx')):

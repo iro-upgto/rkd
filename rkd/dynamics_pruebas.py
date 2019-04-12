@@ -1,4 +1,4 @@
-from rkd.didactic import *
+from rkd.didactic.util import *
 from sympy import *
 
 def Ji(r):
