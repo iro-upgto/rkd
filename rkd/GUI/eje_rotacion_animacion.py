@@ -2,8 +2,6 @@
 
 import vtk
 
-
-
 class vtkTimerCallback():
     def __init__(self, steps, actor, iren):
         self.timer_count = 0
