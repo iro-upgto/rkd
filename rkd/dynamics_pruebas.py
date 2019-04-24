@@ -19,40 +19,78 @@ def check_params(r1,r2,r3,r4,r5,r6):
 # v2 = '(l1,0,0,q1),(lc2,0,0,q2)'
 # v2.append(eval(v2))
 
-def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('r1','r2','r3','r4','r5','r6')):
+def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('r1','r2','r3','r4','r5','r6'), mass = ('m1', 'm2', 'm3', 'm4', 'm5', 'm6'), J = ('J1', 'J2', 'J3', 'J4', 'J5', 'J6')):
     #*********************************************************************************************************************************************
     #       TABLE 1 (Parámetros DH sin considerar los sistemas de masas)
     #*********************************************************************************************************************************************
     t1r1, t1r2, t1r3, t1r4, t1r5, t1r6 = params_SN_SM[0], params_SN_SM[1], params_SN_SM[2], params_SN_SM[3], params_SN_SM[4], params_SN_SM[5]
-    #*****************************
+    #*********************************************************************************************************************************************
     #       TABLE 2 (Parámetros DH considerando los sistemas de masas)
     #*********************************************************************************************************************************************
     t2r1, t2r2, t2r3, t2r4, t2r5, t2r6 = params_CN_SM[0], params_CN_SM[1], params_CN_SM[2], params_CN_SM[3], params_CN_SM[4], params_CN_SM[5]
     #*********************************************************************************************************************************************
+    #       TABLE OF MASS
+    #*********************************************************************************************************************************************
+    m1, m2, m3, m4, m5, m6 = mass[0], mass[1], mass[2], mass[3], mass[4], mass[5]
+    #*********************************************************************************************************************************************
+    #       TABLES OF J
+    #*********************************************************************************************************************************************
+    J1, J2, J3, J4, J5, J6 = J[0], J[1], J[2], J[3], J[4], J[5]
     Table1 = check_params(t1r1, t1r2, t1r3, t1r4, t1r5, t1r6)
-    R1 = np.shape(Table1)[0]
     Table2 = check_params(t2r1, t2r2, t2r3, t2r4, t2r5, t2r6)
-    R2 = np.shape(Table2)[0]
-    if R1 == R2:
-        Table1 = Table1[0:-1]
-    if  R2 == 1:
-        R = []
-        R.append(Table2[0])
-        r = jac(*R)
-    elif R2 > 1:
-        RT = []
-        for j in range(R2, 0, -1):
+    m = check_params(m1, m2, m3, m4, m5, m6)
+    J = check_params(J1, J2, J3, J4, J5, J6)
+    # R1 = np.shape(Table1)[0]
+    # R2 = np.shape(Table2)[0]
+    R1 = len(Table1)
+    R2 = len(Table2)
+    Rm = len(m)
+    RJ = len(J)
+    if R2 == Rm == RJ:
+        #*********************************************************************************************************************************************
+        #       JACOBIANO APLICADO DE MANERA GENERAL
+        #*********************************************************************************************************************************************
+        JT = []
+        if R1 == R2:
+            Table1 = Table1[0:-1]
+            R1 -= 1
+        if  R2 == 1:
             R = []
-            k = j
-            i = R1
-            # for i in range(R1-1):
-            i -= R2-k+1
-            if i >= 0:
-                for t in range(i):
-                    R.append(Table1[t])
-            R.append(Table2[j-1])
-            RT.append(R)
-        # r = jac(*JT)
+            R.append(Table2[0])
+            jaco = jac(*R)
+            JT.append(jaco)
+        elif R2 > 1:
+            RT = []
+            for j in range(R2):
+                R, k, i = [], j, R1
+                k -= R2
+                i += k+1
+                if i <= R1:
+                    for t in range(i):
+                        R.append(Table1[t])
+                R.append(Table2[j])
+                RT.append(R)
+            for i in range(len(RT)):
+                jaco = jac(*RT[i])
+                JT.append(jaco)
+
+        #*********************************************************************************************************************************************
+        #       OBTENCIÓN DE VELOCIDADES LINEALES Y ÁNGULARES
+        #*********************************************************************************************************************************************
+        # size = len(JT)
+        # print(JT[0][:3,0])
+        vl, va = [], []
+        for i in range(len(JT)):
+            vl.append(JT[i][:3,0:i+1])
+            va.append(JT[i][3:,0:i+1])
+        print('VELOCIDADES LINEALES\n')
+        print(vl)
+        print('\n\n******************************************************************************************************\n\nVELOCIDADES ANGULARES\n')
+        print(va)
+        print('\n\n******************************************************************************************************\n\nJACOBIANOS\n')
+        print(JT)
+    
+
         # R.append(Table2[-1])
 
         # r1 = Table1[0]
@@ -81,7 +119,7 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
     # R.append(w5)
     # R.append(v6)
     # R.append(w6)
-    return RT
+    return
 
 # J1 = Ji(r1)
 # J2 = Ji(r2)
@@ -125,9 +163,24 @@ f2 = ''
 # d2 = ''
 # e2 = ''
 # f2 = ''
+
+m1 = '10'
+m2 = '40'
+m3 = '20'
+m4 = '80'
+m5 = ''
+m6 = ''
+J1 = '30'
+J2 = '70'
+J3 = '90'
+J4 = '50'
+J5 = ''
+J6 = ''
 table1 = (a1, b1, c1, d1, e1, f1)
 table2 = (a2, b2, c2, d2, e2, f2)
-print(Lagrangian(table1, table2))
+m = (m1, m2, m3, m4, m5, m6)
+J = (J1, J2, J3, J4, J5, J6)
+print(Lagrangian(table1, table2, m, J))
 
 # print(R2)
 # print(R[0,0])
