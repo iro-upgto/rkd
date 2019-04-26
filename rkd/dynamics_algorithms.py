@@ -84,3 +84,14 @@ def Dh(a,alpha,d,theta):
                   [0,sin(alpha),cos(alpha),d],
                   [0,0,0,1]])
     return H
+
+def T(matrix):
+    rows = len(matrix)
+    cols = len(matrix[0])
+
+    t = [[0 for x in range(rows)] for y in range(cols)]
+
+    for i in range(rows):
+        for j in range(cols):
+            t[j][i] = matrix[i][j]
+    return t

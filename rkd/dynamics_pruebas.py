@@ -11,14 +11,6 @@ def check_params(r1,r2,r3,r4,r5,r6):
             R.append(eval(r))
     return R
 
-# NOTA: Meter los ángulos en radianes
-# v1 = []
-# v1 = '(lc1,0,0,q1)'
-# v1.append(eval(v1))
-# v2 = []
-# v2 = '(l1,0,0,q1),(lc2,0,0,q2)'
-# v2.append(eval(v2))
-
 def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('r1','r2','r3','r4','r5','r6'), mass = ('m1', 'm2', 'm3', 'm4', 'm5', 'm6'), J = ('J1', 'J2', 'J3', 'J4', 'J5', 'J6')):
     #*********************************************************************************************************************************************
     #       TABLE 1 (Parámetros DH sin considerar los sistemas de masas)
@@ -40,15 +32,13 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
     Table2 = check_params(t2r1, t2r2, t2r3, t2r4, t2r5, t2r6)
     m = check_params(m1, m2, m3, m4, m5, m6)
     J = check_params(J1, J2, J3, J4, J5, J6)
-    # R1 = np.shape(Table1)[0]
-    # R2 = np.shape(Table2)[0]
     R1 = len(Table1)
     R2 = len(Table2)
     Rm = len(m)
     RJ = len(J)
     if R2 == Rm == RJ:
         #*********************************************************************************************************************************************
-        #       JACOBIANO APLICADO DE MANERA GENERAL
+        #       JACOBIANO APPLIED IN A GENERAL MANNER
         #*********************************************************************************************************************************************
         JT = []
         if R1 == R2:
@@ -73,72 +63,50 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
             for i in range(len(RT)):
                 jaco = jac(*RT[i])
                 JT.append(jaco)
+            
+        q = []
+        for i in range(R2):
+            q.append(eval('q'+str(int("".join(str(i+1))))+'p'))
 
-        #*********************************************************************************************************************************************
-        #       OBTENCIÓN DE VELOCIDADES LINEALES Y ÁNGULARES
-        #*********************************************************************************************************************************************
-        # size = len(JT)
-        # print(JT[0][:3,0])
-        vl, va = [], []
+        jt = []
         for i in range(len(JT)):
-            vl.append(JT[i][:3,0:i+1])
-            va.append(JT[i][3:,0:i+1])
-        print('VELOCIDADES LINEALES\n')
-        print(vl)
-        print('\n\n******************************************************************************************************\n\nVELOCIDADES ANGULARES\n')
-        print(va)
-        print('\n\n******************************************************************************************************\n\nJACOBIANOS\n')
-        print(JT)
-    
+            for j in range(i+1):
+                p = JT[i][:,j]*q[j]
+                jt.append(p)
+        
+        Jt = []
+        Jt.append(jt[0])
+        i = 1
+        l, k, z, a = 0, 2, 2, 1
+        for j in range(1,len(JT)):
+            Jt.append(Matrix(np.sum(jt[i:j+k], axis = 0)))
+            i += j+a
+            k += z
+            z += 1
 
-        # R.append(Table2[-1])
+        JT = Jt
 
-        # r1 = Table1[0]
-        # r2 = Table1[1]
-        # r3 = Table1[2]
-        # Table1 = tuple((r1,r2,r3))
-        # Table1 = np.array(Table1)
-        # Table1 = Table1[-1]
+        #*********************************************************************************************************************************************
+        #       OBTAINING LINEAR AND ANGULAR SPEEDS
+        #*********************************************************************************************************************************************
+        v, w = [], []
+        for i in range(len(JT)):
+            v.append(JT[i][:3,0:i+1])
+            w.append(JT[i][3:,0:i+1])
+        
+        #*********************************************************************************************************************************************
+        #           KINEMATIC ENERGY
+        #*********************************************************************************************************************************************
+        k = []
+        for i in range(len(v)):
+            k.append((0.5*m[i]*v[i].T*v[i])+(0.5*J[i]*w[i].T*w[i]))
+        print('**********************************************')
+        print('KINEMATIC ENERGY')
+        print('**********************************************')
+        print(k)
 
-    # Table2 = np.array(check_params(t2r1, t2r2, t2r3, t2r4, t2r5, t2r6))
-    # _,R2 = Table2.shape
-    # for i in range(R1):
-    # r = Table1[0]
-    # R = Robot(r)
-    # JT1 = R.J
 
-    # R.append(v1)
-    # R.append(w1)
-    # R.append(v2)
-    # R.append(w2)
-    # R.append(v3)
-    # R.append(w3)
-    # R.append(v4)
-    # R.append(w4)
-    # R.append(v5)
-    # R.append(w5)
-    # R.append(v6)
-    # R.append(w6)
     return
-
-# J1 = Ji(r1)
-# J2 = Ji(r2)
-# J1 = J1[0]
-# J2 = J2[1]
-# Q1 = Matrix([q1p])
-# Q12 = Matrix([q1p,q2p])
-# J1 = simplify(J1*Q1)
-# J2 = simplify(J2*Q12)
-# v1 = J1[:3,0]
-# v2 = J2[:3,0:1]
-# w1 = J1[3:6,0]
-# w2 = J2[3:6,0:1]
-# print('J1 = ',J1)
-# print('\n\nJ2 = ',J2)
-# print('\n\nV1 = ',v1)
-# print('\n\nV2 = ',v2)
-# print('\n\nW1 = ',w1)
-# print('\n\nW2 = ',w2)
 
 a1 = 'l1,0,0,q1'
 b1 = 'l2,0,0,q2'
@@ -170,34 +138,22 @@ m3 = '20'
 m4 = '80'
 m5 = ''
 m6 = ''
+# m3 = ''
+# m4 = ''
+# m5 = ''
+# m6 = ''
 J1 = '30'
 J2 = '70'
 J3 = '90'
 J4 = '50'
 J5 = ''
 J6 = ''
+# J3 = ''
+# J4 = ''
+# J5 = ''
+# J6 = ''
 table1 = (a1, b1, c1, d1, e1, f1)
 table2 = (a2, b2, c2, d2, e2, f2)
 m = (m1, m2, m3, m4, m5, m6)
 J = (J1, J2, J3, J4, J5, J6)
 print(Lagrangian(table1, table2, m, J))
-
-# print(R2)
-# print(R[0,0])
-# print(R[0,1])
-# print(R)
-# r1=Robot(a)
-# r2=Robot(b)
-# r3 = Robot((c))
-# r4 = Robot((d))
-# r5 = Robot((e))
-# r6 = Robot((f))
-# r1, r2,r3, r4, r5, r6 = str(r1.J), str(r2.J), str(r3.J), str(r4.J), str(r5.J), str(r6.J)
-# r3=Robot((l1,0,0,q1),(l2,0,0,q2),(lc3,0,0,q3))
-# r4=Robot((l1,0,0,q1),(l2,0,0,q2),(l3,0,0,q3),(lc4,0,0,q4))
-# r5=Robot((l1,0,0,q1),(l2,0,0,q2),(l3,0,0,q3),(l4,0,0,q4),(lc5,0,0,q5))
-# r6=Robot((l1,0,0,q1),(l2,0,0,q2),(l3,0,0,q3),(l4,0,0,q4),(l5,0,0,q5),(lc6,0,0,q6))
-
-# R = Lagrangian(r1,r2,'','','','')
-# print(R)
-# print(Lagrangian(r1,r2,r3,r4,r5,r6))
