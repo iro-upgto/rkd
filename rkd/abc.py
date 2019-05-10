@@ -1,5 +1,6 @@
 from sympy import symbols
 
+g = symbols('g', real=True)
 t1,t2,t3,t4,t5,t6 = symbols('\\theta_1:7', real=True)
 q1,q2,q3,q4,q5,q6 = symbols('q_1:7', real=True)
 q1p,q2p,q3p,q4p,q5p,q6p = symbols('\\dot{q}_1:7')
