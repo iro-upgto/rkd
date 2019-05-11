@@ -1,5 +1,4 @@
-from rkd.didactic.util import *
-from rkd.didactic.core import *
+from rkd.abc import *
 from rkd.dynamics_algorithms import *
 from sympy import *
 import numpy as np
@@ -104,8 +103,8 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         #*********************************************************************************************************************************************
         v, w = [], []
         for i in range(len(JP)):
-            v.append(JP[i][:3,0:i+1])
-            w.append(JP[i][3:,0:i+1])
+            v.append(simplify(JP[i][:3,0:i+1]))
+            w.append(simplify(JP[i][3:,0:i+1]))
 
         # print('=========================')
         # print(v)
@@ -116,8 +115,8 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         #*********************************************************************************************************************************************
         k = []
         for i in range(len(v)):
-            k.append((0.5*m[i]*v[i].T*v[i])+(0.5*j[i]*w[i].T*w[i]))
-        K =  np.sum(k[:], axis = 0)
+            k.append(simplify((0.5*m[i]*v[i].T*v[i])+(0.5*j[i]*w[i].T*w[i])))
+        K = simplify(np.sum(k[:], axis = 0))
 
         # print('**********************************************')
         # print('KINEMATIC ENERGY')
@@ -127,28 +126,29 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         #*********************************************************************************************************************************************
         #          POTENTIAL ENERGY
         #*********************************************************************************************************************************************
-        H = eye(4)
-        u, U, Ts = [], [], []
-        for k in RT[i]:
-            Ts.append(Dh(k[0], k[1], k[2], k[3]))
+        # H = eye(4)
+        u, U, Hm = [], [], []
         for i in range(len(RT)):
-            H = H*Ts[i] # Matrices homogéneas con los parámetros DH
+            Hm.append(DH(*RT[i]))
+        for i in range(len(RT)):
             if direction_of_gravity == 'x' or direction_of_gravity == 'X':
-                u.append(H[:1,3])
+                u.append(Hm[i][:1,3])
             elif direction_of_gravity == 'y' or direction_of_gravity == 'Y':
-                u.append(H[1:2,3])
+                u.append(Hm[i][1:2,3])
             elif direction_of_gravity == 'z' or direction_of_gravity == 'Z':
-                u.append(H[2:3,3])
+                u.append(Hm[i][2:3,3])
         for i in range(len(v)):
             U.append((m[i]*g)*u[i])
 
-        U = np.sum(U[:], axis = 0)
+        U = simplify(np.sum(U[:], axis = 0))
 
-        # print('**********************************************')
-        # print(u)
-        # print('**********************************************')
-        # print(U)
-        # print('**********************************************')
+        print('**********************************************')
+        print(RT)
+        print('**********************************************')
+        print(Hm)
+        print('**********************************************')
+        print(U)
+        print('**********************************************')
         # print('Lagrangian:')
         # # print(K - U)
         # print('**********************************************')
@@ -157,14 +157,26 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
 
 def dynamic_modeling(lagrangian, dof):
     q, qp = [], []
+    
+    diffq, diffqp, difft = [], [], []
     for i in range(dof):
         q.append(eval('q'+str(int("".join(str(i+1))))))
         qp.append(eval('q'+str(int("".join(str(i+1))))+'p'))
-    print('************************************************************')
-    print(q)
-    print('************************************************************')
-    print(qp)
-    print('************************************************************')
+        diffq.append(Matrix(simplify(diff(lagrangian, q[i]))))
+        diffqp.append(Matrix(simplify(diff(lagrangian, qp[i]))))
+        difft.append(Matrix(simplify(diff(diffqp[i], t))))
+        print('------------------------------------')
+        print(diff(diffqp[i], t))
+        print('------------------------------------')
+
+    print('***********************************************')
+    print(diffq)
+    print('***********************************************')
+    print(diffqp)
+    print('***********************************************')
+    print('HOLA')
+    print(difft)
+    print('***********************************************')
 
     return
 
@@ -184,36 +196,36 @@ f1 = ''
 # a2 = 'lc1,pi/2,0,q1'
 a2 = 'lc1,0,0,q1'
 b2 = 'lc2,0,0,q2'
-c2 = 'lc3,0,0,q3'
-d2 = 'lc4,0,0,q4'
+# c2 = 'lc3,0,0,q3'
+# d2 = 'lc4,0,0,q4'
 # e2 = ''
 # f2 = ''
 # b2 = ''
-# c2 = ''
-# d2 = ''
+c2 = ''
+d2 = ''
 e2 = ''
 f2 = ''
 
 M1 = '10'
 M2 = '20'
-M3 = '30'
-M4 = '40'
+# M3 = '30'
+# M4 = '40'
 # M5 = ''
 # M6 = ''
 # M2 = ''
-# M3 = ''
-# M4 = ''
+M3 = ''
+M4 = ''
 M5 = ''
 M6 = ''
 j1 = '10'
 j2 = '20'
-j3 = '30'
-j4 = '40'
+# j3 = '30'
+# j4 = '40'
 # j5 = ''
 # j6 = ''
 # j2 = ''
-# j3 = ''
-# j4 = ''
+j3 = ''
+j4 = ''
 j5 = ''
 j6 = ''
 table1 = (a1, b1, c1, d1, e1, f1)
@@ -221,9 +233,9 @@ table2 = (a2, b2, c2, d2, e2, f2)
 M = (M1, M2, M3, M4, M5, M6)
 j = (j1, j2, j3, j4, j5, j6)
 lag, dof = Lagrangian(table1, table2, M, j, 'y')
-# print('***************************************************************')
-# print(lag)
-# print('***************************************************************')
+print('***************************************************************')
+print(lag)
+print('***************************************************************')
 # print(dof)
 
 print(dynamic_modeling(lag, dof))

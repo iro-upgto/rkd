@@ -84,3 +84,13 @@ def jac(*args):
         jp = jp.col_join(jo)
         M_[:,i] = jp
     return M_
+
+def DH(*args):
+    Ts = []
+    H = eye(4)
+    for k in args:
+        Ts.append(Dh(k[0], k[1], k[2], k[3]))
+    for i in range(len(args)):
+        H = H*Ts[i]
+
+    return H
