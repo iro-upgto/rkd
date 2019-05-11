@@ -6,50 +6,10 @@ from sympy.matrices import Matrix,eye
 from itertools import combinations
 from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
-from matplotlib.pyplot import *
+import matplotlib.pyplot as plt
+from .core import *
 
 
-def deg2rad(theta):
-    """ Convert degrees to radians """
-    return ( theta*(pi/180) ).evalf()
-
-
-def rad2deg(theta):
-    """ Convert radians to degrees """
-    return ( theta*(180/pi) ).evalf()
-    
-def ishtm(H):
-    """
-    Is H a homogeneous transformation matrix ?
-    """
-    nrow,ncol = H.shape
-    if nrow == ncol == 4:
-        return True
-    return False
-
-def isrot(R):
-    """
-    Is R a rotation matrix ?
-    """
-    nrow,ncol = R.shape
-    if (nrow == ncol == 3) and isorthonormal(R):
-        return True
-    return False
-    
-def isorthonormal(R):
-    """
-    Check if R is orthonormal
-    """
-    _,ncol = R.shape
-    for i,j in combinations(range(ncol), 2):
-        if ( R[:,i].dot(R[:,j]) ).simplify() != 0:
-            return False
-    for i in range(ncol):
-        if R[:,i].norm().simplify() != 1:
-            return False
-    return True
-
- 
 def alpha_shape(points, alpha, only_outer=True):
     """
     Compute the alpha shape (concave hull) of a set of points.
@@ -101,31 +61,27 @@ def add_edge(edges, i, j, only_outer):
     edges.add((i, j))
 
 
-def main():
-    # Constructing the input point data
-    np.random.seed(0)
-    x = 3.0 * np.random.rand(2000)
-    y = 2.0 * np.random.rand(2000) - 1.0
-    inside = ((x ** 2 + y ** 2 > 1.0) & ((x - 3) ** 2 + y ** 2 > 1.0))
-    points = np.vstack([x[inside], y[inside]]).T
-
+def RR_Example():
+    from numpy import sin,cos
+    l1,l2 = 100,50
+    X, Y = [],[]
+    for t1 in np.linspace(0,np.pi):
+        for t2 in np.linspace(-np.pi/2,np.pi/2):
+            X.append( l1*cos(t1) + l2*cos(t1+t2) )
+            Y.append( l1*sin(t1) + l2*sin(t1+t2) )
+    
+    points = np.array( list(zip(X,Y)) )
     # Computing the alpha shape
-    edges = alpha_shape(points, alpha=0.25, only_outer=True)
-
+    edges = alpha_shape(points, alpha=5, only_outer=True)
     # Plotting the output
-    figure()
-    axis('equal')
-    plot(points[:, 0], points[:, 1], '.')
+    plt.figure()
+    plt.axis('equal')
+    # ~ plt.plot(points[:, 0], points[:, 1], '.')
+    xc,yc = [],[]
     for i, j in edges:
-        plot(points[[i, j], 0], points[[i, j], 1])
-    show()
+        plt.plot(points[[i, j], 0], points[[i, j], 1])
+    plt.show()
 
 
 if __name__=="__main__":
-    # ~ points = ((100,100), (200,300), (500,200), (400,350), (600,500))
-    # ~ s = list(zip(*points))
-    # ~ plt.plot(s[0], s[1], "o")
-    # ~ plt.show()
-    # ~ print( concave(points, 1, 1) )
-    # ~ main()
-    pass
+    RR_Example()
