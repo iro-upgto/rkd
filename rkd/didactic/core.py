@@ -8,6 +8,7 @@ from rkd.didactic.transformations import *
 from sympy import *
 from sympy.matrices import Matrix,eye
 from rkd.abc import *
+from rkd.didactic.ws import *
 
 class Robot(object):
     """
@@ -16,12 +17,17 @@ class Robot(object):
     def __init__(self,*args):
         self.Ts = [] # Transformation matrices i to i-1
         self.type = [] # Joint type -> "r" revolute, "p" prismatic
+        self.qs = []
         for k in args:
             self.Ts.append(dh(k[0],k[1],k[2],k[3])) # Compute Ti->i-1
             if len(k)>4:
                 self.type.append(k[4])
             else:
                 self.type.append('r')
+            if self.type[-1] is "r":
+                self.qs.append(k[3])
+            else:
+                self.qs.append(k[2])
         self.dof = len(args) # Degree of freedom
     
     def z(self,i):
@@ -132,7 +138,20 @@ class Robot(object):
         ax.quiver(o[0],o[1],o[2],u[0],u[1],u[2],color="r", length=L)
         ax.quiver(o[0],o[1],o[2],v[0],v[1],v[2],color="g", length=L)
         ax.quiver(o[0],o[1],o[2],w[0],w[1],w[2],color="b", length=L)
-
+    
+    def qi(self, i):
+        return self.qs[i]
+    
+    @property
+    def qis_range(self):
+        return self._qis_range
+        
+    @qis_range.setter
+    def qis_range(self, *args):
+        self._qis_range = args
+        
+    def plot_workspace(self):
+        pass
 
 
 
@@ -243,5 +262,5 @@ def test_rb2():
 
 
 if __name__=="__main__":
-    H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    test_rb2()
+    pass
+    

@@ -316,6 +316,9 @@ def _rot2htm(R):
     
 
 def rot2axa(R, deg=False):
+    """
+    Given a SO(3) matrix return the axis-angle representation
+    """
     r32,r23 = R[2,1],R[1,2]
     r13,r31 = R[0,2],R[2,0]
     r21,r12 = R[1,0],R[0,1]
@@ -326,6 +329,10 @@ def rot2axa(R, deg=False):
     return k,theta
     
 def axa2rot(k,theta):
+    """
+    Given a R^3 vector (k) and an angle (theta), return 
+    the SO(3) matrix associated.
+    """
     if isinstance(k,(list,tuple)):
         k = Matrix(k)
     ct = cos(theta)
@@ -347,7 +354,7 @@ def axa2rot(k,theta):
 
 def skew(u):
     """
-    Return skew-symmetric matrix associated to u vector
+    Return skew-symmetric matrix associated to u vector 
     """
     ux,uy,uz = u
     S = Matrix([[0, -uz, uy],
@@ -358,5 +365,4 @@ def skew(u):
 
 if __name__=="__main__":
     H = Matrix([[0,0,1,0], [0,-1,0,0], [1,0,0,0], [0,0,0,1]])
-    test_robot()
-    # ~ test_rb2()
+    print(htm2eul(H))
