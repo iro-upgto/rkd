@@ -127,28 +127,28 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         #          POTENTIAL ENERGY
         #*********************************************************************************************************************************************
         # H = eye(4)
-        u, U, Hm = [], [], []
+        u, U, H = [], [], []
         for i in range(len(RT)):
-            Hm.append(DH(*RT[i]))
+            H.append(DH(*RT[i]))
         for i in range(len(RT)):
             if direction_of_gravity == 'x' or direction_of_gravity == 'X':
-                u.append(Hm[i][:1,3])
+                u.append(H[i][:1,3])
             elif direction_of_gravity == 'y' or direction_of_gravity == 'Y':
-                u.append(Hm[i][1:2,3])
+                u.append(H[i][1:2,3])
             elif direction_of_gravity == 'z' or direction_of_gravity == 'Z':
-                u.append(Hm[i][2:3,3])
+                u.append(H[i][2:3,3])
         for i in range(len(v)):
             U.append((m[i]*g)*u[i])
 
         U = simplify(np.sum(U[:], axis = 0))
 
-        print('**********************************************')
-        print(RT)
-        print('**********************************************')
-        print(Hm)
-        print('**********************************************')
-        print(U)
-        print('**********************************************')
+        # print('**********************************************')
+        # print(RT)
+        # print('**********************************************')
+        # print(Hm)
+        # print('**********************************************')
+        # print(U)
+        # print('**********************************************')
         # print('Lagrangian:')
         # # print(K - U)
         # print('**********************************************')
@@ -156,27 +156,27 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
     return K - U, len(JT)
 
 def dynamic_modeling(lagrangian, dof):
-    q, qp = [], []
-    
-    diffq, diffqp, difft = [], [], []
+    diffq, diffqp, difft, q, qp, taus = [], [], [], [], [], []
     for i in range(dof):
         q.append(eval('q'+str(int("".join(str(i+1))))))
         qp.append(eval('q'+str(int("".join(str(i+1))))+'p'))
-        diffq.append(Matrix(simplify(diff(lagrangian, q[i]))))
-        diffqp.append(Matrix(simplify(diff(lagrangian, qp[i]))))
-        difft.append(Matrix(simplify(diff(diffqp[i], t))))
-        print('------------------------------------')
-        print(diff(diffqp[i], t))
-        print('------------------------------------')
+        #      Necessary derivates for dynamic modeling
+        diffq.append(simplify(lagrangian.diff(q[i])))
+        diffqp.append(simplify(lagrangian.diff(qp[i])))
+        difft.append(simplify(diffqp[i].diff(t)))
+        taus.append(simplify(difft[i]-diffq[i]))
 
-    print('***********************************************')
-    print(diffq)
-    print('***********************************************')
-    print(diffqp)
-    print('***********************************************')
-    print('HOLA')
-    print(difft)
-    print('***********************************************')
+    # print('***********************************************')
+    # print(diffq)
+    # print('***********************************************')
+    # print(diffqp)
+    # print('***********************************************')
+    # print(difft)
+    # print('***********************************************')
+    print(taus)
+
+    # Invesatigar como clasificar los resultados como matrices y separarlas
+    # para el modelado dinámico del robot
 
     return
 
@@ -233,9 +233,9 @@ table2 = (a2, b2, c2, d2, e2, f2)
 M = (M1, M2, M3, M4, M5, M6)
 j = (j1, j2, j3, j4, j5, j6)
 lag, dof = Lagrangian(table1, table2, M, j, 'y')
-print('***************************************************************')
-print(lag)
-print('***************************************************************')
+# print('***************************************************************')
+# print(lag)
+# print('***************************************************************')
 # print(dof)
 
 print(dynamic_modeling(lag, dof))
