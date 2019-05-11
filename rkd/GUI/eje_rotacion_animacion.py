@@ -2,8 +2,6 @@
 
 import vtk
 
-
-
 class vtkTimerCallback():
     def __init__(self, steps, actor, iren):
         self.timer_count = 0
@@ -17,11 +15,11 @@ class vtkTimerCallback():
         while step < self.steps:
             print(self.timer_count)
             if step < self.steps/3:
-                self.actor.RotateX(1/2) # Modificar los ángulos para el eje X
-            elif step > self.steps/3 and step < self.steps*(2/3):
-                self.actor.RotateY(1) # Modificar los ángulos para el eje Y
+                self.actor.RotateX(1/4)
+            elif step > self.steps/3 and step <self.steps*2/3:
+                self.actor.RotateY(1/4)
             else:
-                self.actor.RotateZ(2) # Modificar los ángulos para el eje Z
+                self.actor.RotateZ(1/4)
             iren = obj
             iren.GetRenderWindow().Render()
             self.timer_count += 1
@@ -90,7 +88,7 @@ def main():
    # Sign up to receive TimerEvent
     cb = vtkTimerCallback(540, transform2, renderWindowInteractor)
     renderWindowInteractor.AddObserver('TimerEvent', cb.execute)
-    cb.timerId = renderWindowInteractor.CreateRepeatingTimer(500)
+    cb.timerId = renderWindowInteractor.CreateRepeatingTimer(1000)
 
     # begin mouse interaction
     renderWindowInteractor.Start()
