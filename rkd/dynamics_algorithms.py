@@ -133,13 +133,15 @@ def sorter_of_the_dynamic_modeling(tau_n, dof):
         qpp.append(eval('q'+str(int("".join(str(i+1))))+'p'+'p'))
 
     #*******************************************************
-    #           OBTAINING THE "INERTIA MATRIX"
+    #              CHECK TAU VECTOR
     #*******************************************************
-    q_pp = []
+    q_pp, Gravity = [], []
     for i in range(dof):
         qpp1, qpp2, qpp3, qpp4, qpp5, qpp6 = [], [], [], [], [], []
         for sumando in tau_n[i][0].args:
             for fc in sumando.args:
+                if g == fc:
+                    Gravity.append(sumando)
                 if q1pp == fc:
                     qpp1.append(sumando)
                 elif q2pp == fc:
@@ -165,12 +167,50 @@ def sorter_of_the_dynamic_modeling(tau_n, dof):
         for j in range(dof):
             res.append(Matrix([simplify(r[i][0]/qpp[j])]))
             i += 1
-    
-    MH, k = ones(dof, dof), 0
+    #*******************************************************
+    #           OBTAINING THE "INERTIA MATRIX"
+    #*******************************************************
+    B, k = ones(dof, dof), 0
     while k < len(r):
         for i in range(dof):
             for j in range(dof):
-                MH[i,j] = simplify(MH[i,j]*res[k])
+                B[i,j] = simplify(B[i,j]*res[k])
                 k += 1
 
-    return MH
+    #*******************************************************
+    #           OBTAINING THE "CORIOLIS MATRIX"
+    #*******************************************************
+    C, p = ones(dof**3, 1), 0
+    sizeC,_ = C.shape
+    while p < sizeC:
+        for k in range(dof):
+            for i in range(dof):
+                for j in range(dof):
+                    C[p,0] = C[p,0]*0.5*(B[i,j].diff(q[k]) + B[i,k].diff(q[j]) - B[j,k].diff(q[i]))*qp[k]
+                    p += 1
+    
+    Cor, i = ones(dof**2,1), 0
+    sizeCor,_ = Cor.shape
+    if dof == 1:
+        Cor[0,0] = simplify(C[0,0])
+    if dof > 1:
+        while i < sizeCor:
+            Cor[i,0] = simplify(Cor[i,0]*C[i,0])
+            for k in range(1,dof):
+                Cor[i,0] = simplify(Cor[i,0]+C[i+(k*dof**2),0])
+            i += 1
+
+    C, k = ones(dof, dof), 0
+    while k < len(Cor):
+        for i in range(dof):
+            for j in range(dof):
+                C[i,j] = simplify(C[i,j]*Cor[k])
+                k += 1
+
+    G, k = ones(dof, 1), 0
+    while k < len(Gravity):
+        for i in range(dof):
+            G[i,0] = simplify(G[i,0]*Gravity[k])
+            k += 1
+
+    return B, C, G

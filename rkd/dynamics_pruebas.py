@@ -44,10 +44,11 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
             Table1 = Table1[0:R2-1]
             R1 = R2-1
         if  R2 == 1:
-            R = []
+            R, RT = [], []
             R.append(Table2[0])
             jaco = jac(*R)
             JT.append(jaco)
+            RT.append([Table2[0]])
         elif R2 > 1:
             RT = []
             for j in range(R2):
@@ -143,7 +144,7 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         # # print(K - U)
         # print('**********************************************')
 
-    return K - U, len(JT)
+    return simplify(K-U), len(JT)
 
 def dynamic_modeling(lagrangian, dof):
     diffq, diffqp, difft, q, qp, qpp, taus = [], [], [], [], [], [], []
@@ -157,11 +158,11 @@ def dynamic_modeling(lagrangian, dof):
         difft.append(simplify(diffqp[i].diff(t)))
         taus.append(simplify(difft[i]-diffq[i]))
 
-    # print('MATRIZ RESULTANTE FUNCION')
-    # print(sorter_of_the_dynamic_modeling(taus, dof))
-    # print('===============================')
-
-
+    # print('MATRIZ DE CORIOLIS FUNCION')
+    B, C, G = sorter_of_the_dynamic_modeling(taus, dof)
+    print('PARES GRAVITACIONALES')
+    print(G)
+    
 
 
     # NOTA: PROGRAMAR MATRIZ DE CORIOLIS
@@ -225,5 +226,6 @@ lag, dof = Lagrangian(table1, table2, M, j, 'y')
 # print(lag)
 # print('***************************************************************')
 # print(dof)
+# print('***************************************************************')
 
 print(dynamic_modeling(lag, dof))
