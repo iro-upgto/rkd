@@ -12,7 +12,7 @@ def check_params(r1,r2,r3,r4,r5,r6):
 
 def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('r1','r2','r3','r4','r5','r6'), mass = ('M1', 'M2', 'M3', 'M4', 'M5', 'M6'), j = ('j1', 'j2', 'j3', 'j4', 'j5', 'j6'), direction_of_gravity = 'y'):
     #*********************************************************************************************************************************************
-    #       TABLE 1 (Parámetros DH sin considerar los sistemas de masas)
+    #          TABLE 1 (Parámetros DH sin considerar los sistemas de masas)
     #*********************************************************************************************************************************************
     t1r1, t1r2, t1r3, t1r4, t1r5, t1r6 = params_SN_SM[0], params_SN_SM[1], params_SN_SM[2], params_SN_SM[3], params_SN_SM[4], params_SN_SM[5]
     #*********************************************************************************************************************************************
@@ -126,28 +126,18 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
         #*********************************************************************************************************************************************
         #          POTENTIAL ENERGY
         #*********************************************************************************************************************************************
-        # H = eye(4)
-        u, U, H = [], [], []
-        for i in range(len(RT)):
-            H.append(DH(*RT[i]))
-        for i in range(len(RT)):
-            if direction_of_gravity == 'x' or direction_of_gravity == 'X':
-                u.append(H[i][:1,3])
-            elif direction_of_gravity == 'y' or direction_of_gravity == 'Y':
-                u.append(H[i][1:2,3])
-            elif direction_of_gravity == 'z' or direction_of_gravity == 'Z':
-                u.append(H[i][2:3,3])
-        for i in range(len(v)):
-            U.append((m[i]*g)*u[i])
-
-        U = simplify(np.sum(U[:], axis = 0))
+        U = potential_energy(RT, len(v), R2)
 
         # print('**********************************************')
         # print(RT)
         # print('**********************************************')
-        # print(Hm)
+        # print(H)
         # print('**********************************************')
+        # print('POTENCIAL AQUI')
         # print(U)
+        # print('**********************************************')
+        # print('POTENCIAL FUNCION')
+        # print(potential_energy(RT, len(v), R2))
         # print('**********************************************')
         # print('Lagrangian:')
         # # print(K - U)
@@ -156,27 +146,25 @@ def Lagrangian(params_SN_SM = ('r1','r2','r3','r4','r5','r6'), params_CN_SM = ('
     return K - U, len(JT)
 
 def dynamic_modeling(lagrangian, dof):
-    diffq, diffqp, difft, q, qp, taus = [], [], [], [], [], []
+    diffq, diffqp, difft, q, qp, qpp, taus = [], [], [], [], [], [], []
     for i in range(dof):
         q.append(eval('q'+str(int("".join(str(i+1))))))
         qp.append(eval('q'+str(int("".join(str(i+1))))+'p'))
+        qpp.append(eval('q'+str(int("".join(str(i+1))))+'p'+'p'))
         #      Necessary derivates for dynamic modeling
         diffq.append(simplify(lagrangian.diff(q[i])))
         diffqp.append(simplify(lagrangian.diff(qp[i])))
         difft.append(simplify(diffqp[i].diff(t)))
         taus.append(simplify(difft[i]-diffq[i]))
 
-    # print('***********************************************')
-    # print(diffq)
-    # print('***********************************************')
-    # print(diffqp)
-    # print('***********************************************')
-    # print(difft)
-    # print('***********************************************')
-    print(taus)
+    # print('MATRIZ RESULTANTE FUNCION')
+    # print(sorter_of_the_dynamic_modeling(taus, dof))
+    # print('===============================')
 
-    # Invesatigar como clasificar los resultados como matrices y separarlas
-    # para el modelado dinámico del robot
+
+
+
+    # NOTA: PROGRAMAR MATRIZ DE CORIOLIS
 
     return
 
