@@ -1,4 +1,3 @@
-# Transformations
 from numpy import *
 import numpy as np
 from rkd.util import *
@@ -7,6 +6,9 @@ from rkd.mathematical_algorithms import *
 # init_printing(use_latex=True)
 
 def rot(phi,theta,psi, sec, deg):
+	'''
+	
+	'''
     if ((sec == 'XYX') or (sec == 'xyx')):
         H = m_mult(rotx(phi,deg), roty(theta,deg), rotx(psi,deg))
     if ((sec == 'XZX') or (sec == 'xzx')):
@@ -37,6 +39,9 @@ def rot(phi,theta,psi, sec, deg):
 def rotz(theta, deg=False):
     """
     Calculates the rotation matrix about the z-axis
+    
+    Parameters
+    -----------
 
     *theta* : float or int
         Rotation angle (given in radians by default)
@@ -75,6 +80,9 @@ def rotx(theta, deg=False):
 def roty(theta, deg=False):
     """
     Calculates the rotation matrix about the y-axis
+    
+    Parameters
+    ----------
 
     *theta* : float or int
         Rotation angle (given in radians by default)
@@ -94,9 +102,11 @@ def roty(theta, deg=False):
 def rot2eul(R, axis, deg = False, sol = False):
     """
     Calculates the Euler angles from a rotation matrix with differents combinations of axis
-
     ** The angles must be given in radians by default **
-
+    
+    Parameters
+    ----------
+    
     Important: The rotation matrix must be 3x3
     """
     
@@ -111,8 +121,8 @@ def rot2eul(R, axis, deg = False, sol = False):
     r33 = R[2,2] # Position in the matrix [3,3]
 
 
-    if ((axis=="ZXZ")or(axis=="zxz")): # Condition for the ZXZ axis
-        if ((r33!=1)or(r33!=-1)):
+    if ((axis=="ZXZ") or (axis=="zxz")): # Condition for the ZXZ axis
+        if ((r33!=1) or (r33!=-1)):
             theta = arctan2((sqrt(1-(r33**2))), r33)
             phi = arctan2(r13, -r23)
             psi = arctan2(r31, r32)
