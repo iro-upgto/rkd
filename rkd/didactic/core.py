@@ -166,6 +166,9 @@ class RigidBody2D(object):
     def __init__(self,points):
         self._points = points # Points
         self.Hs = [eye(4),] # Transformation matrices
+        
+    def restart(self):
+        self.Hs = [eye(4),]
     
     @property
     def points(self):
