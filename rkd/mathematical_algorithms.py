@@ -23,7 +23,7 @@ def m_mult(*matrices):
     Calculates the matrix resulting from a series of matrix multiplications
     """
     
-    f,_ = ( matrices[0] ).shape
+    f,_ = (matrices[0]).shape
     A = np.eye(f)
     for matriz in matrices:
         A = np.dot(A, matriz)
@@ -43,4 +43,5 @@ if __name__=="__main__":
                   [1, 2, 3], 
                   [1, 2, 3]])
 
-    print("RESULTADO: ", m_mult(A, B, C, C, B, A))
+    print("RESULTADO CON FUNCIÓN: ", m_mult(A, B, C, C, B, A))
+    print("RESULTADO SIN FUNCIÓN: ", A @ B @ C @ C @ B @ A)

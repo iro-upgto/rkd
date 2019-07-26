@@ -6,9 +6,9 @@ from rkd.mathematical_algorithms import *
 # init_printing(use_latex=True)
 
 def rot(phi,theta,psi, sec, deg):
-	'''
-	
-	'''
+    '''
+    
+    '''
     if ((sec == 'XYX') or (sec == 'xyx')):
         H = m_mult(rotx(phi,deg), roty(theta,deg), rotx(psi,deg))
     if ((sec == 'XZX') or (sec == 'xzx')):
@@ -323,6 +323,24 @@ def rot2axa(R, deg = False):
 
     return theta, k
 
+def RPY2Rot(phi, theta, psi, deg=False):
+    if deg:
+        phi = deg2rad(phi)
+        theta = deg2rad(theta)
+        psi = deg2rad(psi)
+    
+    Rz = np.array([[np.cos(phi), -np.sin(phi), 0],
+                   [np.sin(phi), np.cos(phi), 0],
+                   [0, 0, 1]])
+    Ry = np.array([[np.cos(theta), 0, np.sin(theta)],
+                   [0, 1, 0],
+                   [-np.sin(theta), 0, np.cos(theta)]])
+    Rx = np.array([[1, 0, 0],
+                   [0, np.cos(psi), -np.sin(psi)],
+                   [0, np.sin(psi), np.cos(psi)]])
+    
+    return m_mult(Rz, Ry, Rx)
+
 def htmDH(a,al,d,t, deg=False ):
     """
     Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameters
@@ -358,3 +376,5 @@ if __name__=="__main__":
     DH3 = htmDH(25,10,9,2,True)
     
     print("RESULTADO: \n", m_mult(DH1,DH2,DH3))
+    
+    print('Resultado RPY2Rot:\n', RPY2Rot(30, 60, 0, True))
