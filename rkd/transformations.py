@@ -6,9 +6,6 @@ from rkd.mathematical_algorithms import *
 # init_printing(use_latex=True)
 
 def rot(phi,theta,psi, sec, deg):
-    '''
-    
-    '''
     if ((sec == 'XYX') or (sec == 'xyx')):
         H = m_mult(rotx(phi,deg), roty(theta,deg), rotx(psi,deg))
     if ((sec == 'XZX') or (sec == 'xzx')):
@@ -377,4 +374,4 @@ if __name__=="__main__":
     
     print("RESULTADO: \n", m_mult(DH1,DH2,DH3))
     
-    print('Resultado RPY2Rot:\n', RPY2Rot(30, 60, 0, True))
+    print('Resultado RPY2Rot:\n', RPY2Rot(0, 0, 0, True))
