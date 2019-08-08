@@ -7,7 +7,7 @@ from itertools import combinations
 from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
 import matplotlib.pyplot as plt
-from .core import *
+from rkd.didactic.core import *
 
 
 def alpha_shape(points, alpha, only_outer=True):

@@ -17,9 +17,9 @@ def plot_euler(phi,theta,psi,seq="zxz"):
         R2 = R1*rotx(theta)
         R3 = R2*rotz(psi)
     draw_uvw(eye(4), ax, sz=8)
-    draw_uvw(R1, ax, "r", 6)
-    draw_uvw(R2, ax, "g", 4)
-    draw_uvw(R3, ax, "b", 3)
+    draw_uvw(R1, ax, sz=6)
+    draw_uvw(R2, ax, sz=4)
+    draw_uvw(R3, ax, sz=3)
     ax.set_xlim([-1,1])
     ax.set_ylim([-1,1])
     ax.set_zlim([-1,1])
@@ -54,4 +54,9 @@ def draw_uvw(H,ax,color=("r","g","b"),sz=1):
 
 
 if __name__=="__main__":
-    plot_euler(pi/3,pi/3,pi/3)
+    # ~ plot_euler(pi/3,pi/3,pi/3)
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    H = eye(4)*htmrot(pi/3)
+    draw_uvw(H, ax)
+    plt.show()

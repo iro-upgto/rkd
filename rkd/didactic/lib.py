@@ -7,7 +7,7 @@ from sympy import sin,cos,tan,atan2
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import numpy as np
-from rkd.didactic.util import alpha_shape
+from rkd.didactic.ws import alpha_shape
 
 class RR_Planar_Robot(Robot):
     def __init__(self,L1,L2,q=[0,0]):
