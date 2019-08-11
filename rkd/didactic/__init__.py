@@ -1,6 +1,6 @@
 """
 Universidad Politécnica de Guanajuato
-Departamento de Ingeniería Robótica
+Departamento de Ingeniería Robótica, (c) 2019
 
 This module has been designed for academic purposes, using SymPy as base library. 
 It's easy to check that SymPy is slower than NumPy specially in matrix algebra, 

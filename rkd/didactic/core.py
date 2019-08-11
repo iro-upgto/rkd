@@ -12,7 +12,8 @@ from rkd.didactic.ws import *
 
 class Robot(object):
     """
-    Define a robot-serial-arm given the Denavit-Hartenberg parameters
+    Define a robot-serial-arm given the Denavit-Hartenberg parameters 
+    and joint type, as tuples:
     """
     def __init__(self,*args):
         self.Ts = [] # Transformation matrices i to i-1
@@ -28,7 +29,7 @@ class Robot(object):
                 self.qs.append(k[3])
             else:
                 self.qs.append(k[2])
-        self.dof = len(args) # Degree of freedom
+        self._dof = len(args) # Degree of freedom
     
     def z(self,i):
         """
@@ -85,8 +86,9 @@ class Robot(object):
             M_[:,i] = jp
         return simplify(M_).evalf(6)
 
+    @property
     def dof(self):
-        return self.dof
+        return self._dof
 
     @property
     def T(self):
@@ -154,6 +156,7 @@ class Robot(object):
         self._qis_range = args
         
     def plot_workspace(self):
+        """ TODO """
         pass
 
 
@@ -268,5 +271,5 @@ def test_rb2():
 
 
 if __name__=="__main__":
-    pass
+    test_robot()
     
