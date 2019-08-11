@@ -1,0 +1,449 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>rkd.didactic.transformations &#8212; rkd 0.1.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">rkd 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for rkd.didactic.transformations</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">sympy</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sympy.matrices</span> <span class="k">import</span> <span class="n">Matrix</span><span class="p">,</span><span class="n">eye</span>
+<span class="kn">from</span> <span class="nn">rkd.abc</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">rkd.didactic.util</span> <span class="k">import</span> <span class="o">*</span>
+    
+<span class="c1"># ~ ==========================================</span>
+<span class="c1"># ~ Transformation operations</span>
+<span class="c1"># ~ ==========================================</span>
+
+<div class="viewcode-block" id="rotz"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.rotz">[docs]</a><span class="k">def</span> <span class="nf">rotz</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the rotation matrix about the z-axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    theta : float, int or `symbolic`</span>
+<span class="sd">        Rotation angle (given in radians by default)</span>
+
+<span class="sd">    deg : bool</span>
+<span class="sd">        ¿Is theta given in degrees?</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    R : `sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Rotation matrix (SO3)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span> <span class="c1"># If theta is given in degrees -&gt; convert to radians</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="n">ct</span><span class="p">,</span> <span class="o">-</span><span class="n">st</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                  <span class="p">[</span><span class="n">st</span><span class="p">,</span> <span class="n">ct</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">R</span></div>
+
+
+<div class="viewcode-block" id="roty"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.roty">[docs]</a><span class="k">def</span> <span class="nf">roty</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the rotation matrix about the y-axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    theta : float, int or `symbolic`</span>
+<span class="sd">        Rotation angle (given in radians by default)</span>
+
+<span class="sd">    deg : bool</span>
+<span class="sd">        ¿Is theta given in degrees?</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    R : `sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Rotation matrix (SO3)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span> <span class="c1"># If theta is given in degrees -&gt; convert to radians</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="n">ct</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">st</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="o">-</span><span class="n">st</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ct</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">R</span></div>
+
+
+<div class="viewcode-block" id="rotx"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.rotx">[docs]</a><span class="k">def</span> <span class="nf">rotx</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the rotation matrix about the x-axis</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    theta : float, int or `symbolic`</span>
+<span class="sd">        Rotation angle (given in radians by default)</span>
+
+<span class="sd">    deg : bool</span>
+<span class="sd">        ¿Is theta given in degrees?</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    R : `sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Rotation matrix (SO3)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span> <span class="c1"># If theta is given in degrees -&gt; convert to radians</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">ct</span><span class="p">,</span> <span class="o">-</span><span class="n">st</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">st</span><span class="p">,</span> <span class="n">ct</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">R</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;X&quot;</span><span class="p">,</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">rotx</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">roty</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">rotz</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">R</span>
+    
+
+<div class="viewcode-block" id="compose_rotations"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.compose_rotations">[docs]</a><span class="k">def</span> <span class="nf">compose_rotations</span><span class="p">(</span><span class="o">*</span><span class="n">rotations</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Composes rotation matrices w.r.t. fixed or movable frames</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    rotations : tuple</span>
+<span class="sd">        A tuple that contains (angle, axis, frame, deg)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    R : :class:`sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Rotation matrix</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; compose_rotations((45, &quot;z&quot;, &quot;fixed&quot;, True), (30, &quot;x&quot;, &quot;local&quot;, True))</span>
+<span class="sd">    ⎡0.707106781186548  -0.612372435695794  0.353553390593274 ⎤</span>
+<span class="sd">    ⎢                                                         ⎥</span>
+<span class="sd">    ⎢0.707106781186547  0.612372435695795   -0.353553390593274⎥</span>
+<span class="sd">    ⎢                                                         ⎥</span>
+<span class="sd">    ⎣        0                 0.5          0.866025403784439 ⎦</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># I3x3 matrix</span>
+    <span class="k">for</span> <span class="n">rot</span> <span class="ow">in</span> <span class="n">rotations</span><span class="p">:</span>
+        <span class="n">angle</span><span class="p">,</span><span class="n">axis</span><span class="p">,</span><span class="n">frame</span><span class="p">,</span><span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">rot</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span><span class="o">==</span><span class="mi">4</span><span class="p">:</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="n">rot</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">deg</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># default value</span>
+        <span class="n">crm</span> <span class="o">=</span> <span class="n">_rot</span><span class="p">(</span><span class="n">angle</span><span class="p">,</span><span class="n">axis</span><span class="p">,</span><span class="n">deg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;world&quot;</span><span class="p">,</span><span class="s2">&quot;fixed&quot;</span><span class="p">,</span><span class="s2">&quot;global&quot;</span><span class="p">,</span><span class="s2">&quot;w&quot;</span><span class="p">,</span><span class="s2">&quot;0&quot;</span><span class="p">,</span><span class="mi">0</span><span class="p">):</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">crm</span><span class="o">*</span><span class="n">R</span>
+        <span class="k">elif</span> <span class="n">frame</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;current&quot;</span><span class="p">,</span><span class="s2">&quot;movable&quot;</span><span class="p">,</span><span class="s2">&quot;local&quot;</span><span class="p">,</span><span class="s2">&quot;c&quot;</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">R</span><span class="o">*</span><span class="n">crm</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span> <span class="c1"># Nothing to do here -&gt; raise except. (to impl.)</span>
+            
+    <span class="k">return</span> <span class="n">R</span></div>
+
+
+<div class="viewcode-block" id="dh"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.dh">[docs]</a><span class="k">def</span> <span class="nf">dh</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">alpha</span><span class="p">,</span><span class="n">d</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates Denavit-Hartenberg matrix given the four parameters.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : int, float or symbol</span>
+<span class="sd">        DH parameter</span>
+<span class="sd">    alpha : int, float or symbol</span>
+<span class="sd">        DH parrameter</span>
+<span class="sd">    d : int, float or symbol</span>
+<span class="sd">        DH parameter</span>
+<span class="sd">    theta : int, float or symbol</span>
+<span class="sd">        DH parameter</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : :class:`sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Denavit-Hartenberg matrix (4x4)</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; dh(100,pi/2,50,pi/2)</span>
+<span class="sd">    ⎡0  0  1   0 ⎤</span>
+<span class="sd">    ⎢            ⎥</span>
+<span class="sd">    ⎢1  0  0  100⎥</span>
+<span class="sd">    ⎢            ⎥</span>
+<span class="sd">    ⎢0  1  0  50 ⎥</span>
+<span class="sd">    ⎢            ⎥</span>
+<span class="sd">    ⎣0  0  0   1 ⎦</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="o">-</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="n">a</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)],</span>
+                  <span class="p">[</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="o">-</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="n">a</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)],</span>
+                  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="n">sin</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="n">cos</span><span class="p">(</span><span class="n">alpha</span><span class="p">),</span><span class="n">d</span><span class="p">],</span>
+                  <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">H</span></div>
+    
+    
+<div class="viewcode-block" id="eul2htm"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.eul2htm">[docs]</a><span class="k">def</span> <span class="nf">eul2htm</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">psi</span><span class="p">,</span><span class="n">seq</span><span class="o">=</span><span class="s2">&quot;zxz&quot;</span><span class="p">,</span><span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a set of Euler Angles (phi,theta,psi) for specific </span>
+<span class="sd">    sequence this function returns the homogeneous transformation </span>
+<span class="sd">    matrix associated. Default sequence is ZXZ.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    phi : int,float,symbol</span>
+<span class="sd">        phi angle</span>
+<span class="sd">    theta : int,float,symbol</span>
+<span class="sd">        theta angle</span>
+<span class="sd">    psi : int,float,symbol</span>
+<span class="sd">        psi angle</span>
+<span class="sd">    seq : str</span>
+<span class="sd">        Rotation sequence</span>
+<span class="sd">    deg : bool</span>
+<span class="sd">        True if (phi,theta,psi) are given in degrees</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    H : :class:`sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">        Homogeneous transformation matrix</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span> <span class="c1"># If angles are given in degrees -&gt; convert to radians</span>
+        <span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">psi</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">psi</span><span class="p">]))</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">seq</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZXZ&quot;</span><span class="p">,</span><span class="s2">&quot;zxz&quot;</span><span class="p">):</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">htmrot</span><span class="p">(</span><span class="n">phi</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">)</span><span class="o">*</span><span class="n">htmrot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span><span class="s2">&quot;x&quot;</span><span class="p">)</span><span class="o">*</span><span class="n">htmrot</span><span class="p">(</span><span class="n">psi</span><span class="p">,</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">H</span></div>
+    
+    
+<div class="viewcode-block" id="htm2eul"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.htm2eul">[docs]</a><span class="k">def</span> <span class="nf">htm2eul</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">seq</span><span class="o">=</span><span class="s2">&quot;zxz&quot;</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a homogeneous transformation matrix this function </span>
+<span class="sd">    return the equivalent set of Euler Angles. </span>
+<span class="sd">    </span>
+<span class="sd">    If &quot;deg&quot; is True then Euler Angles are converted to degrees.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">seq</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZXZ&quot;</span><span class="p">,</span><span class="s2">&quot;zxz&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_htm2zxz</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">seq</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;ZYZ&quot;</span><span class="p">,</span><span class="s2">&quot;zyz&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_htm2zyz</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">deg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">pass</span> <span class="c1"># raise exception (to impl)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_htm2zxz</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates ZXZ Euler Angles from a homogeneous transformation matrix</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">H</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># rotation sub-matrix</span>
+    <span class="n">r33</span><span class="p">,</span><span class="n">r13</span><span class="p">,</span><span class="n">r23</span><span class="p">,</span><span class="n">r31</span><span class="p">,</span><span class="n">r32</span><span class="p">,</span><span class="n">r11</span><span class="p">,</span><span class="n">r12</span><span class="p">,</span><span class="n">r21</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">r33</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">r33</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">r33</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r13</span><span class="p">,</span> <span class="o">-</span><span class="n">r23</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r31</span><span class="p">,</span> <span class="n">r32</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">r33</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r21</span><span class="p">,</span> <span class="n">r11</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">r33</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">pi</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r21</span><span class="p">,</span> <span class="n">r11</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">r33</span><span class="o">**</span><span class="mi">2</span><span class="p">),</span> <span class="n">r33</span><span class="p">)</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r13</span><span class="p">,</span><span class="o">-</span><span class="n">r23</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">atan2</span><span class="p">(</span><span class="n">r31</span><span class="p">,</span><span class="n">r32</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">phi</span><span class="p">),</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">),</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">phi</span><span class="p">,</span><span class="n">theta</span><span class="p">,</span><span class="n">psi</span>
+
+
+<div class="viewcode-block" id="htmtra"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.htmtra">[docs]</a><span class="k">def</span> <span class="nf">htmtra</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculate the homogeneous transformation matrix of a translation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span><span class="p">,</span><span class="n">dy</span><span class="p">,</span><span class="n">dz</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">M</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">dx</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">dy</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">dz</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">M</span></div>
+    
+
+<div class="viewcode-block" id="htmrot"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.htmrot">[docs]</a><span class="k">def</span> <span class="nf">htmrot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a homogeneous transformation matrix that represents a </span>
+<span class="sd">    rotation &quot;theta&quot; about &quot;axis&quot;. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span> <span class="c1"># Is theta given in degrees? -&gt; then convert to radians</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">deg2rad</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">,</span><span class="s2">&quot;Z&quot;</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="s2">&quot;3&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">rotz</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">,</span><span class="s2">&quot;Y&quot;</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="s2">&quot;2&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">roty</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span><span class="s2">&quot;X&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s2">&quot;1&quot;</span><span class="p">):</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">rotx</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># raise except (to impl)</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">_rot2htm</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">H</span></div>
+
+
+<span class="k">def</span> <span class="nf">_rot2htm</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a SO(3) matrix return a SE(3) homogeneous </span>
+<span class="sd">    transformation matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_H</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">row_join</span><span class="p">(</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">_H</span><span class="o">.</span><span class="n">col_join</span><span class="p">(</span><span class="n">Matrix</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">H</span>
+    
+
+<div class="viewcode-block" id="rot2axa"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.rot2axa">[docs]</a><span class="k">def</span> <span class="nf">rot2axa</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">deg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a SO(3) matrix return the axis-angle representation</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">r32</span><span class="p">,</span><span class="n">r23</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">r13</span><span class="p">,</span><span class="n">r31</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">r21</span><span class="p">,</span><span class="n">r12</span> <span class="o">=</span> <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">acos</span><span class="p">((</span><span class="n">R</span><span class="o">.</span><span class="n">trace</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">k</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)))</span><span class="o">*</span><span class="n">Matrix</span><span class="p">([</span><span class="n">r32</span><span class="o">-</span><span class="n">r23</span><span class="p">,</span> <span class="n">r13</span><span class="o">-</span><span class="n">r31</span><span class="p">,</span> <span class="n">r21</span><span class="o">-</span><span class="n">r12</span><span class="p">])</span> <span class="p">)</span><span class="o">.</span><span class="n">evalf</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">deg</span><span class="p">:</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">rad2deg</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">k</span><span class="p">,</span><span class="n">theta</span></div>
+    
+<div class="viewcode-block" id="axa2rot"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.axa2rot">[docs]</a><span class="k">def</span> <span class="nf">axa2rot</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">theta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a R^3 vector (k) and an angle (theta), return </span>
+<span class="sd">    the SO(3) matrix associated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">k</span><span class="p">,(</span><span class="nb">list</span><span class="p">,</span><span class="nb">tuple</span><span class="p">)):</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">st</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">vt</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">kx</span><span class="p">,</span><span class="n">ky</span><span class="p">,</span><span class="n">kz</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">normalized</span><span class="p">()</span>
+    <span class="n">r11</span> <span class="o">=</span> <span class="n">kx</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">ct</span>
+    <span class="n">r21</span> <span class="o">=</span> <span class="n">kx</span><span class="o">*</span><span class="n">ky</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">kz</span><span class="o">*</span><span class="n">st</span>
+    <span class="n">r31</span> <span class="o">=</span> <span class="n">kx</span><span class="o">*</span><span class="n">kz</span><span class="o">*</span><span class="n">vt</span> <span class="o">-</span> <span class="n">ky</span><span class="o">*</span><span class="n">st</span>
+    <span class="n">r12</span> <span class="o">=</span> <span class="n">kx</span><span class="o">*</span><span class="n">ky</span><span class="o">*</span><span class="n">vt</span> <span class="o">-</span> <span class="n">kz</span><span class="o">*</span><span class="n">st</span>
+    <span class="n">r22</span> <span class="o">=</span> <span class="n">ky</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">ct</span>
+    <span class="n">r32</span> <span class="o">=</span> <span class="n">ky</span><span class="o">*</span><span class="n">kz</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">kx</span><span class="o">*</span><span class="n">st</span>
+    <span class="n">r13</span> <span class="o">=</span> <span class="n">kx</span><span class="o">*</span><span class="n">kz</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">ky</span><span class="o">*</span><span class="n">st</span> 
+    <span class="n">r23</span> <span class="o">=</span> <span class="n">ky</span><span class="o">*</span><span class="n">kz</span><span class="o">*</span><span class="n">vt</span> <span class="o">-</span> <span class="n">kx</span><span class="o">*</span><span class="n">st</span> 
+    <span class="n">r33</span> <span class="o">=</span> <span class="n">kz</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">vt</span> <span class="o">+</span> <span class="n">ct</span> 
+    <span class="n">R</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="n">r11</span><span class="p">,</span><span class="n">r12</span><span class="p">,</span><span class="n">r13</span><span class="p">],[</span><span class="n">r21</span><span class="p">,</span><span class="n">r22</span><span class="p">,</span><span class="n">r23</span><span class="p">],[</span><span class="n">r31</span><span class="p">,</span><span class="n">r32</span><span class="p">,</span><span class="n">r33</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">R</span></div>
+    
+
+<div class="viewcode-block" id="skew"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.transformations.skew">[docs]</a><span class="k">def</span> <span class="nf">skew</span><span class="p">(</span><span class="n">u</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return skew-symmetric matrix associated to u vector </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ux</span><span class="p">,</span><span class="n">uy</span><span class="p">,</span><span class="n">uz</span> <span class="o">=</span> <span class="n">u</span>
+    <span class="n">S</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">uz</span><span class="p">,</span> <span class="n">uy</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">uz</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">ux</span><span class="p">],</span> 
+                <span class="p">[</span><span class="o">-</span><span class="n">uy</span><span class="p">,</span> <span class="n">ux</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">S</span></div>
+    
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">htm2eul</span><span class="p">(</span><span class="n">H</span><span class="p">))</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">rkd 0.1.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, IRO.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.4.
+    </div>
+  </body>
+</html>
