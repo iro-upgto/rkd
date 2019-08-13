@@ -10,7 +10,7 @@ setup(name='rkd',
       license = "MIT",
       keywords=["Robotics","Kinematics"],
       url='https://github.com/iro-upgto/rkd',
-      packages=['rkd'],
+      packages=['rkd','rkd.didactic'],
       install_requires=['numpy','sympy','matplotlib','scipy'],
       classifiers=[
       "Development Status :: 2 - Pre-Alpha",
