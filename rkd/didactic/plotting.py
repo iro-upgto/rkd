@@ -8,6 +8,7 @@ from sympy.matrices import Matrix,eye
 from rkd.didactic.transformations import *
 from rkd.didactic.util import *
 
+__all__ = ["plot_euler", "draw_uv", "draw_uvw"]
 
 def plot_euler(phi,theta,psi,seq="zxz"):
     fig = plt.figure()

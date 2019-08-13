@@ -1,9 +1,9 @@
 """
 
 """
-from sympy import *
-from sympy.matrices import Matrix,eye
-from itertools import combinations
+# ~ from sympy import *
+# ~ from sympy.matrices import Matrix,eye
+# ~ from itertools import combinations
 from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
 import matplotlib.pyplot as plt

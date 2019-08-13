@@ -9,11 +9,12 @@ as the symbolic manipulation, calculation of partial and ordinary derivatives,
 matricial multiplication using asterisk symbol, "init_printing" function and so on.
 """
 
-from sympy import * 
+from sympy import solve, symbols, init_printing, pi
+from sympy.matrices import Matrix, eye, zeros, ones
 from rkd.abc import * # To use common symbolic variables
-from .core import *
-from .plotting import *
-from .transformations import *
+from .core import * 
+from .plotting import * 
+from .transformations import * 
 from .util import *
-from .ws import *
+# ~ from .ws import * # not yet ready
 init_printing(use_latex=True) # Get "pretty print"

@@ -9,6 +9,9 @@ from matplotlib import cm
 import numpy as np
 from rkd.didactic.ws import alpha_shape
 
+__all__ = ["RR_Planar_Robot", ]
+
+
 class RR_Planar_Robot(Robot):
     def __init__(self,L1,L2,q=[0,0]):
         self.L1 = L1

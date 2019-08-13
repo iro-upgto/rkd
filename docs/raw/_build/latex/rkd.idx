@@ -1,0 +1,44 @@
+\indexentry{rkd.transformations (module)|hyperpage}{3}
+\indexentry{htmDH() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rot2RPY() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rot2axa() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rot2eul() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rotx() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{roty() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rotz() (in module rkd.transformations)|hyperpage}{3}
+\indexentry{rkd.didactic (module)|hyperpage}{4}
+\indexentry{rkd.didactic.core (module)|hyperpage}{4}
+\indexentry{RigidBody2D (class in rkd.didactic.core)|hyperpage}{4}
+\indexentry{draw() (rkd.didactic.core.RigidBody2D method)|hyperpage}{4}
+\indexentry{move() (rkd.didactic.core.RigidBody2D method)|hyperpage}{4}
+\indexentry{rotate() (rkd.didactic.core.RigidBody2D method)|hyperpage}{4}
+\indexentry{scale() (rkd.didactic.core.RigidBody2D method)|hyperpage}{4}
+\indexentry{Robot (class in rkd.didactic.core)|hyperpage}{4}
+\indexentry{J (rkd.didactic.core.Robot attribute)|hyperpage}{4}
+\indexentry{J\_i() (rkd.didactic.core.Robot method)|hyperpage}{4}
+\indexentry{T (rkd.didactic.core.Robot attribute)|hyperpage}{4}
+\indexentry{p() (rkd.didactic.core.Robot method)|hyperpage}{4}
+\indexentry{plot\_workspace() (rkd.didactic.core.Robot method)|hyperpage}{4}
+\indexentry{z() (rkd.didactic.core.Robot method)|hyperpage}{4}
+\indexentry{rkd.didactic.transformations (module)|hyperpage}{4}
+\indexentry{axa2rot() (in module rkd.didactic.transformations)|hyperpage}{4}
+\indexentry{compose\_rotations() (in module rkd.didactic.transformations)|hyperpage}{4}
+\indexentry{dh() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{eul2htm() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{htm2eul() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{htmrot() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{htmtra() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{rot2axa() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{rotx() (in module rkd.didactic.transformations)|hyperpage}{5}
+\indexentry{roty() (in module rkd.didactic.transformations)|hyperpage}{6}
+\indexentry{rotz() (in module rkd.didactic.transformations)|hyperpage}{6}
+\indexentry{skew() (in module rkd.didactic.transformations)|hyperpage}{6}
+\indexentry{rkd.didactic.plotting (module)|hyperpage}{6}
+\indexentry{rkd.didactic.util (module)|hyperpage}{6}
+\indexentry{deg2rad() (in module rkd.didactic.util)|hyperpage}{6}
+\indexentry{ishtm() (in module rkd.didactic.util)|hyperpage}{6}
+\indexentry{isorthonormal() (in module rkd.didactic.util)|hyperpage}{6}
+\indexentry{isrot() (in module rkd.didactic.util)|hyperpage}{6}
+\indexentry{rad2deg() (in module rkd.didactic.util)|hyperpage}{6}
+\indexentry{sympy2float() (in module rkd.didactic.util)|hyperpage}{7}
+\indexentry{sympy\_matrix\_to\_numpy\_float() (in module rkd.didactic.util)|hyperpage}{7}

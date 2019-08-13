@@ -10,6 +10,8 @@ from sympy.matrices import Matrix,eye
 from rkd.abc import *
 from rkd.didactic.ws import *
 
+__all__ = ["Robot", "RigidBody2D"]
+
 class Robot(object):
     """
     Define a robot-serial-arm given the Denavit-Hartenberg parameters 

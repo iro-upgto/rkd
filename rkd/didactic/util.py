@@ -7,6 +7,15 @@ from itertools import combinations
 # ~ from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
 
+__all__ = [
+    "deg2rad",
+    "ishtm",
+    "isorthonormal",
+    "isrot",
+    "rad2deg",
+    "sympy2float",
+    "sympy_matrix_to_numpy_float"
+]
 
 def deg2rad(theta, evalf=True):
     """
