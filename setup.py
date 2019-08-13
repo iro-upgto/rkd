@@ -11,6 +11,7 @@ setup(name='rkd',
       keywords=["Robotics","Kinematics"],
       url='https://github.com/iro-upgto/rkd',
       packages=['rkd'],
+      install_requires=['numpy','sympy','matplotlib','scipy'],
       classifiers=[
       "Development Status :: 2 - Pre-Alpha",
       "Intended Audience :: Education",

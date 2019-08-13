@@ -101,7 +101,38 @@ def isorthonormal(R):
         if R[:,i].norm().simplify() != 1:
             return False
     return True
+    
+
+def sympy_matrix_to_numpy_float(H):
+    """
+    Convert SymPy Matrix (numerical) to NumPy array
+    
+    Parameters
+    ----------
+    
+    H : `sympy.matrices.dense.MutableDenseMatrix`
+    
+    Returns
+    -------
+    
+    Hf : array
+    
+    """
+    Hf = np.array(H).astype("float64")
+    return Hf
+    
+def sympy2float(sympy_object):
+    """
+    Convert a SymPy object to float object
+    """
+    if isinstance(sympy_object, Matrix):
+        float_object = sympy_matrix_to_numpy_float(sympy_object)
+    else:
+        float_object = sympy_object
+    return float_object
+    
+    
 
 
 if __name__=="__main__":
-    pass
+    print( sympy_matrix_to_numpy_float(H) )

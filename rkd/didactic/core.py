@@ -271,5 +271,5 @@ def test_rb2():
 
 
 if __name__=="__main__":
-    test_robot()
+    print(30*"aaaaa")
     

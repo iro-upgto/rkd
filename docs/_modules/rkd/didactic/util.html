@@ -156,10 +156,41 @@
         <span class="k">if</span> <span class="n">R</span><span class="p">[:,</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">norm</span><span class="p">()</span><span class="o">.</span><span class="n">simplify</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="kc">True</span></div>
+    
+
+<div class="viewcode-block" id="sympy_matrix_to_numpy_float"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.util.sympy_matrix_to_numpy_float">[docs]</a><span class="k">def</span> <span class="nf">sympy_matrix_to_numpy_float</span><span class="p">(</span><span class="n">H</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert SymPy Matrix (numerical) to NumPy array</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    H : `sympy.matrices.dense.MutableDenseMatrix`</span>
+<span class="sd">    </span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    </span>
+<span class="sd">    Hf : array</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">Hf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">H</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Hf</span></div>
+    
+<div class="viewcode-block" id="sympy2float"><a class="viewcode-back" href="../../../_src/didactic.html#rkd.didactic.util.sympy2float">[docs]</a><span class="k">def</span> <span class="nf">sympy2float</span><span class="p">(</span><span class="n">sympy_object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a SymPy object to float object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sympy_object</span><span class="p">,</span> <span class="n">Matrix</span><span class="p">):</span>
+        <span class="n">float_object</span> <span class="o">=</span> <span class="n">sympy_matrix_to_numpy_float</span><span class="p">(</span><span class="n">sympy_object</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">float_object</span> <span class="o">=</span> <span class="n">sympy_object</span>
+    <span class="k">return</span> <span class="n">float_object</span></div>
+    
+    
 
 
 <span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="k">pass</span>
+    <span class="nb">print</span><span class="p">(</span> <span class="n">sympy_matrix_to_numpy_float</span><span class="p">(</span><span class="n">H</span><span class="p">)</span> <span class="p">)</span>
 </pre></div>
 
           </div>

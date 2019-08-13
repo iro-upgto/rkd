@@ -35,6 +35,17 @@
     </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Didactic</a><ul>
+<li><a class="reference internal" href="#module-rkd.didactic.core">core</a></li>
+<li><a class="reference internal" href="#module-rkd.didactic.transformations">transformations</a></li>
+<li><a class="reference internal" href="#plotting">plotting</a></li>
+<li><a class="reference internal" href="#module-rkd.didactic.util">util</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="transformations.html"
                         title="previous chapter">Transformations</a></p>
@@ -74,7 +85,9 @@ It’s easy to check that SymPy is slower than NumPy specially in matrix algebra
 however SymPy is more convenient to use as didactic tool due to the given facilities 
 as the symbolic manipulation, calculation of partial and ordinary derivatives, 
 matricial multiplication using asterisk symbol, “init_printing” function and so on.</p>
-<span class="target" id="module-rkd.didactic.core"></span><dl class="class">
+<div class="section" id="module-rkd.didactic.core">
+<span id="core"></span><h2>core<a class="headerlink" href="#module-rkd.didactic.core" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
 <dt id="rkd.didactic.core.RigidBody2D">
 <em class="property">class </em><code class="descclassname">rkd.didactic.core.</code><code class="descname">RigidBody2D</code><span class="sig-paren">(</span><em>points</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rkd/didactic/core.html#RigidBody2D"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rkd.didactic.core.RigidBody2D" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -152,7 +165,10 @@ Homogeneous transformation matrix of N-Frame respect to Base-Frame</p>
 
 </dd></dl>
 
-<span class="target" id="module-rkd.didactic.transformations"></span><dl class="function">
+</div>
+<div class="section" id="module-rkd.didactic.transformations">
+<span id="transformations"></span><h2>transformations<a class="headerlink" href="#module-rkd.didactic.transformations" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
 <dt id="rkd.didactic.transformations.axa2rot">
 <code class="descclassname">rkd.didactic.transformations.</code><code class="descname">axa2rot</code><span class="sig-paren">(</span><em>k</em>, <em>theta</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rkd/didactic/transformations.html#axa2rot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rkd.didactic.transformations.axa2rot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a R^3 vector (k) and an angle (theta), return 
@@ -316,7 +332,13 @@ rotation “theta” about “axis”.</p>
 <dd><p>Return skew-symmetric matrix associated to u vector</p>
 </dd></dl>
 
-<span class="target" id="module-rkd.didactic.util"></span><dl class="function">
+</div>
+<div class="section" id="plotting">
+<h2>plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-rkd.didactic.plotting"></span></div>
+<div class="section" id="module-rkd.didactic.util">
+<span id="util"></span><h2>util<a class="headerlink" href="#module-rkd.didactic.util" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
 <dt id="rkd.didactic.util.deg2rad">
 <code class="descclassname">rkd.didactic.util.</code><code class="descname">deg2rad</code><span class="sig-paren">(</span><em>theta</em>, <em>evalf=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rkd/didactic/util.html#deg2rad"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rkd.didactic.util.deg2rad" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert degrees to radians</p>
@@ -354,6 +376,21 @@ rotation “theta” about “axis”.</p>
 <p>theta_deg : symbolic</p>
 </dd></dl>
 
+<dl class="function">
+<dt id="rkd.didactic.util.sympy2float">
+<code class="descclassname">rkd.didactic.util.</code><code class="descname">sympy2float</code><span class="sig-paren">(</span><em>sympy_object</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rkd/didactic/util.html#sympy2float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rkd.didactic.util.sympy2float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a SymPy object to float object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="rkd.didactic.util.sympy_matrix_to_numpy_float">
+<code class="descclassname">rkd.didactic.util.</code><code class="descname">sympy_matrix_to_numpy_float</code><span class="sig-paren">(</span><em>H</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/rkd/didactic/util.html#sympy_matrix_to_numpy_float"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rkd.didactic.util.sympy_matrix_to_numpy_float" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert SymPy Matrix (numerical) to NumPy array</p>
+<p>H : <cite>sympy.matrices.dense.MutableDenseMatrix</cite></p>
+<p>Hf : array</p>
+</dd></dl>
+
+</div>
 </div>
 
 

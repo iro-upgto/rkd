@@ -3,9 +3,9 @@
 A Python library for kinematic and dynamic analysis of robots
 
 
-# Instalation
+# Installation
 
-From this repo (currently version 0.1.0.dev0) :
+From this repo (currently developer version 0.1.0) :
 
 ```
 pip install git+https://github.com/iro-upgto/rkd.git

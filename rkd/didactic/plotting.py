@@ -16,6 +16,12 @@ def plot_euler(phi,theta,psi,seq="zxz"):
         R1 = rotz(phi)
         R2 = R1*rotx(theta)
         R3 = R2*rotz(psi)
+    elif seq in ("zyz","ZYZ","323",323):
+        R1 = rotz(phi)
+        R2 = R1*roty(theta)
+        R3 = R2*rotz(psi)
+    else:
+        R1 = R2 = R3 = eye(4)
     draw_uvw(eye(4), ax, sz=8)
     draw_uvw(R1, ax, sz=6)
     draw_uvw(R2, ax, sz=4)
@@ -25,7 +31,6 @@ def plot_euler(phi,theta,psi,seq="zxz"):
     ax.set_zlim([-1,1])
     ax.set_aspect("equal")
     ax.axis('off')
-    plt.show()
 
     
     
@@ -50,13 +55,43 @@ def draw_uvw(H,ax,color=("r","g","b"),sz=1):
               length=L, arrow_length_ratio=0.2)
 
 
+def draw_xyz(*args, **kwargs):
+    return draw_uvw(*args, **kwargs)
 
+
+def draw_uv(H, ax, name="S0", color=("r","g"), sz=1):
+    tpos = H*Matrix([1,1,0,1])
+    H = sympy2float(H)
+    u = H[:3,0]             
+    v = H[:3,1]
+    w = H[:3,2]
+    if ishtm(H):
+        o = H[:3,3]
+    else:
+        o = Matrix([0,0,0])
+    L = sz/5
+    if isinstance(color,str):
+        colorl = (color,color)
+    else:
+        colorl = color
+    # ~ print(o, u)
+    ax.arrow(o[0],o[1],u[0],u[1], color=colorl[0])
+    ax.arrow(o[0],o[1],v[0],v[1], color=colorl[1])
+    ax.text(tpos[0], tpos[1], "{"+name+"}", fontsize=8)
+    ax.set_aspect("equal")
 
 
 if __name__=="__main__":
-    # ~ plot_euler(pi/3,pi/3,pi/3)
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection="3d")
-    H = eye(4)*htmrot(pi/3)
-    draw_uvw(H, ax)
+    plot_euler(20,20,20,"x")
     plt.show()
+    # ~ fig = plt.figure()
+    # ~ ax = fig.add_subplot(111)
+    # ~ H1 = eye(4)*htmrot(pi/3)
+    # ~ H2 = H1*htmtra([10,5,0])
+    # ~ H3 = H2*htmtra([-4,5,0])*htmrot(pi/4)
+    # ~ draw_uv(H1, ax, "A", "b")
+    # ~ draw_uv(H2, ax, "B")
+    # ~ draw_uv(H3, ax, "C")
+    # ~ plt.grid(ls="--")
+    # ~ plt.axis([-20,20,-20,20])
+    # ~ plt.show()
