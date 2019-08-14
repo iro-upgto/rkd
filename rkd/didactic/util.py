@@ -6,6 +6,9 @@ from sympy.matrices import Matrix,eye
 from itertools import combinations
 # ~ from scipy.spatial import Delaunay, ConvexHull
 import numpy as np
+import sympy.core as sc
+import sympy.matrices as sm
+from sympy.core.basic import Basic
 
 __all__ = [
     "deg2rad",
@@ -14,7 +17,8 @@ __all__ = [
     "isrot",
     "rad2deg",
     "sympy2float",
-    "sympy_matrix_to_numpy_float"
+    "sympy_matrix_to_numpy_float",
+    "issympyobject"
 ]
 
 def deg2rad(theta, evalf=True):
@@ -57,6 +61,28 @@ def rad2deg(theta, evalf=True):
     else:
         theta_deg = theta*(180/pi)
     return theta_deg
+
+
+def issympyobject(obj):
+    """
+    Determine if input (obj) is a sympy object.
+    
+    Examples
+    --------
+    >>> from sympy import symbols
+    >>> x = symbols("x")
+    >>> issympyobject(x)
+    True
+    """
+    if isinstance( obj, tuple(sc.all_classes ) ):
+        return True
+    elif isinstance(obj, Basic):
+        return True
+    elif isinstance(obj, sm.MatrixBase):
+        return True
+    else:
+        return False
+
     
 def ishtm(H):
     """
