@@ -25,7 +25,6 @@
  \fi
 \fi
 \usepackage{cmap}
-\usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amstext}
 \usepackage{babel}
@@ -56,7 +55,7 @@
 
 
 \title{rkd Documentation}
-\date{Aug 12, 2019}
+\date{Aug 14, 2019}
 \release{0.1.0}
 \author{IRO}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -76,106 +75,10 @@ Source code: \sphinxurl{https://github.com/iro-upgto/rkd}
 
 
 \chapter{Contents}
-\label{\detokenize{index:contents}}\label{\detokenize{index:welcome-to-rkd-s-documentation}}
-
-\section{Transformations}
-\label{\detokenize{_src/transformations::doc}}\label{\detokenize{_src/transformations:module-rkd.transformations}}\label{\detokenize{_src/transformations:transformations}}\index{rkd.transformations (module)}\index{htmDH() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.htmDH}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{htmDH}}}{\emph{a}, \emph{al}, \emph{d}, \emph{t}, \emph{deg=False}}{}
-Calculates the homogeneous matrix with the Denavir - Hartenberg (DH) parameters
-
-** The angles must be given in radians by default **
-
-\end{fulllineitems}
-
-\index{rot2RPY() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.rot2RPY}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{rot2RPY}}}{\emph{R}, \emph{deg=False}, \emph{sol=False}}{}
-Calculates the Roll, Pitch, Yaw angles from a rotation matrix on the XYZ axis
-
-** The angles must be given in radians by default **
-
-Important: The rotation matrix must be 3x3
-
-\end{fulllineitems}
-
-\index{rot2axa() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.rot2axa}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{rot2axa}}}{\emph{R}, \emph{deg=False}}{}
-Calculates the axis / angle ratio from a rotation matrix
-
-** The angles must be given in radians by default **
-
-Important: The rotation matrix must be 3x3
-
-\end{fulllineitems}
-
-\index{rot2eul() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.rot2eul}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{rot2eul}}}{\emph{R}, \emph{axis}, \emph{deg=False}, \emph{sol=False}}{}
-Calculates the Euler angles from a rotation matrix with differents combinations of axis
-** The angles must be given in radians by default **
-
-Important: The rotation matrix must be 3x3
-
-\end{fulllineitems}
-
-\index{rotx() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.rotx}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{rotx}}}{\emph{theta}, \emph{deg=False}}{}
-Calculates the rotation matrix about the x-axis
-\begin{description}
-\item[{\sphinxstyleemphasis{theta}}] \leavevmode{[}float or int{]}
-Rotation angle (given in radians by default)
-
-\item[{\sphinxstyleemphasis{deg}}] \leavevmode{[}bool{]}
-¿Is theta given in degrees?
-
-\end{description}
-
-\end{fulllineitems}
-
-\index{roty() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.roty}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{roty}}}{\emph{theta}, \emph{deg=False}}{}
-Calculates the rotation matrix about the y-axis
-\begin{description}
-\item[{\sphinxstyleemphasis{theta}}] \leavevmode{[}float or int{]}
-Rotation angle (given in radians by default)
-
-\item[{\sphinxstyleemphasis{deg}}] \leavevmode{[}bool{]}
-¿Is theta given in degrees?
-
-\end{description}
-
-\end{fulllineitems}
-
-\index{rotz() (in module rkd.transformations)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/transformations:rkd.transformations.rotz}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.transformations.}}\sphinxbfcode{\sphinxupquote{rotz}}}{\emph{theta}, \emph{deg=False}}{}
-Calculates the rotation matrix about the z-axis
-\begin{description}
-\item[{\sphinxstyleemphasis{theta}}] \leavevmode{[}float or int{]}
-Rotation angle (given in radians by default)
-
-\item[{\sphinxstyleemphasis{deg}}] \leavevmode{[}bool{]}
-¿Is theta given in degrees?
-
-\end{description}
-
-\end{fulllineitems}
-
-
+\label{\detokenize{index:welcome-to-rkd-s-documentation}}\label{\detokenize{index:contents}}
 
 \section{Didactic}
-\label{\detokenize{_src/didactic:didactic}}\label{\detokenize{_src/didactic::doc}}\label{\detokenize{_src/didactic:module-rkd.didactic}}\index{rkd.didactic (module)}
+\label{\detokenize{_src/didactic:didactic}}\label{\detokenize{_src/didactic:module-rkd.didactic}}\label{\detokenize{_src/didactic::doc}}\index{rkd.didactic (module)}
 Universidad Politécnica de Guanajuato
 Departamento de Ingeniería Robótica, (c) 2019
 
@@ -187,51 +90,7 @@ matricial multiplication using asterisk symbol, “init\_printing” function an
 
 
 \subsection{core}
-\label{\detokenize{_src/didactic:core}}\label{\detokenize{_src/didactic:module-rkd.didactic.core}}\index{rkd.didactic.core (module)}\index{RigidBody2D (class in rkd.didactic.core)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{rkd.didactic.core.}}\sphinxbfcode{\sphinxupquote{RigidBody2D}}}{\emph{points}}{}
-Bases: \sphinxcode{\sphinxupquote{object}}
-
-Defines a rigid body through a series of points that 
-make it up.
-\index{draw() (rkd.didactic.core.RigidBody2D method)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.draw}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{draw}}}{\emph{color='r'}, \emph{kaxis=None}}{}
-Dibuja el cuerpo rígido en sus estatus actual
-
-\end{fulllineitems}
-
-\index{move() (rkd.didactic.core.RigidBody2D method)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.move}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{move}}}{\emph{q}}{}
-Traslada el cuerpo rígido un vector q
-
-\end{fulllineitems}
-
-\index{rotate() (rkd.didactic.core.RigidBody2D method)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.rotate}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{rotate}}}{\emph{angle}}{}
-Rota el cuerpo rígido un ángulo determinado alrededor 
-del eje coordenado z.
-
-\end{fulllineitems}
-
-\index{scale() (rkd.didactic.core.RigidBody2D method)}
-
-\begin{fulllineitems}
-\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.scale}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{scale}}}{\emph{sf}}{}
-Escala el cuerpo rígido
-
-\end{fulllineitems}
-
-
-\end{fulllineitems}
-
-\index{Robot (class in rkd.didactic.core)}
+\label{\detokenize{_src/didactic:core}}\label{\detokenize{_src/didactic:module-rkd.didactic.core}}\index{rkd.didactic.core (module)}\index{Robot (class in rkd.didactic.core)}
 
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.Robot}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{rkd.didactic.core.}}\sphinxbfcode{\sphinxupquote{Robot}}}{\emph{*args}}{}
@@ -285,6 +144,50 @@ TODO
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.Robot.z}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{z}}}{\emph{i}}{}
 z-dir of every i-Frame wrt 0-Frame
+
+\end{fulllineitems}
+
+
+\end{fulllineitems}
+
+\index{RigidBody2D (class in rkd.didactic.core)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{class }}\sphinxcode{\sphinxupquote{rkd.didactic.core.}}\sphinxbfcode{\sphinxupquote{RigidBody2D}}}{\emph{points}}{}
+Bases: \sphinxcode{\sphinxupquote{object}}
+
+Defines a rigid body through a series of points that 
+make it up.
+\index{draw() (rkd.didactic.core.RigidBody2D method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.draw}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{draw}}}{\emph{color='r'}, \emph{kaxis=None}}{}
+Dibuja el cuerpo rígido en sus estatus actual
+
+\end{fulllineitems}
+
+\index{move() (rkd.didactic.core.RigidBody2D method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.move}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{move}}}{\emph{q}}{}
+Traslada el cuerpo rígido un vector q
+
+\end{fulllineitems}
+
+\index{rotate() (rkd.didactic.core.RigidBody2D method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.rotate}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{rotate}}}{\emph{angle}}{}
+Rota el cuerpo rígido un ángulo determinado alrededor 
+del eje coordenado z.
+
+\end{fulllineitems}
+
+\index{scale() (rkd.didactic.core.RigidBody2D method)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.core.RigidBody2D.scale}}\pysiglinewithargsret{\sphinxbfcode{\sphinxupquote{scale}}}{\emph{sf}}{}
+Escala el cuerpo rígido
 
 \end{fulllineitems}
 
@@ -356,6 +259,8 @@ Denavit-Hartenberg matrix (4x4)
 
 \end{description}
 
+With numerical values:
+
 \fvset{hllines={, ,}}%
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dh}\PYG{p}{(}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{50}\PYG{p}{,}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}
@@ -366,6 +271,22 @@ Denavit-Hartenberg matrix (4x4)
 \PYG{g+go}{⎢0  1  0  50 ⎥}
 \PYG{g+go}{⎢            ⎥}
 \PYG{g+go}{⎣0  0  0   1 ⎦}
+\end{sphinxVerbatim}
+
+Using symbolic values:
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{a} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{a}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{t} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{dh}\PYG{p}{(}\PYG{n}{a}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{n}{t}\PYG{p}{)}
+\PYG{g+go}{⎡cos(t)  \PYGZhy{}sin(t)  0  a⋅cos(t)⎤}
+\PYG{g+go}{⎢                            ⎥}
+\PYG{g+go}{⎢sin(t)  cos(t)   0  a⋅sin(t)⎥}
+\PYG{g+go}{⎢                            ⎥}
+\PYG{g+go}{⎢  0        0     1     0    ⎥}
+\PYG{g+go}{⎢                            ⎥}
+\PYG{g+go}{⎣  0        0     0     1    ⎦}
 \end{sphinxVerbatim}
 
 \end{fulllineitems}
@@ -400,6 +321,42 @@ Homogeneous transformation matrix
 
 \end{description}
 
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{eul2htm}\PYG{p}{(}\PYG{l+m+mi}{90}\PYG{p}{,}\PYG{l+m+mi}{90}\PYG{p}{,}\PYG{l+m+mi}{90}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{zxz}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{⎡0  0   1  0⎤}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0  \PYGZhy{}1  0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢1  0   0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎣0  0   0  1⎦}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{eul2htm}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{g+go}{⎡0  0   1  0⎤}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0  \PYGZhy{}1  0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢1  0   0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎣0  0   0  1⎦}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{eul2htm}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{zyz}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{⎡0   0  1  0⎤}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0   1  0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢\PYGZhy{}1  0  0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎣0   0  0  1⎦}
+\end{sphinxVerbatim}
+
 \end{fulllineitems}
 
 \index{htm2eul() (in module rkd.didactic.transformations)}
@@ -411,6 +368,31 @@ return the equivalent set of Euler Angles.
 
 If “deg” is True then Euler Angles are converted to degrees.
 
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{H} \PYG{o}{=} \PYG{n}{htmrot}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{3}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{y}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}\PYG{o}{*}\PYG{n}{htmrot}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{H}
+\PYG{g+go}{⎡      √6   √6    ⎤}
+\PYG{g+go}{⎢1/2   ──   ──   0⎥}
+\PYG{g+go}{⎢      4    4     ⎥}
+\PYG{g+go}{⎢                 ⎥}
+\PYG{g+go}{⎢      √2  \PYGZhy{}√2    ⎥}
+\PYG{g+go}{⎢ 0    ──  ────  0⎥}
+\PYG{g+go}{⎢      2    2     ⎥}
+\PYG{g+go}{⎢                 ⎥}
+\PYG{g+go}{⎢\PYGZhy{}√3   √2   √2    ⎥}
+\PYG{g+go}{⎢────  ──   ──   0⎥}
+\PYG{g+go}{⎢ 2    4    4     ⎥}
+\PYG{g+go}{⎢                 ⎥}
+\PYG{g+go}{⎣ 0    0    0    1⎦}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htm2eul}\PYG{p}{(}\PYG{n}{H}\PYG{p}{)}
+\PYG{g+go}{⎛    ⎛√3⎞                     ⎞}
+\PYG{g+go}{⎜atan⎜──⎟, atan(√7), \PYGZhy{}atan(√6)⎟}
+\PYG{g+go}{⎝    ⎝2 ⎠                     ⎠}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htm2eul}\PYG{p}{(}\PYG{n}{H}\PYG{p}{,} \PYG{n}{deg}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{(40.8933946491309, 69.2951889453646, \PYGZhy{}67.7923457014035)}
+\end{sphinxVerbatim}
+
 \end{fulllineitems}
 
 \index{htmrot() (in module rkd.didactic.transformations)}
@@ -419,6 +401,59 @@ If “deg” is True then Euler Angles are converted to degrees.
 \phantomsection\label{\detokenize{_src/didactic:rkd.didactic.transformations.htmrot}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.didactic.transformations.}}\sphinxbfcode{\sphinxupquote{htmrot}}}{\emph{theta}, \emph{axis='z'}, \emph{deg=False}}{}
 Return a homogeneous transformation matrix that represents a 
 rotation “theta” about “axis”.
+\begin{description}
+\item[{theta}] \leavevmode{[}float, int or \sphinxtitleref{symbolic}{]}
+Rotation angle (given in radians by default)
+
+\item[{axis}] \leavevmode{[}str{]}
+Rotation axis
+
+\item[{deg}] \leavevmode{[}bool{]}
+¿Is theta given in degrees?
+
+\end{description}
+\begin{description}
+\item[{H}] \leavevmode{[}\sphinxcode{\sphinxupquote{sympy.matrices.dense.MutableDenseMatrix}}{]}
+Homogeneous transformation matrix
+
+\end{description}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmrot}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{g+go}{⎡0  \PYGZhy{}1  0  0⎤}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢1  0   0  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0  0   1  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎣0  0   0  1⎦}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmrot}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{⎡1  0  0   0⎤}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0  0  \PYGZhy{}1  0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎢0  1  0   0⎥}
+\PYG{g+go}{⎢           ⎥}
+\PYG{g+go}{⎣0  0  0   1⎦}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmrot}\PYG{p}{(}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{y}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{,} \PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{⎡0.866025403784439  0         0.5         0⎤}
+\PYG{g+go}{⎢                                          ⎥}
+\PYG{g+go}{⎢        0          1          0          0⎥}
+\PYG{g+go}{⎢                                          ⎥}
+\PYG{g+go}{⎢      \PYGZhy{}0.5         0  0.866025403784439  0⎥}
+\PYG{g+go}{⎢                                          ⎥}
+\PYG{g+go}{⎣        0          0          0          1⎦}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{t} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{t}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmrot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+go}{⎡1    0        0     0⎤}
+\PYG{g+go}{⎢                     ⎥}
+\PYG{g+go}{⎢0  cos(t)  \PYGZhy{}sin(t)  0⎥}
+\PYG{g+go}{⎢                     ⎥}
+\PYG{g+go}{⎢0  sin(t)  cos(t)   0⎥}
+\PYG{g+go}{⎢                     ⎥}
+\PYG{g+go}{⎣0    0        0     1⎦}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 
@@ -427,6 +462,41 @@ rotation “theta” about “axis”.
 \begin{fulllineitems}
 \phantomsection\label{\detokenize{_src/didactic:rkd.didactic.transformations.htmtra}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.didactic.transformations.}}\sphinxbfcode{\sphinxupquote{htmtra}}}{\emph{d}}{}
 Calculate the homogeneous transformation matrix of a translation
+\begin{description}
+\item[{d}] \leavevmode{[}list, tuple{]}
+Translation vector
+
+\end{description}
+\begin{description}
+\item[{H}] \leavevmode{[}\sphinxcode{\sphinxupquote{sympy.matrices.dense.MutableDenseMatrix}}{]}
+Homogeneous transformation matrix
+
+\end{description}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmtra}\PYG{p}{(}\PYG{p}{[}\PYG{l+m+mi}{50}\PYG{p}{,}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{100}\PYG{p}{,}\PYG{l+m+mi}{30}\PYG{p}{]}\PYG{p}{)}
+\PYG{g+go}{⎡1  0  0   50 ⎤}
+\PYG{g+go}{⎢             ⎥}
+\PYG{g+go}{⎢0  1  0  \PYGZhy{}100⎥}
+\PYG{g+go}{⎢             ⎥}
+\PYG{g+go}{⎢0  0  1   30 ⎥}
+\PYG{g+go}{⎢             ⎥}
+\PYG{g+go}{⎣0  0  0   1  ⎦}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{a}\PYG{p}{,}\PYG{n}{b}\PYG{p}{,}\PYG{n}{c} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{a,b,c}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{htmtra}\PYG{p}{(}\PYG{p}{[}\PYG{n}{a}\PYG{p}{,}\PYG{n}{b}\PYG{p}{,}\PYG{n}{c}\PYG{p}{]}\PYG{p}{)}
+\PYG{g+go}{⎡1  0  0  a⎤}
+\PYG{g+go}{⎢          ⎥}
+\PYG{g+go}{⎢0  1  0  b⎥}
+\PYG{g+go}{⎢          ⎥}
+\PYG{g+go}{⎢0  0  1  c⎥}
+\PYG{g+go}{⎢          ⎥}
+\PYG{g+go}{⎣0  0  0  1⎦}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 
@@ -457,6 +527,22 @@ Rotation matrix (SO3)
 
 \end{description}
 
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{rotx}\PYG{p}{(}\PYG{n}{pi}\PYG{p}{)}
+\PYG{g+go}{⎡1  0   0 ⎤}
+\PYG{g+go}{⎢         ⎥}
+\PYG{g+go}{⎢0  \PYGZhy{}1  0 ⎥}
+\PYG{g+go}{⎢         ⎥}
+\PYG{g+go}{⎣0  0   \PYGZhy{}1⎦}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{rotx}\PYG{p}{(}\PYG{l+m+mi}{60}\PYG{p}{,} \PYG{n}{deg}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{⎡1          0                  0         ⎤}
+\PYG{g+go}{⎢                                        ⎥}
+\PYG{g+go}{⎢0         0.5         \PYGZhy{}0.866025403784439⎥}
+\PYG{g+go}{⎢                                        ⎥}
+\PYG{g+go}{⎣0  0.866025403784439         0.5        ⎦}
+\end{sphinxVerbatim}
+
 \end{fulllineitems}
 
 \index{roty() (in module rkd.didactic.transformations)}
@@ -478,6 +564,30 @@ Rotation matrix (SO3)
 
 \end{description}
 
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{roty}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{3}\PYG{p}{)}
+\PYG{g+go}{⎡         √3 ⎤}
+\PYG{g+go}{⎢1/2   0  ── ⎥}
+\PYG{g+go}{⎢         2  ⎥}
+\PYG{g+go}{⎢            ⎥}
+\PYG{g+go}{⎢ 0    1   0 ⎥}
+\PYG{g+go}{⎢            ⎥}
+\PYG{g+go}{⎢\PYGZhy{}√3         ⎥}
+\PYG{g+go}{⎢────  0  1/2⎥}
+\PYG{g+go}{⎣ 2          ⎦}
+\end{sphinxVerbatim}
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{roty}\PYG{p}{(}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{deg}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{⎡0.866025403784439  0         0.5       ⎤}
+\PYG{g+go}{⎢                                       ⎥}
+\PYG{g+go}{⎢        0          1          0        ⎥}
+\PYG{g+go}{⎢                                       ⎥}
+\PYG{g+go}{⎣      \PYGZhy{}0.5         0  0.866025403784439⎦}
+\end{sphinxVerbatim}
+
 \end{fulllineitems}
 
 \index{rotz() (in module rkd.didactic.transformations)}
@@ -490,14 +600,53 @@ Calculates the rotation matrix about the z-axis
 Rotation angle (given in radians by default)
 
 \item[{deg}] \leavevmode{[}bool{]}
-¿Is theta given in degrees?
+¿Is theta given in degrees?, False is default value
 
 \end{description}
 \begin{description}
 \item[{R}] \leavevmode{[}\sphinxtitleref{sympy.matrices.dense.MutableDenseMatrix}{]}
 Rotation matrix (SO3)
 
+Examples
+
 \end{description}
+
+Using angle in radians,
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{rotz}\PYG{p}{(}\PYG{n}{pi}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{g+go}{⎡0  \PYGZhy{}1  0⎤}
+\PYG{g+go}{⎢        ⎥}
+\PYG{g+go}{⎢1  0   0⎥}
+\PYG{g+go}{⎢        ⎥}
+\PYG{g+go}{⎣0  0   1⎦}
+\end{sphinxVerbatim}
+
+Or symbolic variables,
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{x} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{rotz}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+\PYG{g+go}{⎡cos(x)  \PYGZhy{}sin(x)  0⎤}
+\PYG{g+go}{⎢                  ⎥}
+\PYG{g+go}{⎢sin(x)  cos(x)   0⎥}
+\PYG{g+go}{⎢                  ⎥}
+\PYG{g+go}{⎣  0        0     1⎦}
+\end{sphinxVerbatim}
+
+Using angles in degrees,
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{rotz}\PYG{p}{(}\PYG{l+m+mi}{45}\PYG{p}{,} \PYG{n}{deg}\PYG{o}{=}\PYG{k+kc}{True}\PYG{p}{)}
+\PYG{g+go}{⎡0.707106781186548  \PYGZhy{}0.707106781186547  0⎤}
+\PYG{g+go}{⎢                                        ⎥}
+\PYG{g+go}{⎢0.707106781186547  0.707106781186548   0⎥}
+\PYG{g+go}{⎢                                        ⎥}
+\PYG{g+go}{⎣        0                  0           1⎦}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 
@@ -588,6 +737,22 @@ Convert SymPy Matrix (numerical) to NumPy array
 H : \sphinxtitleref{sympy.matrices.dense.MutableDenseMatrix}
 
 Hf : array
+
+\end{fulllineitems}
+
+\index{issympyobject() (in module rkd.didactic.util)}
+
+\begin{fulllineitems}
+\phantomsection\label{\detokenize{_src/didactic:rkd.didactic.util.issympyobject}}\pysiglinewithargsret{\sphinxcode{\sphinxupquote{rkd.didactic.util.}}\sphinxbfcode{\sphinxupquote{issympyobject}}}{\emph{obj}}{}
+Determine if input (obj) is a sympy object.
+
+\fvset{hllines={, ,}}%
+\begin{sphinxVerbatim}[commandchars=\\\{\}]
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{k+kn}{from} \PYG{n+nn}{sympy} \PYG{k}{import} \PYG{n}{symbols}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{x} \PYG{o}{=} \PYG{n}{symbols}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{x}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+\PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{n}{issympyobject}\PYG{p}{(}\PYG{n}{x}\PYG{p}{)}
+\PYG{g+go}{True}
+\end{sphinxVerbatim}
 
 \end{fulllineitems}
 

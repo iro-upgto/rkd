@@ -16,8 +16,8 @@ Contents
 .. toctree::
    :maxdepth: 2
 
-   _src/transformations.rst
    _src/didactic.rst
+
 
 
 Indices and tables

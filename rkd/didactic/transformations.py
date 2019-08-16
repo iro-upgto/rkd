@@ -40,7 +40,7 @@ def rotz(theta, deg=False):
         Rotation angle (given in radians by default)
 
     deg : bool
-        ¿Is theta given in degrees?
+        ¿Is theta given in degrees?, False is default value
 
 
     Returns
@@ -48,6 +48,37 @@ def rotz(theta, deg=False):
 
     R : `sympy.matrices.dense.MutableDenseMatrix`
         Rotation matrix (SO3)
+
+	Examples
+    --------
+    
+    Using angle in radians,
+    
+    >>> rotz(pi/2)
+    ⎡0  -1  0⎤
+    ⎢        ⎥
+    ⎢1  0   0⎥
+    ⎢        ⎥
+    ⎣0  0   1⎦
+
+    Or symbolic variables,
+    
+    >>> x = symbols("x")
+    >>> rotz(x)
+    ⎡cos(x)  -sin(x)  0⎤
+    ⎢                  ⎥
+    ⎢sin(x)  cos(x)   0⎥
+    ⎢                  ⎥
+    ⎣  0        0     1⎦
+
+    Using angles in degrees,
+    
+    >>> rotz(45, deg=True)
+    ⎡0.707106781186548  -0.707106781186547  0⎤
+    ⎢                                        ⎥
+    ⎢0.707106781186547  0.707106781186548   0⎥
+    ⎢                                        ⎥
+    ⎣        0                  0           1⎦
 
     """
     if deg: # If theta is given in degrees -> convert to radians
@@ -79,6 +110,27 @@ def roty(theta, deg=False):
 
     R : `sympy.matrices.dense.MutableDenseMatrix`
         Rotation matrix (SO3)
+        
+    Examples
+    --------
+    
+    >>> roty(pi/3)
+    ⎡         √3 ⎤
+    ⎢1/2   0  ── ⎥
+    ⎢         2  ⎥
+    ⎢            ⎥
+    ⎢ 0    1   0 ⎥
+    ⎢            ⎥
+    ⎢-√3         ⎥
+    ⎢────  0  1/2⎥
+    ⎣ 2          ⎦
+    
+    >>> roty(30, deg=True)
+    ⎡0.866025403784439  0         0.5       ⎤
+    ⎢                                       ⎥
+    ⎢        0          1          0        ⎥
+    ⎢                                       ⎥
+    ⎣      -0.5         0  0.866025403784439⎦
 
     """
     if deg: # If theta is given in degrees -> convert to radians
@@ -97,6 +149,7 @@ def rotx(theta, deg=False):
 
     Parameters
     ----------
+    
     theta : float, int or `symbolic`
         Rotation angle (given in radians by default)
 
@@ -106,8 +159,24 @@ def rotx(theta, deg=False):
 
     Returns
     -------
+    
     R : `sympy.matrices.dense.MutableDenseMatrix`
         Rotation matrix (SO3)
+        
+    Examples
+    --------
+    >>> rotx(pi)
+    ⎡1  0   0 ⎤
+    ⎢         ⎥
+    ⎢0  -1  0 ⎥
+    ⎢         ⎥
+    ⎣0  0   -1⎦
+    >>> rotx(60, deg=True)
+    ⎡1          0                  0         ⎤
+    ⎢                                        ⎥
+    ⎢0         0.5         -0.866025403784439⎥
+    ⎢                                        ⎥
+    ⎣0  0.866025403784439         0.5        ⎦
 
     """
     if deg: # If theta is given in degrees -> convert to radians
@@ -195,6 +264,9 @@ def dh(a,alpha,d,theta):
 
     Examples
     --------
+    
+    With numerical values:
+    
     >>> dh(100,pi/2,50,pi/2)
     ⎡0  0  1   0 ⎤
     ⎢            ⎥
@@ -203,6 +275,19 @@ def dh(a,alpha,d,theta):
     ⎢0  1  0  50 ⎥
     ⎢            ⎥
     ⎣0  0  0   1 ⎦
+    
+    Using symbolic values:
+    
+    >>> a = symbols("a")
+    >>> t = symbols("t")
+    >>> dh(a,0,0,t)
+    ⎡cos(t)  -sin(t)  0  a⋅cos(t)⎤
+    ⎢                            ⎥
+    ⎢sin(t)  cos(t)   0  a⋅sin(t)⎥
+    ⎢                            ⎥
+    ⎢  0        0     1     0    ⎥
+    ⎢                            ⎥
+    ⎣  0        0     0     1    ⎦
     """
     H = Matrix([[cos(theta),-sin(theta)*cos(alpha),sin(theta)*sin(alpha),a*cos(theta)],
                   [sin(theta),cos(theta)*cos(alpha),-cos(theta)*sin(alpha),a*sin(theta)],
@@ -235,12 +320,44 @@ def eul2htm(phi,theta,psi,seq="zxz",deg=False):
     -------
     H : :class:`sympy.matrices.dense.MutableDenseMatrix`
         Homogeneous transformation matrix
-
+    
+    
+    Examples
+    --------
+    
+    >>> eul2htm(90,90,90,"zxz",True)
+    ⎡0  0   1  0⎤
+    ⎢           ⎥
+    ⎢0  -1  0  0⎥
+    ⎢           ⎥
+    ⎢1  0   0  0⎥
+    ⎢           ⎥
+    ⎣0  0   0  1⎦
+    
+    >>> eul2htm(pi/2,pi/2,pi/2)
+    ⎡0  0   1  0⎤
+    ⎢           ⎥
+    ⎢0  -1  0  0⎥
+    ⎢           ⎥
+    ⎢1  0   0  0⎥
+    ⎢           ⎥
+    ⎣0  0   0  1⎦
+        
+    >>> eul2htm(0,pi/2,0,"zyz")
+    ⎡0   0  1  0⎤
+    ⎢           ⎥
+    ⎢0   1  0  0⎥
+    ⎢           ⎥
+    ⎢-1  0  0  0⎥
+    ⎢           ⎥
+    ⎣0   0  0  1⎦
     """
     if deg: # If angles are given in degrees -> convert to radians
-        phi,theta,psi = deg2rad(Matrix([phi,theta,psi])).evalf()
+        phi,theta,psi = deg2rad(Matrix([phi,theta,psi]), evalf=False)
     if seq in ("ZXZ","zxz"):
         H = htmrot(phi,"z")*htmrot(theta,"x")*htmrot(psi,"z")
+    elif seq in ("ZYZ","zyz"):
+        H = htmrot(phi,"z")*htmrot(theta,"y")*htmrot(psi,"z")
     else:
         H = eye(4)
     return H
@@ -252,6 +369,28 @@ def htm2eul(H, seq="zxz", deg=False):
     return the equivalent set of Euler Angles. 
     
     If "deg" is True then Euler Angles are converted to degrees.
+    
+    >>> H = htmrot(pi/3,"y")*htmrot(pi/4,"x")
+    >>> H
+    ⎡      √6   √6    ⎤
+    ⎢1/2   ──   ──   0⎥
+    ⎢      4    4     ⎥
+    ⎢                 ⎥
+    ⎢      √2  -√2    ⎥
+    ⎢ 0    ──  ────  0⎥
+    ⎢      2    2     ⎥
+    ⎢                 ⎥
+    ⎢-√3   √2   √2    ⎥
+    ⎢────  ──   ──   0⎥
+    ⎢ 2    4    4     ⎥
+    ⎢                 ⎥
+    ⎣ 0    0    0    1⎦
+    >>> htm2eul(H)
+    ⎛    ⎛√3⎞                     ⎞
+    ⎜atan⎜──⎟, atan(√7), -atan(√6)⎟
+    ⎝    ⎝2 ⎠                     ⎠
+    >>> htm2eul(H, deg=True)
+    (40.8933946491309, 69.2951889453646, -67.7923457014035)
     """
     if seq in ("ZXZ","zxz"):
         return _htm2zxz(H, deg)
@@ -293,6 +432,41 @@ def _htm2zxz(H, deg=False):
 def htmtra(d):
     """
     Calculate the homogeneous transformation matrix of a translation
+    
+    Parameters
+    ----------
+    
+    d : list, tuple
+        Translation vector
+    
+    Returns
+    -------
+    
+    H : :class:`sympy.matrices.dense.MutableDenseMatrix`
+        Homogeneous transformation matrix
+        
+        
+    Examples
+    --------
+    
+    >>> htmtra([50,-100,30])
+    ⎡1  0  0   50 ⎤
+    ⎢             ⎥
+    ⎢0  1  0  -100⎥
+    ⎢             ⎥
+    ⎢0  0  1   30 ⎥
+    ⎢             ⎥
+    ⎣0  0  0   1  ⎦
+    
+    >>> a,b,c = symbols("a,b,c")
+    >>> htmtra([a,b,c])
+    ⎡1  0  0  a⎤
+    ⎢          ⎥
+    ⎢0  1  0  b⎥
+    ⎢          ⎥
+    ⎢0  0  1  c⎥
+    ⎢          ⎥
+    ⎣0  0  0  1⎦
     """
     dx,dy,dz = d[0],d[1],d[2]
     M = Matrix([[1,0,0,dx],
@@ -306,6 +480,62 @@ def htmrot(theta, axis="z", deg=False):
     """
     Return a homogeneous transformation matrix that represents a 
     rotation "theta" about "axis". 
+    
+    Parameters
+    ----------
+    
+    theta : float, int or `symbolic`
+        Rotation angle (given in radians by default)
+        
+    axis : str
+        Rotation axis
+
+    deg : bool
+        ¿Is theta given in degrees?
+        
+    Returns
+    -------
+    
+    H : :class:`sympy.matrices.dense.MutableDenseMatrix`
+        Homogeneous transformation matrix
+        
+    
+    Examples
+    --------
+    >>> htmrot(pi/2)
+    ⎡0  -1  0  0⎤
+    ⎢           ⎥
+    ⎢1  0   0  0⎥
+    ⎢           ⎥
+    ⎢0  0   1  0⎥
+    ⎢           ⎥
+    ⎣0  0   0  1⎦
+    >>> htmrot(pi/2, "x")
+    ⎡1  0  0   0⎤
+    ⎢           ⎥
+    ⎢0  0  -1  0⎥
+    ⎢           ⎥
+    ⎢0  1  0   0⎥
+    ⎢           ⎥
+    ⎣0  0  0   1⎦
+    >>> htmrot(30, "y", True)
+    ⎡0.866025403784439  0         0.5         0⎤
+    ⎢                                          ⎥
+    ⎢        0          1          0          0⎥
+    ⎢                                          ⎥
+    ⎢      -0.5         0  0.866025403784439  0⎥
+    ⎢                                          ⎥
+    ⎣        0          0          0          1⎦
+    >>> t = symbols("t")
+    >>> htmrot(t, "x")
+    ⎡1    0        0     0⎤
+    ⎢                     ⎥
+    ⎢0  cos(t)  -sin(t)  0⎥
+    ⎢                     ⎥
+    ⎢0  sin(t)  cos(t)   0⎥
+    ⎢                     ⎥
+    ⎣0    0        0     1⎦
+    
     """
     if deg: # Is theta given in degrees? -> then convert to radians
         theta = deg2rad(theta)
