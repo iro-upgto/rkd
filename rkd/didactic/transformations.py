@@ -82,7 +82,7 @@ def rotz(theta, deg=False):
 
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = deg2rad(theta)
+        theta = deg2rad(theta, False)
     ct = cos(theta)
     st = sin(theta)
     R = Matrix([[ct, -st, 0],
@@ -134,7 +134,7 @@ def roty(theta, deg=False):
 
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = deg2rad(theta)
+        theta = deg2rad(theta, False)
     ct = cos(theta)
     st = sin(theta)
     R = Matrix([[ct, 0, st],
@@ -180,7 +180,7 @@ def rotx(theta, deg=False):
 
     """
     if deg: # If theta is given in degrees -> convert to radians
-        theta = deg2rad(theta)
+        theta = deg2rad(theta, False)
     ct = cos(theta)
     st = sin(theta)
     R = Matrix([[1, 0, 0],
